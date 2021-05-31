@@ -2,6 +2,7 @@
 #include <QDesktopWidget>
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
+#include <QDebug>
 
 CGameWindow::CGameWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -17,6 +18,8 @@ CGameWindow::CGameWindow(QWidget* parent)
     int windowW = this->size().width();
     int windowH = this->size().height();
     this->move((screenW / 2) - (windowW / 2), (screenH / 2) - (windowH / 2));
+
+    qDebug() << "Created CGameWindow";
 }
 
 CGameWindow::~CGameWindow()

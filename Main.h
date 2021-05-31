@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "GameWindow.h"
+#include "Game.h"
 
 // Main program entry class
 class CMain : public QObject
@@ -23,10 +24,16 @@ public:
     // Returns the GameWindow instance
     CGameWindow* getGameWindow();
 
+    // Returns the Game instance
+    CGame* getGameInstance();
+
 private:
     // Singleton instance
     static CMain* singletonInstance;
 
     // The CGameWindow instance
     CGameWindow* gameWindow;
+
+    // The CGame instance
+    CGame* gameInstance;
 };

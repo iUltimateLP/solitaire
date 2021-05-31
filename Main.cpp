@@ -1,7 +1,7 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "Main.h"
 #include <QApplication>
-#include "GameWindow.h"
+#include <QDebug>
 
 // Singleton instance definition
 CMain* CMain::singletonInstance = nullptr;
@@ -11,9 +11,14 @@ int CMain::run(int argc, char* argv[])
     // Create a new QApplication instance
     QApplication app(argc, argv);
 
+    // Create the game instance
+    gameInstance = new CGame();
+
     // Create the game window
     gameWindow = new CGameWindow();
     gameWindow->show();
+
+    qDebug() << "Entering app loop";
 
     // Run the app loop
     return app.exec();
@@ -29,6 +34,12 @@ CGameWindow* CMain::getGameWindow()
 {
     // Return the game window instance
     return gameWindow;
+}
+
+CGame* CMain::getGameInstance()
+{
+    // Returns the game instance
+    return gameInstance;
 }
 
 // Applications entry point
