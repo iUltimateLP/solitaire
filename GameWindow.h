@@ -1,5 +1,5 @@
-#ifndef CGAMEWINDOW_H
-#define CGAMEWINDOW_H
+// Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
+#pragma once
 
 #include <QMainWindow>
 
@@ -7,15 +7,17 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class CGameWindow; }
 QT_END_NAMESPACE
 
+// Implements the main window to be displayed by Qt
 class CGameWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    CGameWindow(QWidget *parent = nullptr);
+    // Constructor and destructor
+    CGameWindow(QWidget* parent = nullptr);
     ~CGameWindow();
 
 private:
-    Ui::CGameWindow *ui;
+    // Reference to this window
+    Ui::CGameWindow* ui;
 };
-#endif // CGAMEWINDOW_H
