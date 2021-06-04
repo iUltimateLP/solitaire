@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/card_tileset.png</file>
+    </qresource>
+</RCC>

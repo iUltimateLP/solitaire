@@ -3,6 +3,7 @@
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
 #include <QDebug>
+#include "Card.h"
 
 CGameWindow::CGameWindow(QWidget* parent)
     : QMainWindow(parent)
