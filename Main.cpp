@@ -11,12 +11,14 @@ int CMain::run(int argc, char* argv[])
     // Create a new QApplication instance
     QApplication app(argc, argv);
 
-    // Create the game instance
-    gameInstance = new CGame();
+    singletonInstance = this;
 
     // Create the game window
     gameWindow = new CGameWindow();
     gameWindow->show();
+
+    // Create the game instance
+    gameInstance = new CGame();
 
     qDebug() << "Entering app loop";
 

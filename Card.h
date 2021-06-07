@@ -35,6 +35,9 @@ public:
     // Constructor
     CCard(QWidget *parent = nullptr, ECardSymbol symbol = ECardSymbol::Heart, ECardType type = ECardType::Number, int numberValue = 0);
 
+    QPixmap getPixmap() const;
+    QLabel* getLabel();
+
 private:
     // This card's symbol and type
     ECardSymbol cardSymbol;
@@ -43,4 +46,6 @@ private:
 
     // The QLabel image container to display the card
     QLabel* imageContainer;
+
+    QPixmap pixmap;
 };
