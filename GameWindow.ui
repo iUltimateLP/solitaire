@@ -14,6 +14,7 @@
    <string>Solitaire</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+<<<<<<< HEAD
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
      <layout class="QGridLayout" name="gridLayout">
@@ -152,6 +153,11 @@
        </layout>
       </item>
      </layout>
+=======
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="cardHBox"/>
+>>>>>>> c78baa4e917b3da07b8271e0b5e7be4286b82f5b
     </item>
    </layout>
   </widget>

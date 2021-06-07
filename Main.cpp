@@ -32,13 +32,13 @@ CMain* CMain::get()
     return singletonInstance;
 }
 
-CGameWindow* CMain::getGameWindow()
+CGameWindow* CMain::getGameWindow() const
 {
     // Return the game window instance
     return gameWindow;
 }
 
-CGame* CMain::getGameInstance()
+CGame* CMain::getGameInstance() const
 {
     // Returns the game instance
     return gameInstance;

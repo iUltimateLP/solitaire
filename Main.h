@@ -22,10 +22,10 @@ public:
     static CMain* get();
 
     // Returns the GameWindow instance
-    CGameWindow* getGameWindow();
+    CGameWindow* getGameWindow() const;
 
     // Returns the Game instance
-    CGame* getGameInstance();
+    CGame* getGameInstance() const;
 
 private:
     // Singleton instance
