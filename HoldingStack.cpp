@@ -12,7 +12,7 @@ CHoldingStack::CHoldingStack(QWidget* parent)
     vbox = new CCardVBoxLayout(45, this);
 
     QLabel* dummy = new QLabel(this);
-    dummy->setGeometry(0,0,CCard::getCardScreenSize().width(), 1000);
+   // dummy->setGeometry(0,0,CCard::getCardScreenSize().width(), 1000);
     dummy->setStyleSheet("QLabel { background-color: green; }");
 }
 

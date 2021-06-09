@@ -87,6 +87,9 @@ public:
         }
     }
 
+
+    QPixmap getPixmap() const;
+
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
@@ -94,8 +97,6 @@ private:
     void enterEvent(QEvent* ev) override;
     void leaveEvent(QEvent* ev) override;
 
-    QPixmap getPixmap() const;
-    QLabel* getLabel();
 
 private:
     // This card's symbol and type

@@ -2,6 +2,9 @@
 #pragma once
 
 #include <QObject>
+#include <HoldingStack.h>
+#include <Card.h>
+#include <QTimer>
 
 // Implements the game logic
 class CGame : public QObject
@@ -11,26 +14,30 @@ class CGame : public QObject
 public:
     // Constructor
     CGame(QObject* parent = nullptr);
- //   bool isValidMove(Card from, Card to);
- //   void moveCard (Card from, Card to);
+    void moveCard (CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack);
     bool hasEnded();
     void setUp();
 
-    //Array of all Cards = deck
+private:
+    //declaring all necessary stacks
+    //final stacks -> TODO: these has to be either other sort of stack or simply cards
+    CHoldingStack* finalDiamond;
+    CHoldingStack* finalHeart;
+    CHoldingStack* finalSpade;
+    CHoldingStack* finalClub;
 
-/*    CFinalStack* finalStackHeart;
-    CFinalStack* finalStackDiamond;
-    CFinalStack* finalStackClub;
-    CFinalStack* finalStackSpade;
-    CHoldingStack* holdingStack1;
-    CHoldingStack* holdingStack2;
-    CHoldingStack* holdingStack3;
-    CHoldingStack* holdingStack4;
-    CHoldingStack* holdingStack5;
-    CHoldingStack* holdingStack6;
-    CHoldingStack* holdingStack7;
-    CHoldingStack drawPile;
+    //holding stacks:
+    CHoldingStack* hold1;
+    CHoldingStack* hold2;
+    CHoldingStack* hold3;
+    CHoldingStack* hold4;
+    CHoldingStack* hold5;
+    CHoldingStack* hold6;
+    CHoldingStack* hold7;
 
-    Timer time;*/
-    QString score;
+    //CHoldingStack drawPile;
+
+
+    //the deck contains all cards
+    QList<CCard*> deck;
 };

@@ -71,8 +71,3 @@ QPixmap CCard::getPixmap() const
     qDebug() << "in get Pixmap";
     return this->pixmap;
 }
-
-QLabel* CCard::getLabel()
-{
-    return this->imageContainer;
-}

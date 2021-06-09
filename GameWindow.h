@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <Card.h>
+#include <HoldingStack.h>
+#include <QTimer>
+#include <QTime>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CGameWindow; }
@@ -18,9 +21,20 @@ public:
     CGameWindow(QWidget* parent = nullptr);
     ~CGameWindow();
 
-    void displayCards(const CCard& c);
+    void displayHoldingStack(CHoldingStack* stack);
+    void displayFinalStack(CCardStack* final);
+    void incrementScore();
+
+private slots:
+    void updateTimer();
 
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
+
+    //variable for the amount of moves
+    int score = 0;
+    QTimer* timer;
+    QTime* time;
+
 };

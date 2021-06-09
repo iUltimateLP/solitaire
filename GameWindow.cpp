@@ -23,36 +23,54 @@ CGameWindow::CGameWindow(QWidget* parent)
     int windowH = this->size().height();
     this->move((screenW / 2) - (windowW / 2), (screenH / 2) - (windowH / 2));
 
-    // Create a test holding stack
-    CHoldingStack* hold = new CHoldingStack(this);
-    hold->move(20, 20);
-    hold->resize(CCard::getCardScreenSize().width(), windowH - hold->pos().y());
-    hold->addCard(new CCard(hold, ECardSymbol::Heart, ECardType::Number, 3));
-
-    CHoldingStack* hold2 = new CHoldingStack(this);
-    hold2->move(CCard::getCardScreenSize().width() + 40, 20);
-    hold2->resize(CCard::getCardScreenSize().width(), windowH - hold2->pos().y());
-    hold2->addCard(new CCard(hold2, ECardSymbol::Club, ECardType::Number, 7));
-    hold2->addCard(new CCard(hold2, ECardSymbol::Heart, ECardType::Number, 6));
-    hold2->addCard(new CCard(hold2, ECardSymbol::Spade, ECardType::Number, 5));
-
     qDebug() << "Created CGameWindow";
 
     //Set background-color
     ui->centralwidget->setStyleSheet("background-color:green;");
     ui->centralwidget->resize(1000, 800);
 
-    //set the 4 symbols to the finalstacks;
+    //displays the initial score
+    ui->score_label->setText("Score is: " + QString::number(score));
 
+    //creation of timer and time as well as connection of timeout signal with updateTime
+    timer = new QTimer(this);
+    //TODO: check why first connection is not working
+  //  QObject::connect(timer, &QTimer::timeout(), this, &CGameWindow::updateTimer);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
+    QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
+    timer->start(1000);
+    time = new QTime(0,0);
 }
 
-
-void CGameWindow::displayCards(const CCard& c)
+//this functions displays the holding stacks, is called from game.cpp
+void CGameWindow::displayHoldingStack(CHoldingStack* stack)
 {
-    //TODO: choose correct label: switch case or variable
-    ui->label_2->setPixmap(c.getPixmap());
-    ui->label_2->resize(ui->label_2->pixmap()->size());
+    stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
+    ui->horizontalLayout->addWidget(stack);
 }
+
+//this functions displays the final stacks, is called from game.cpp
+void CGameWindow::displayFinalStack(CCardStack* final)
+{
+    final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
+    ui->horizontalLayout_3->addWidget(final);
+}
+
+//is called after every move
+void CGameWindow::incrementScore()
+{
+    ++score;
+    ui->score_label->setText("Score: " + QString::number(score));
+}
+
+//SLOT: called every second
+void CGameWindow::updateTimer()
+{
+    *time = time->addSecs(1);
+    qDebug() << time->toString("mm:ss");
+    ui->time_label->setText("Timer: " + time->toString("mm:ss"));
+}
+
 
 CGameWindow::~CGameWindow()
 {
