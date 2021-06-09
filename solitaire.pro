@@ -17,14 +17,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Card.cpp \
+    CardStack.cpp \
+    CardVBoxLayout.cpp \
     Game.cpp \
+    HoldingStack.cpp \
     Main.cpp \
     GameWindow.cpp
 
 HEADERS += \
     Card.h \
+    CardStack.h \
+    CardVBoxLayout.h \
     Game.h \
     GameWindow.h \
+    HoldingStack.h \
     Main.h
 
 FORMS += \
