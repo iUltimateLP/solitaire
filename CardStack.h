@@ -22,7 +22,7 @@ public:
     virtual void removeCard(CCard* cardToRemove);
 
     // Removes a card identified by the card index from the stack
-    void removeCard(int cardIndexToRemove);
+    void removeCardAt(int cardIndexToRemove);
 
     // Returns the number of cards on this stack
     int getNumCards() const;

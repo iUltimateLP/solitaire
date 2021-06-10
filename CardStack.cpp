@@ -39,7 +39,7 @@ void CCardStack::removeCard(CCard *cardToRemove)
     }
 }
 
-void CCardStack::removeCard(int cardIndexToRemove)
+void CCardStack::removeCardAt(int cardIndexToRemove)
 {
     // Make sure the index is valid
     if (cardIndexToRemove >= 0 && cardIndexToRemove < cards.length())

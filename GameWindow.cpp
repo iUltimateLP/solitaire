@@ -4,7 +4,6 @@
 #include "ui_GameWindow.h"
 #include <QDebug>
 
-
 #include "Card.h"
 #include "HoldingStack.h"
 
@@ -25,45 +24,39 @@ CGameWindow::CGameWindow(QWidget* parent)
 
     qDebug() << "Created CGameWindow";
 
-    //Set background-color
+    // Set background-color
     ui->centralwidget->setStyleSheet("background-color:green;");
     ui->centralwidget->resize(1000, 800);
 
-    //displays the initial score
+    // Displays the initial score
     ui->score_label->setText("Score is: " + QString::number(score));
 
-    //creation of timer and time as well as connection of timeout signal with updateTime
+    // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
-    //TODO: check why first connection is not working
-  //  QObject::connect(timer, &QTimer::timeout(), this, &CGameWindow::updateTimer);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
+    QObject::connect(timer, &QTimer::timeout, this, &CGameWindow::updateTimer);
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
     timer->start(1000);
     time = new QTime(0,0);
 }
 
-//this functions displays the holding stacks, is called from game.cpp
 void CGameWindow::displayHoldingStack(CHoldingStack* stack)
 {
     stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
     ui->horizontalLayout->addWidget(stack);
 }
 
-//this functions displays the final stacks, is called from game.cpp
 void CGameWindow::displayFinalStack(CCardStack* final)
 {
     final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
     ui->horizontalLayout_3->addWidget(final);
 }
 
-//is called after every move
 void CGameWindow::incrementScore()
 {
     ++score;
     ui->score_label->setText("Score: " + QString::number(score));
 }
 
-//SLOT: called every second
 void CGameWindow::updateTimer()
 {
     *time = time->addSecs(1);
@@ -71,10 +64,8 @@ void CGameWindow::updateTimer()
     ui->time_label->setText("Timer: " + time->toString("mm:ss"));
 }
 
-
 CGameWindow::~CGameWindow()
 {
     // Delete the UI
     delete ui;
 }
-

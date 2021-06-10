@@ -45,8 +45,6 @@ void CCardVBoxLayout::setGeometry(const QRect &r)
         return;
 
     // Calculate the width and height
-    int w = r.width() - (m_items.count() - 1);
-    int h = r.height() - (m_items.count() - 1) * spacing();
     int i = 0;
 
     // Iterate all over items

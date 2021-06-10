@@ -24,8 +24,6 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     // Extract that region off the tileset
     QPixmap cardTile = tileset.copy(tilesetX * cardTileSize.width(), tilesetY * cardTileSize.height(), cardTileSize.width(), cardTileSize.height());
 
-    QPixmap pixmap = cardTile;
-
     // Set the card image to the container, scaled by the desired screensize of the card
     this->setPixmap(cardTile.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
@@ -39,6 +37,9 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     DropShadowEffect->setOffset(0, 0);
     DropShadowEffect->setColor(QColor(0, 0, 0, 64));
     this->setGraphicsEffect(DropShadowEffect);
+
+    // Hide the background which this card (a QLabel-child) will inherit from it's parent (the MainWindow)
+    this->setStyleSheet("background-color: rgba(0, 0, 0, 0);");
 }
 
 QSize CCard::getCardScreenSize()

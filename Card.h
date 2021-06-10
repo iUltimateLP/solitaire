@@ -95,7 +95,6 @@ private:
     void enterEvent(QEvent* ev) override;
     void leaveEvent(QEvent* ev) override;
 
-
 private:
     // This card's symbol and type
     ECardSymbol cardSymbol;

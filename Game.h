@@ -26,17 +26,8 @@ private:
     CHoldingStack* finalSpade;
     CHoldingStack* finalClub;
 
-    //holding stacks:
-    CHoldingStack* hold1;
-    CHoldingStack* hold2;
-    CHoldingStack* hold3;
-    CHoldingStack* hold4;
-    CHoldingStack* hold5;
-    CHoldingStack* hold6;
-    CHoldingStack* hold7;
-
-    //CHoldingStack drawPile;
-
+    // List of all holding stacks
+    QList<CHoldingStack*> holdingStacks;
 
     //the deck contains all cards
     QList<CCard*> deck;

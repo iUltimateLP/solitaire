@@ -21,20 +21,25 @@ public:
     CGameWindow(QWidget* parent = nullptr);
     ~CGameWindow();
 
+    // This functions displays the holding stacks, is called from game.cpp
     void displayHoldingStack(CHoldingStack* stack);
+
+    // This functions displays the final stacks, is called from game.cpp
     void displayFinalStack(CCardStack* final);
+
+    // Is called after every move
     void incrementScore();
 
 private slots:
+    // Called every second
     void updateTimer();
 
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
 
-    //variable for the amount of moves
+    // Variable for the amount of moves
     int score = 0;
     QTimer* timer;
     QTime* time;
-
 };

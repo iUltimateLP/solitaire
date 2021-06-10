@@ -28,11 +28,13 @@ void CGame::setUp()
     {
         for (int i = 2; i < 11; ++i)
         {
-            deck.push_back(new CCard(nullptr, s, ECardType::Number, i));
+            CCard* newCard = new CCard(nullptr, s, ECardType::Number, i);
+            deck.push_back(newCard);
         }
         for(ECardType t: typeVector)
         {
-            deck.push_back(new CCard(nullptr, s, t, 0));
+            CCard* newCard = new CCard(nullptr, s, t, 0);
+            deck.push_back(newCard);
         }
     }
 
@@ -40,11 +42,12 @@ void CGame::setUp()
     std::random_shuffle(deck.begin(), deck.end());
 
     //declaring the holding Stacks in a list
-    QList<CHoldingStack*> holdingStacks = {new CHoldingStack(), new CHoldingStack(),
-                                     new CHoldingStack(),new CHoldingStack(),new CHoldingStack(),new CHoldingStack(),new CHoldingStack()};
+
 
     for(int i = 0; i<7; ++i)
     {
+        holdingStacks.push_back(new CHoldingStack());
+
         for(int j = 0; j<i+1; ++j)
         {
             holdingStacks[i]->addCard(deck.front());
@@ -95,7 +98,7 @@ void CGame::moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* des
         {
             cardsToMove.push_back(srcStack->getTopCard());
             //TODO: this function call doesn't work -> does not detect overloading
-         //   srcStack->removeCard(srcStack->getNumCards()-1);
+            //srcStack->removeCardAt(srcStack->getNumCards()-1);
         }
         //finally remove the cardToDrop from the source stack and add it to the destination stack
         srcStack->removeCard(cardToDrop);

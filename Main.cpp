@@ -11,6 +11,7 @@ int CMain::run(int argc, char* argv[])
     // Create a new QApplication instance
     QApplication app(argc, argv);
 
+    // Assign the singleton instance
     singletonInstance = this;
 
     // Create the game window

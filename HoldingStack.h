@@ -16,12 +16,11 @@ public:
     CHoldingStack(QWidget* parent = nullptr);
 
 public:
+    //~ Begin CCardStack interface
     virtual void addCard(CCard *cardToAdd) override;
-
     virtual void removeCard(CCard *cardToRemove) override;
-
-    // Checks whether a given card can be dropped on this stack
     virtual bool canDropCard(CCard* cardToDrop) override;
+    //~ End CCardCard interface
 
 private:
     // The vertical box layout to use for the holding stack
