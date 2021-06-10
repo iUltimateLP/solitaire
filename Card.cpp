@@ -24,7 +24,7 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     // Extract that region off the tileset
     QPixmap cardTile = tileset.copy(tilesetX * cardTileSize.width(), tilesetY * cardTileSize.height(), cardTileSize.width(), cardTileSize.height());
 
-    pixmap = cardTile;
+    QPixmap pixmap = cardTile;
 
     // Set the card image to the container, scaled by the desired screensize of the card
     this->setPixmap(cardTile.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -64,10 +64,4 @@ void CCard::enterEvent(QEvent* ev)
 void CCard::leaveEvent(QEvent* ev)
 {
     qDebug() << "Leave card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
-}
-
-QPixmap CCard::getPixmap() const
-{
-    qDebug() << "in get Pixmap";
-    return this->pixmap;
 }

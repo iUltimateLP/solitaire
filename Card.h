@@ -88,8 +88,6 @@ public:
     }
 
 
-    QPixmap getPixmap() const;
-
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
@@ -103,6 +101,4 @@ private:
     ECardSymbol cardSymbol;
     ECardType cardType;
     int cardNumberValue;
-
-    QPixmap pixmap;
 };

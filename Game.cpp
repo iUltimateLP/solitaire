@@ -36,93 +36,22 @@ void CGame::setUp()
         }
     }
 
-    for(int i = 0; i < deck.length(); ++i)
-    {
-        qDebug() << deck[i]->getSymbol();
-        qDebug() << deck[i]->getType();
-        qDebug() << deck[i]->getNumberValue();
-    }
-
-    //declaring the holding Stacks
-    hold1 = new CHoldingStack();
-    hold2 = new CHoldingStack();
-    hold3 = new CHoldingStack();
-    hold4 = new CHoldingStack();
-    hold5 = new CHoldingStack();
-    hold6 = new CHoldingStack();
-    hold7 = new CHoldingStack();
-
     //shuffle carddeck
     std::random_shuffle(deck.begin(), deck.end());
 
+    //declaring the holding Stacks in a list
+    QList<CHoldingStack*> holdingStacks = {new CHoldingStack(), new CHoldingStack(),
+                                     new CHoldingStack(),new CHoldingStack(),new CHoldingStack(),new CHoldingStack(),new CHoldingStack()};
 
-    //TODO: write a loop for this!
-    //filling the cardStacks with cards from the deck
-    hold1->addCard(deck.front());
-    deck.pop_front();
-    hold2->addCard(deck.front());
-    deck.pop_front();
-    hold2->addCard(deck.front());
-    deck.pop_front();
-    hold3->addCard(deck.front());
-        deck.pop_front();
-    hold3->addCard(deck.front());
-        deck.pop_front();
-    hold3->addCard(deck.front());
-        deck.pop_front();
-    hold4->addCard(deck.front());
-    deck.pop_front();
-    hold4->addCard(deck.front());
-        deck.pop_front();
-    hold4->addCard(deck.front());
-        deck.pop_front();
-    hold4->addCard(deck.front());
-        deck.pop_front();
-    hold5->addCard(deck.front());
-        deck.pop_front();
-    hold5->addCard(deck.front());
-        deck.pop_front();
-    hold5->addCard(deck.front());
-        deck.pop_front();
-    hold5->addCard(deck.front());
-        deck.pop_front();
-    hold5->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-        deck.pop_front();
-    hold6->addCard(deck.front());
-      deck.pop_front();
-    hold7->addCard(deck.front());
-        deck.pop_front();
-    hold7->addCard(deck.front());
-       deck.pop_front();
-    hold7->addCard(deck.front());
-        deck.pop_front();
-    hold7->addCard(deck.front());
-        deck.pop_front();
-    hold7->addCard(deck.front());
-       deck.pop_front();
-    hold7->addCard(deck.front());
-        deck.pop_front();
-    hold7->addCard(deck.front());
-
-    /*
     for(int i = 0; i<7; ++i)
     {
-        for(int j = 0; j<i; ++j)
+        for(int j = 0; j<i+1; ++j)
         {
-            //(holdingStack + i).addCard(carddeck.pop());
+            holdingStacks[i]->addCard(deck.front());
+            deck.pop_front();
         }
     }
-    */
+
   //  drawPile = new CCardStack();
  //   drawPile.addCards(cardDeck);*/
     //empty carddeck;
@@ -139,13 +68,10 @@ void CGame::setUp()
     finalSpade->addCard(new CCard(nullptr, ECardSymbol::Spade, ECardType::Ace, 12));
 
     //call the CGameWindow to display the initial state of the game
-    CMain::get()->getGameWindow()->displayHoldingStack(hold1);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold2);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold3);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold4);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold5);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold6);
-    CMain::get()->getGameWindow()->displayHoldingStack(hold7);
+    for(CHoldingStack* stack: holdingStacks)
+    {
+        CMain::get()->getGameWindow()->displayHoldingStack(stack);
+    }
 
     CMain::get()->getGameWindow()->displayFinalStack(finalHeart);
     CMain::get()->getGameWindow()->displayFinalStack(finalDiamond);
