@@ -36,15 +36,8 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     this->setGeometry(0, 0, cardTileSize.width(), cardTileSize.height());
     this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    // Create a drop shadow effect to make it easier to distinguish cards on one stack
-    QGraphicsDropShadowEffect* DropShadowEffect = new QGraphicsDropShadowEffect();
-    DropShadowEffect->setBlurRadius(50);
-    DropShadowEffect->setOffset(0, 0);
-    DropShadowEffect->setColor(QColor(0, 0, 0, 64));
-    this->setGraphicsEffect(DropShadowEffect);
-
     // Hide the background which this card (a QLabel-child) will inherit from it's parent (the MainWindow)
-    this->setStyleSheet("background-color: rgba(0, 0, 0, 0);");
+    this->setStyleSheet("background-color: rgba(0, 0, 0, 0); background: transparent;");
 }
 
 QSize CCard::getCardScreenSize()
@@ -62,6 +55,13 @@ void CCard::setCardFlipped(bool shouldFlip)
 
     // Set the card image to the container, scaled by the desired screensize of the card
     this->setPixmap(pixmap.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    // Create a drop shadow effect to make it easier to distinguish cards on one stack
+    QGraphicsDropShadowEffect* DropShadowEffect = new QGraphicsDropShadowEffect();
+    DropShadowEffect->setBlurRadius(50);
+    DropShadowEffect->setOffset(0, 0);
+    DropShadowEffect->setColor(QColor(0, 0, 0, 64));
+    this->setGraphicsEffect(DropShadowEffect);
 }
 
 void CCard::mousePressEvent(QMouseEvent* ev)

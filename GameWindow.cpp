@@ -25,7 +25,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     qDebug() << "Created CGameWindow";
 
     // Set background-color
-    ui->centralwidget->setStyleSheet("background-color:green;");
+    ui->centralwidget->setStyleSheet("background-image: url(:/assets/table_background.png);");
     ui->centralwidget->resize(1000, 800);
 
     // Displays the initial score

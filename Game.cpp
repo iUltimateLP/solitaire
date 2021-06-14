@@ -28,14 +28,14 @@ void CGame::setUp()
         // Create all number cards
         for (int i = 2; i < 11; ++i)
         {
-            CCard* newCard = new CCard(nullptr, symbol, ECardType::Number, i);
+            CCard* newCard = new CCard(CMain::get()->getGameWindow(), symbol, ECardType::Number, i);
             deck.push_back(newCard);
         }
 
         // Create all special cards
         for(ECardType type : typeVector)
         {
-            CCard* newCard = new CCard(nullptr, symbol, type, 0);
+            CCard* newCard = new CCard(CMain::get()->getGameWindow(), symbol, type, 0);
             deck.push_back(newCard);
         }
     }
@@ -69,13 +69,13 @@ void CGame::setUp()
 
     // Placeholder for single symbols => use FinalCardStack or single Cards in the end
     finalHeart = new CHoldingStack();
-    finalHeart->addCard(new CCard(nullptr, ECardSymbol::Heart, ECardType::Ace, 12));
+    finalHeart->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Heart, ECardType::Ace, 12));
     finalDiamond = new CHoldingStack();
-    finalDiamond->addCard(new CCard(nullptr, ECardSymbol::Diamond, ECardType::Ace, 12));
+    finalDiamond->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Diamond, ECardType::Ace, 12));
     finalClub = new CHoldingStack();
-    finalClub->addCard(new CCard(nullptr, ECardSymbol::Club, ECardType::Ace, 12));
+    finalClub->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Club, ECardType::Ace, 12));
     finalSpade = new CHoldingStack();
-    finalSpade->addCard(new CCard(nullptr, ECardSymbol::Spade, ECardType::Ace, 12));
+    finalSpade->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Spade, ECardType::Ace, 12));
 
     // Call the CGameWindow to display the initial state of the game
     for(CHoldingStack* stack: holdingStacks)
