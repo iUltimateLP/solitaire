@@ -6,6 +6,16 @@
 #include <Card.h>
 #include <QTimer>
 
+namespace GameScoringAttributes
+{
+    static int RECYCLING_DRAW_PILE = -100;
+    static int WASTE_PILE_TO_TABLEAU = 5;
+    static int WASTE_PILE_TO_FOUNDATION = 10;
+    static int TABLEAU_TO_FOUNDATION = 10;
+    static int TURN_OVER_TABLEAU_CARD = 5;
+    static int FOUNDATION_TO_TABLEAU = -15;
+}
+
 // Implements the game logic
 class CGame : public QObject
 {
@@ -20,7 +30,7 @@ public:
     void setUp();
 
     // Moves a card from one stack to another, checks first if the move is valid
-    void moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack);
+    void moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack);
 
     // Returns whether the game has ended (all finalStacks have 13 cards)
     bool hasEnded();
