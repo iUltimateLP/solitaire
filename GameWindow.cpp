@@ -3,7 +3,7 @@
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
 #include <QDebug>
-
+#include <QMessageBox>
 #include "Card.h"
 #include "HoldingStack.h"
 
@@ -35,6 +35,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     timer = new QTimer(this);
     QObject::connect(timer, &QTimer::timeout, this, &CGameWindow::updateTimer);
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
+    QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
     timer->start(1000);
     time = new QTime(0,0);
 }
@@ -62,6 +63,15 @@ void CGameWindow::updateTimer()
     *time = time->addSecs(1);
     qDebug() << time->toString("mm:ss");
     ui->time_label->setText("Timer: " + time->toString("mm:ss"));
+}
+
+void CGameWindow::showAbout()
+{
+    // Simply show a message box
+    QMessageBox msgBox(QMessageBox::Information, "About Solitaire", "Solitaire v1.0\n\
+Written in C++ and Qt.\n\n\
+Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
+    msgBox.exec();
 }
 
 CGameWindow::~CGameWindow()

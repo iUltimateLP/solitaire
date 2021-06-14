@@ -34,6 +34,9 @@ private slots:
     // Called every second
     void updateTimer();
 
+    // The "About" menu item
+    void showAbout();
+
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
