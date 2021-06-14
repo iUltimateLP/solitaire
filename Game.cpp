@@ -4,9 +4,10 @@
 
 #include <Main.h>
 
-#include <GameWindow.h>
-#include <HoldingStack.h>
-#include <CardStack.h>
+#include "GameWindow.h"
+#include "HoldingStack.h"
+#include "CardStack.h"
+#include "FinalStack.h"
 
 CGame::CGame(QObject *parent)
     : QObject(parent)
@@ -68,17 +69,13 @@ void CGame::setUp()
     // For detection of ponr: does the game need to know where which card is at the moment?
 
     // Placeholder for single symbols => use FinalCardStack or single Cards in the end
-    finalHeart = new CHoldingStack();
-    finalHeart->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Heart, ECardType::Ace, 12));
-    finalDiamond = new CHoldingStack();
-    finalDiamond->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Diamond, ECardType::Ace, 12));
-    finalClub = new CHoldingStack();
-    finalClub->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Club, ECardType::Ace, 12));
-    finalSpade = new CHoldingStack();
-    finalSpade->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Spade, ECardType::Ace, 12));
+    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
+    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
+    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
+    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
 
     // Call the CGameWindow to display the initial state of the game
-    for(CHoldingStack* stack: holdingStacks)
+    for(CHoldingStack* stack : holdingStacks)
     {
         CMain::get()->getGameWindow()->displayHoldingStack(stack);
     }

@@ -3,5 +3,6 @@
         <file>assets/card_tileset.png</file>
         <file>assets/card_back.png</file>
         <file>assets/table_background.png</file>
+        <file>assets/card_placeholders.png</file>
     </qresource>
 </RCC>
