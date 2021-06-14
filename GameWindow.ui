@@ -25,6 +25,9 @@
       </property>
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="leftMargin">
+         <number>500</number>
+        </property>
         <property name="topMargin">
          <number>20</number>
         </property>

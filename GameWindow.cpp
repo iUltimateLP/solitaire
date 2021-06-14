@@ -50,13 +50,13 @@ CGameWindow::CGameWindow(QWidget* parent)
 void CGameWindow::displayHoldingStack(CHoldingStack* stack)
 {
    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
-    ui->horizontalLayout->addWidget(stack);
+    ui->holdingStackLayout->addWidget(stack);
 }
 
 void CGameWindow::displayFinalStack(CCardStack* final)
 {
     final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
-    ui->horizontalLayout_3->addWidget(final);
+    ui->finalStackLayout->addWidget(final);
 }
 
 void CGameWindow::incrementMove()
