@@ -28,7 +28,8 @@ public:
     void displayFinalStack(CCardStack* final);
 
     // Is called after every move
-    void incrementScore();
+    void incrementMove();
+    void incrementScore(int gameScore);
 
 private slots:
     // Called every second
@@ -41,8 +42,9 @@ private:
     // Reference to this window
     Ui::CGameWindow* ui;
 
-    // Variable for the amount of moves
+    // Variable for score and amount of moves
     int score = 0;
+    int moves = 0;
     QTimer* timer;
     QTime* time;
 };

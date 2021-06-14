@@ -43,6 +43,13 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Moves: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="time_label">
           <property name="text">
            <string>Time</string>

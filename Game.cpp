@@ -89,19 +89,51 @@ void CGame::setUp()
     CMain::get()->getGameWindow()->displayFinalStack(finalClub);
 }
 
-void CGame::moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack)
+void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack)
 {
     // Can we drop the card?
     if(destStack->canDropCard(cardToDrop))
     {
+
+        // Increment the score with the suitable attribute (this is done before the movement, so it can be checked if there are unflipped cards on the srcStack)
+        if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
+        {
+            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+            if (srcStack.getNumberUnflippedCards() > 0)
+            {
+                CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
+            }
+        }
+        else if (dynamic_cast<CFinalStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
+        {
+            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+        }
+        else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
+        {
+            //TODO: check if DrawStack is empty -> "incrementScore" and reset
+            /*
+              if (srcStack.isEmpty())
+              {
+                srcStack.reset();
+                CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
+              }
+            */
+            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+        }
+        else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
+        {
+            //TODO: check if DrawStack is empty -> "incrementScore" and reset
+            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+        }
+
+        // Movement of the card:
         QList<CCard*> cardsToMove;
+
         // While cardToDrop is not the last card, all cards are safed in list and removed
         while (cardToDrop != srcStack->getTopCard())
         {
             cardsToMove.push_back(srcStack->getTopCard());
-
-            // TODO: this function call doesn't work -> does not detect overloading
-            // srcStack->removeCardAt(srcStack->getNumCards()-1);
+            srcStack->removeCardAt(srcStack->getNumCards()-1);
         }
 
         // Finally remove the cardToDrop from the source stack and add it to the destination stack
@@ -115,8 +147,8 @@ void CGame::moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* des
               cardsToMove.pop_front();
         }
 
-        // Increment the score
-        CMain::get()->getGameWindow()->incrementScore();
+        // Increment the amount of steps
+        CMain::get()->getGameWindow()->incrementMove();
     }
     else
     {

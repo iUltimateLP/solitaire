@@ -52,9 +52,15 @@ void CGameWindow::displayFinalStack(CCardStack* final)
     ui->horizontalLayout_3->addWidget(final);
 }
 
-void CGameWindow::incrementScore()
+void CGameWindow::incrementMove()
 {
-    ++score;
+    ++move;
+    ui->move_label->setText("Moves: " + QString::number(score));
+}
+
+void CGameWindow::incrementScore(int gameScore)
+{
+    score += gameScore;
     ui->score_label->setText("Score: " + QString::number(score));
 }
 
