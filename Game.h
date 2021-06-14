@@ -30,7 +30,7 @@ public:
     void setUp();
 
     // Moves a card from one stack to another, checks first if the move is valid
-    void moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack);
+    void moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack);
 
     // Returns whether the game has ended (all finalStacks have 13 cards)
     bool hasEnded();

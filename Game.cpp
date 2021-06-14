@@ -95,6 +95,7 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
     if(destStack->canDropCard(cardToDrop))
     {
 
+
         // Increment the score with the suitable attribute (this is done before the movement, so it can be checked if there are unflipped cards on the srcStack)
         if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
         {
@@ -117,7 +118,7 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
                 srcStack.reset();
                 CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
               }
-            */
+*/
             CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
         }
         else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
@@ -125,6 +126,7 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
             //TODO: check if DrawStack is empty -> "incrementScore" and reset
             CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
         }
+
 
         // Movement of the card:
         QList<CCard*> cardsToMove;
@@ -149,11 +151,6 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
 
         // Increment the amount of steps
         CMain::get()->getGameWindow()->incrementMove();
-    }
-    else
-    {
-        // Message to player: GameWindow.showMessageBox
-        // CMain::get()->getGameWindow()->showMessage(INVALID_MOVE);
     }
 }
 

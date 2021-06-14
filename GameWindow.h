@@ -31,6 +31,8 @@ public:
     void incrementMove();
     void incrementScore(int gameScore);
 
+    void showQMessageBox();
+
 private slots:
     // Called every second
     void updateTimer();
