@@ -46,7 +46,7 @@ void CGameWindow::displayHoldingStack(CHoldingStack* stack)
     ui->horizontalLayout->addWidget(stack);
 }
 
-void CGameWindow::displayFinalStack(CCardStack* final)
+void CGameWindow::displayFinalStack(CFinalStack* final)
 {
     final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
     ui->horizontalLayout_3->addWidget(final);

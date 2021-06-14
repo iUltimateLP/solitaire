@@ -2,10 +2,12 @@
 #pragma once
 
 #include <QObject>
-#include <HoldingStack.h>
-#include <Card.h>
+#include "HoldingStack.h"
+#include "FinalStack.h"
+#include "Card.h"
 #include <QTimer>
 
+// Contains the scoring attributes for the game
 namespace GameScoringAttributes
 {
     static int RECYCLING_DRAW_PILE = -100;
@@ -37,10 +39,10 @@ public:
 
 private:
     // The final stacks at the top
-    CHoldingStack* finalDiamond;
-    CHoldingStack* finalHeart;
-    CHoldingStack* finalSpade;
-    CHoldingStack* finalClub;
+    CFinalStack* finalDiamond;
+    CFinalStack* finalHeart;
+    CFinalStack* finalSpade;
+    CFinalStack* finalClub;
 
     // List of all holding stacks
     QList<CHoldingStack*> holdingStacks;

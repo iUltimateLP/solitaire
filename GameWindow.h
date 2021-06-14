@@ -2,8 +2,9 @@
 #pragma once
 
 #include <QMainWindow>
-#include <Card.h>
-#include <HoldingStack.h>
+#include "Card.h"
+#include "HoldingStack.h"
+#include "FinalStack.h"
 #include <QTimer>
 #include <QTime>
 
@@ -25,7 +26,7 @@ public:
     void displayHoldingStack(CHoldingStack* stack);
 
     // This functions displays the final stacks, is called from game.cpp
-    void displayFinalStack(CCardStack* final);
+    void displayFinalStack(CFinalStack* final);
 
     // Is called after every move
     void incrementMove();

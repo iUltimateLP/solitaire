@@ -32,8 +32,6 @@ void CHoldingStack::removeCard(CCard *cardToRemove)
 
 bool CHoldingStack::canDropCard(CCard *cardToDrop)
 {
-    qDebug() << "HoldingStack::canDropCard";
-
     // If we have any card
     if (this->getNumCards() > 0)
     {
