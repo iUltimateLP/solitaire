@@ -92,39 +92,8 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
     // Can we drop the card?
     if(destStack->canDropCard(cardToDrop))
     {
-/*
-
-        // Increment the score with the suitable attribute (this is done before the movement, so it can be checked if there are unflipped cards on the srcStack)
-        if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
-        {
-            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
-            if (srcStack.getNumberUnflippedCards() > 0)
-            {
-                CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
-            }
-        }
-        else if (dynamic_cast<CFinalStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
-        {
-            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
-        }
-        else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
-        {
-            //TODO: check if DrawStack is empty -> "incrementScore" and reset
-            /*
-              if (srcStack.isEmpty())
-              {
-                srcStack.reset();
-                CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
-              }
-
-            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
-        }
-        else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
-        {
-            //TODO: check if DrawStack is empty -> "incrementScore" and reset
-            CMain::get()->getGameWindow()->incrementScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
-        }
-*/
+        // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
+        evaluateScore(srcStack, destStack);
 
         // Movement of the card:
         QList<CCard*> cardsToMove;
@@ -143,8 +112,8 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
         // While cardsToMove list is not empty, add the cards to destination stack
         while(cardsToMove.size() > 0)
         {
-              destStack->addCard(cardsToMove.front());
-              cardsToMove.pop_front();
+            destStack->addCard(cardsToMove.front());
+            cardsToMove.pop_front();
         }
 
         // Increment the amount of steps
@@ -152,9 +121,73 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
     }
 }
 
+void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
+{
+    /*
+    // Increment the score with the suitable attribute
+    if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
+    {
+        // Points for moving a card from a HoldingStack to a FinalStack
+        changeScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+        if (srcStack.getNumberUnflippedCards() > 0)
+        {
+            // Extra points if the next card from the HoldingStack gets flipped
+            changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
+        }
+    }
+    else if (dynamic_cast<CFinalStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
+    {
+        // Minus points if card is moved from FinalStack back to a HoldingStack
+        changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+    }
+    else if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
+    {
+        if(srcStack->getNumberUnflippedCards() > 0)
+        {
+            // Extra points if the next card from the HoldingStack gets flipped
+            changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
+        }
+    }
+    else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
+    {
+        //TODO: check if DrawStack is empty -> "incrementScore" and recycle
+        if (srcStack.isEmpty())
+        {
+            srcStack->recycle();
+            // Minus points if the DrawStack is empty and gets recycled
+            changeScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
+        }
+        // Points for moving a card from the DrawStack to a HoldingStack
+        changeScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+    }
+    else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
+    {
+        //TODO: check if DrawStack is empty -> "incrementScore" and recycle
+        // Points for moving a card directly from the DrawStack to a FinalStack
+        changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+    }
+    */
+}
+
+void CGame::changeScore(int points)
+{
+    score += points;
+    if(score < 0)
+    {
+        score = 0;
+    }
+    emit onScoreChanged();
+}
+
+int CGame::getScore()
+{
+    return score;
+}
+
 bool CGame::hasEnded()
 {
     // Check if all final stacks got 13 cards
+    // TODO: use finalXY->isComplete() when implemented
     return (finalDiamond->getNumCards() == 13
             && finalSpade->getNumCards() == 13
             && finalHeart->getNumCards() == 13
