@@ -54,8 +54,8 @@ void CGameWindow::displayFinalStack(CCardStack* final)
 
 void CGameWindow::incrementMove()
 {
-    ++move;
-    ui->move_label->setText("Moves: " + QString::number(score));
+    ++moves;
+    ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
 void CGameWindow::incrementScore(int gameScore)
