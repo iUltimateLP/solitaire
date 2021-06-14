@@ -14,13 +14,19 @@ class CGame : public QObject
 public:
     // Constructor
     CGame(QObject* parent = nullptr);
-    void moveCard (CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack);
-    bool hasEnded();
+
+    // The initial setup of the game board, which shuffles the card deck, fills all card stacks
+    // and calls the GameWindow to display everything
     void setUp();
 
+    // Moves a card from one stack to another, checks first if the move is valid
+    void moveCard(CCard* cardToDrop, CHoldingStack* srcStack, CCardStack* destStack);
+
+    // Returns whether the game has ended (all finalStacks have 13 cards)
+    bool hasEnded();
+
 private:
-    //declaring all necessary stacks
-    //final stacks -> TODO: these has to be either other sort of stack or simply cards
+    // The final stacks at the top
     CHoldingStack* finalDiamond;
     CHoldingStack* finalHeart;
     CHoldingStack* finalSpade;
@@ -29,6 +35,6 @@ private:
     // List of all holding stacks
     QList<CHoldingStack*> holdingStacks;
 
-    //the deck contains all cards
+    // The deck contains all cards in the whole game
     QList<CCard*> deck;
 };
