@@ -31,7 +31,7 @@ class CCard : public QLabel
 {
     Q_OBJECT
 
-private:
+public:
     // The size of a card on the tileset
     static QSize cardTileSize;
 

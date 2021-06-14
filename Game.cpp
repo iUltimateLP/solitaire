@@ -70,7 +70,6 @@ void CGame::setUp()
 
     // Placeholder for single symbols => use FinalCardStack or single Cards in the end
     finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
-    finalHeart->addCard(new CCard(CMain::get()->getGameWindow(), ECardSymbol::Heart, ECardType::Number, 3));
     finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
     finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
     finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);

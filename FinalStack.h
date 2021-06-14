@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "CardStack.h"
+#include "CardVBoxLayout.h"
 
 // Represents one of the four final card stacks at the top of the game,
 // where cards get dropped off until the stack is full
@@ -24,5 +25,8 @@ public:
 private:
     // The symbol this final stack allows
     ECardSymbol stackSymbol;
+
+    // Box layout to display the cards
+    CCardVBoxLayout* vbox;
 };
 
