@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>1000</height>
+    <height>850</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,19 +24,45 @@
        <number>20</number>
       </property>
       <item row="1" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="topMargin">
+         <number>20</number>
+        </property>
+       </layout>
+      </item>
+      <item row="2" column="0">
        <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-        </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout"/>
         </item>
        </layout>
       </item>
       <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="time_label">
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Time</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="score_label">
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
            <string>Score: </string>
           </property>
@@ -44,15 +70,14 @@
         </item>
         <item>
          <widget class="QLabel" name="move_label">
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text">
            <string>Moves: </string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="time_label">
-          <property name="text">
-           <string>Time</string>
           </property>
          </widget>
         </item>

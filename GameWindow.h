@@ -40,6 +40,9 @@ private slots:
     // The "About" menu item
     void showAbout();
 
+    // Called when CGame changes its internal score-variable
+    void updateScore();
+
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
