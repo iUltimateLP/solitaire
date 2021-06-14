@@ -13,6 +13,7 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     , cardSymbol(symbol)
     , cardType(type)
     , cardNumberValue(numberValue)
+    , isFlipped(true)
 {
     // Load the pixmap of the cards tileset
     QPixmap tileset(":/assets/card_tileset.png");
@@ -22,10 +23,14 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     int tilesetY = (int)symbol;
 
     // Extract that region off the tileset
-    QPixmap cardTile = tileset.copy(tilesetX * cardTileSize.width(), tilesetY * cardTileSize.height(), cardTileSize.width(), cardTileSize.height());
+    // We're creating this pixmap on the heap using the copy constructor of QPixmap(const QPixmap&) so we have access to it later
+    cardFrontPixmap = new QPixmap(tileset.copy(tilesetX * cardTileSize.width(), tilesetY * cardTileSize.height(), cardTileSize.width(), cardTileSize.height()));
 
-    // Set the card image to the container, scaled by the desired screensize of the card
-    this->setPixmap(cardTile.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    // Create the pixmap for the back of the card
+    cardBackPixmap = new QPixmap(":/assets/card_back.png");
+
+    // Flipped by default, also applys the pixmap
+    this->setCardFlipped(true);
 
     // Apply the screen size to this whole widget's geometry
     this->setGeometry(0, 0, cardTileSize.width(), cardTileSize.height());
@@ -47,6 +52,18 @@ QSize CCard::getCardScreenSize()
     return cardTileSize * cardSizeFactor;
 }
 
+void CCard::setCardFlipped(bool shouldFlip)
+{
+    // Set the variable
+    this->isFlipped = shouldFlip;
+
+    // Apply the correct pixmap
+    QPixmap pixmap = isFlipped ? *cardFrontPixmap : *cardBackPixmap;
+
+    // Set the card image to the container, scaled by the desired screensize of the card
+    this->setPixmap(pixmap.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+}
+
 void CCard::mousePressEvent(QMouseEvent* ev)
 {
     qDebug() << "Clicked card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
@@ -59,10 +76,10 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
 
 void CCard::enterEvent(QEvent* ev)
 {
-    qDebug() << "Hover card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
+    //qDebug() << "Hover card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
 }
 
 void CCard::leaveEvent(QEvent* ev)
 {
-    qDebug() << "Leave card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
+    //qDebug() << "Leave card" << this->cardSymbol << "," << this->cardType << "," << this->cardNumberValue;
 }

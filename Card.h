@@ -87,6 +87,14 @@ public:
         }
     }
 
+    // Sets whether this card is flipped or not (true = you see the image, false = you see the back)
+    void setCardFlipped(bool shouldFlip);
+
+    // Returns whether this card is flipped
+    bool getFlipped()
+    {
+        return isFlipped;
+    }
 
 private:
     // Overwritten mouse events
@@ -100,4 +108,11 @@ private:
     ECardSymbol cardSymbol;
     ECardType cardType;
     int cardNumberValue;
+
+    // Whether this card is flipped
+    bool isFlipped;
+
+    // The pixmap of the card front
+    QPixmap* cardFrontPixmap;
+    QPixmap* cardBackPixmap;
 };

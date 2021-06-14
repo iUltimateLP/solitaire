@@ -51,6 +51,7 @@ void CGame::setUp()
         for(int j = 0; j<i+1; ++j)
         {
             holdingStacks[i]->addCard(deck.front());
+            deck.front()->setCardFlipped(j >= i);
             deck.pop_front();
         }
     }
