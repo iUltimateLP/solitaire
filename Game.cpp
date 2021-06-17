@@ -64,22 +64,32 @@ void CGame::setUp()
         }
     }
 
-    // drawPile = new CCardStack();
-    // drawPile.addCards(cardDeck);
-    // For detection of ponr: does the game need to know where which card is at the moment?
-
-    // Placeholder for single symbols => use FinalCardStack or single Cards in the end
-    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
-    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
-    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
-    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
-
-    // Call the CGameWindow to display the initial state of the game
+    // Call the CGameWindow to display the initial state of the holdingStacks
     for(CHoldingStack* stack : holdingStacks)
     {
         CMain::get()->getGameWindow()->displayHoldingStack(stack);
     }
 
+    // Create the drawStack and adding the left cards of the deck to it
+    drawStack = new CDrawStack(CMain::get()->getGameWindow());
+    for(int i = 0; i < deck.size(); ++i)
+    {
+        // Every card on the drawStack is initially invisible -> only the "topCard" will be visible
+        deck[i]->setVisible(0);
+        drawStack->addCard(deck[i]);
+    }
+    //TODO: empty deck
+    // Call the CGameWindow to display the initial state of the drawStack
+    CMain::get()->getGameWindow()->displayDrawStack(drawStack);
+
+    // TODO: Could we declare the CFinalStacks directly in the GameWindow?
+    // Declaration of the 4 final stacks, these are initially empty
+    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
+    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
+    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
+    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
+
+    // Call the CGameWindow to display the initial state of the finalStacks
     CMain::get()->getGameWindow()->displayFinalStack(finalHeart);
     CMain::get()->getGameWindow()->displayFinalStack(finalDiamond);
     CMain::get()->getGameWindow()->displayFinalStack(finalSpade);

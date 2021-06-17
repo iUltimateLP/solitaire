@@ -6,6 +6,7 @@
 #include "FinalStack.h"
 #include "Card.h"
 #include <QTimer>
+#include "DrawStack.h"
 
 // Contains the scoring attributes for the game
 namespace GameScoringAttributes
@@ -54,6 +55,7 @@ signals:
     void onScoreChanged();
 
 private:
+    CDrawStack* drawStack;
     // The final stacks at the top
     CFinalStack* finalDiamond;
     CFinalStack* finalHeart;

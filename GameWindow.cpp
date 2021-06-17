@@ -33,6 +33,10 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->score_label->setText("Score is: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
+    cardBackPixmap = new QPixmap(":/assets/card_back.png");
+    QPixmap placeholderTilset = QPixmap(":/assets/card_placeholders.png");
+    emptyDrawStackPixmap = placeholderTilset.copy(CCard::cardTileSize.width(), 0, CCard::cardTileSize.width(), CCard::cardTileSize.height());
+
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
     timer->start(1000);
@@ -55,8 +59,28 @@ void CGameWindow::displayHoldingStack(CHoldingStack* stack)
 
 void CGameWindow::displayFinalStack(CFinalStack* final)
 {
-    final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
+    //final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
     ui->finalStackLayout->addWidget(final);
+}
+
+void CGameWindow::displayDrawStack(CDrawStack *draw)
+{
+    // Create a QLabel that represents the drawStack but needs no logic
+    drawStackPlaceholder = new QLabel(this);
+    drawStackPlaceholder->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    drawStackPlaceholder->setPixmap(cardBackPixmap->scaled(CCard::getCardScreenSize().width(), CCard::getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    // Add the drawStackPlaceholder to the drawStackLayout
+    ui->drawStackLayout->addWidget(drawStackPlaceholder);
+
+    // Initial state of the drawStack is done here
+    draw->setUp();
+
+    // Adding the drawStack to the same layout
+    ui->drawStackLayout->addWidget(draw);
+
+    // For testing purpose: connect the pushButton with the drawstack to iterate through the cards
+    QObject::connect(ui->pushButton, &QPushButton::clicked, draw, &CDrawStack::showNextCard);
 }
 
 void CGameWindow::incrementMove()
@@ -91,6 +115,13 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 void CGameWindow::updateScore()
 {
     score = CMain::get()->getGameInstance()->getScore();
+}
+
+void CGameWindow::toggleDrawStackPlaceholder()
+{
+    qDebug() << "toggle placeholder";
+    // TODO: check what pixmap is displayed currentl and display the other one
+    drawStackPlaceholder->setPixmap(cardBackPixmap->scaled(CCard::getCardScreenSize().width(), CCard::getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 CGameWindow::~CGameWindow()

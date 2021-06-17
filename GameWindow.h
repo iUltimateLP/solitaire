@@ -5,6 +5,7 @@
 #include "Card.h"
 #include "HoldingStack.h"
 #include "FinalStack.h"
+#include "DrawStack.h"
 #include <QTimer>
 #include <QTime>
 
@@ -28,11 +29,15 @@ public:
     // This functions displays the final stacks, is called from game.cpp
     void displayFinalStack(CFinalStack* final);
 
+    // This function displays the draw stack, is called from game.cpp
+    void displayDrawStack(CDrawStack * draw);
+
     // Is called after every move
     void incrementMove();
     void incrementScore(int gameScore);
 
-    void showQMessageBox();
+    // Toggles from card back to empty stack and vice versa, is called from drawStack
+    void toggleDrawStackPlaceholder();
 
 private slots:
     // Called every second
@@ -53,4 +58,13 @@ private:
     int moves = 0;
     QTimer* timer;
     QTime* time;
+
+
+    // Label that represents the unflipped drawStack but needs no logic
+    QLabel* drawStackPlaceholder;
+
+    // The pixmap of the card back and empty drawStack placeholder
+    QPixmap* cardBackPixmap;
+    QPixmap emptyDrawStackPixmap;
+
 };

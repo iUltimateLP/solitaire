@@ -41,7 +41,10 @@ signals:
     // When the cards on this stack changed
     void onCardsChanged();
 
-private:
+
+//TODO: this is currently changed to protected, so that the drawStack can access this List -> is there a better solution?
+//private:
+protected:
     // Holds the cards for this stack
     QList<CCard*> cards;
 };
