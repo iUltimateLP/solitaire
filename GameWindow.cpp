@@ -30,7 +30,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->centralwidget->resize(1000, 800);
 
     // Displays the initial score and moves
-    ui->score_label->setText("Score is: " + QString::number(score));
+    ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
     cardBackPixmap = new QPixmap(":/assets/card_back.png");
@@ -49,6 +49,19 @@ CGameWindow::CGameWindow(QWidget* parent)
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
     // Connection from score changing in CGame with CGameWindow
     QObject::connect(CMain::get()->getGameInstance(), &CGame::onScoreChanged, this, &CGameWindow::updateScore);
+
+
+    // Set the distance between the 3 labels
+    ui->labelLayout->setSpacing(25);
+    ui->labelLayout->setAlignment(ui->move_label, Qt::AlignRight);
+    ui->labelLayout->setAlignment(ui->score_label, Qt::AlignRight);
+    ui->labelLayout->setAlignment(ui->time_label, Qt::AlignRight);
+
+    // Style the 3 labels: Timer, Score, Moves and hide the statusbar
+    ui->score_label->setStyleSheet("QLabel {color: white}");
+    ui->move_label->setStyleSheet("QLabel {color: white}");
+    ui->time_label->setStyleSheet("QLabel {color: white}");
+    ui->statusbar->hide();
 }
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack)
@@ -74,7 +87,7 @@ void CGameWindow::displayDrawStack(CDrawStack *draw)
     ui->drawStackLayout->addWidget(drawStackPlaceholder);
 
     // Initial state of the drawStack is done here
-    draw->setUp();
+  //  draw->setUp();
 
     // Adding the drawStack to the same layout
     ui->drawStackLayout->addWidget(draw);

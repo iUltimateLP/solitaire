@@ -70,9 +70,3 @@ void CDrawStack::showNextCard()
     }
     qDebug() << "click and show next card";
 }
-
-void CDrawStack::setUp()
-{
-    getTopCard()->setVisible(1);
-    this->currentCard = getNumCards()-1;
-}

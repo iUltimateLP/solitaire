@@ -30,7 +30,7 @@ private:
     CCardVBoxLayout* vbox;
 
     // Holds the index of the current visible card
-    int currentCard;
+    int currentCard = 0;
 };
 
 
