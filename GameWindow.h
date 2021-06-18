@@ -24,10 +24,10 @@ public:
     ~CGameWindow();
 
     // This functions displays the holding stacks, is called from game.cpp
-    void displayHoldingStack(CHoldingStack* stack);
+    void displayHoldingStack(CHoldingStack* stack, int column);
 
     // This functions displays the final stacks, is called from game.cpp
-    void displayFinalStack(CFinalStack* final);
+    void displayFinalStack(CFinalStack* final, int column);
 
     // This function displays the draw stack, is called from game.cpp
     void displayDrawStack(CDrawStack * draw);
@@ -36,8 +36,6 @@ public:
     void incrementMove();
     void incrementScore(int gameScore);
 
-    // Toggles from card back to empty stack and vice versa, is called from drawStack
-    void toggleDrawStackPlaceholder();
 
 private slots:
     // Called every second

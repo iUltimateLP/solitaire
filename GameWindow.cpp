@@ -62,21 +62,21 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->statusbar->hide();
 }
 
-void CGameWindow::displayHoldingStack(CHoldingStack* stack)
+void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
-    ui->holdingStackLayout->addWidget(stack);
+    ui->gridLayout_3->addWidget(stack, 1, column, 1, 1);
 }
 
-void CGameWindow::displayFinalStack(CFinalStack* final)
+void CGameWindow::displayFinalStack(CFinalStack* final, int column)
 {
     //final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
-    ui->finalStackLayout->addWidget(final);
+    ui->gridLayout_3->addWidget(final, 0, column + 3, 1, 1);
 }
 
 void CGameWindow::displayDrawStack(CDrawStack *draw)
 {
-    ui->drawStackLayout->addLayout(draw->getHBoxLayout());
+    ui->gridLayout_3->addLayout(draw->getHBoxLayout(), 0, 0, 1, 2);
 }
 
 void CGameWindow::incrementMove()
@@ -111,13 +111,6 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 void CGameWindow::updateScore()
 {
     score = CMain::get()->getGameInstance()->getScore();
-}
-
-void CGameWindow::toggleDrawStackPlaceholder()
-{
-    qDebug() << "toggle placeholder";
-    // TODO: check what pixmap is displayed currentl and display the other one
-  //  drawStackPlaceholder->setPixmap(emptyDrawStackPixmap->scaled(CCard::getCardScreenSize().width(), CCard::getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 CGameWindow::~CGameWindow()

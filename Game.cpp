@@ -44,6 +44,21 @@ void CGame::setUp()
     // Shuffle carddeck
     std::random_shuffle(deck.begin(), deck.end());
 
+
+    // TODO: Could we declare the CFinalStacks directly in the GameWindow?
+    // Declaration of the 4 final stacks, these are initially empty
+    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
+    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
+    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
+    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
+
+    // Call the CGameWindow to display the initial state of the finalStacks
+    //TODO. don't hardcode the int for column
+    CMain::get()->getGameWindow()->displayFinalStack(finalHeart, (int)ECardSymbol::Heart);
+    CMain::get()->getGameWindow()->displayFinalStack(finalDiamond, (int)ECardSymbol::Diamond);
+    CMain::get()->getGameWindow()->displayFinalStack(finalSpade, (int)ECardSymbol::Spade);
+    CMain::get()->getGameWindow()->displayFinalStack(finalClub, (int)ECardSymbol::Club);
+
     // Create seven holding stacks and fill with cards
     for(int i = 0; i < 7; ++i)
     {
@@ -65,9 +80,10 @@ void CGame::setUp()
     }
 
     // Call the CGameWindow to display the initial state of the holdingStacks
-    for(CHoldingStack* stack : holdingStacks)
+    //for(CHoldingStack* stack : holdingStacks)
+    for(int i = 0; i < holdingStacks.size(); ++i)
     {
-        CMain::get()->getGameWindow()->displayHoldingStack(stack);
+        CMain::get()->getGameWindow()->displayHoldingStack(holdingStacks[i], i);
     }
 
     // Create the drawStack and adding the left cards of the deck to it
@@ -82,18 +98,6 @@ void CGame::setUp()
     // Call the CGameWindow to display the initial state of the drawStack
     CMain::get()->getGameWindow()->displayDrawStack(drawStack);
 
-    // TODO: Could we declare the CFinalStacks directly in the GameWindow?
-    // Declaration of the 4 final stacks, these are initially empty
-    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
-    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
-    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
-    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
-
-    // Call the CGameWindow to display the initial state of the finalStacks
-    CMain::get()->getGameWindow()->displayFinalStack(finalHeart);
-    CMain::get()->getGameWindow()->displayFinalStack(finalDiamond);
-    CMain::get()->getGameWindow()->displayFinalStack(finalSpade);
-    CMain::get()->getGameWindow()->displayFinalStack(finalClub);
 }
 
 void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack)
