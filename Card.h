@@ -115,4 +115,6 @@ private:
     // The pixmap of the card front
     QPixmap* cardFrontPixmap;
     QPixmap* cardBackPixmap;
+
+    QPoint dragStartPosition;
 };

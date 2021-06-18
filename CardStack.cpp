@@ -82,3 +82,8 @@ void CCardStack::handleCardsChanged()
 {
     qDebug() << "handleCardsChanged!";
 }
+
+QList<CCard*> CCardStack::getCards()
+{
+    return cards;
+}

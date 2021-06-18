@@ -60,11 +60,5 @@ private:
     QTime* time;
 
 
-    // Label that represents the unflipped drawStack but needs no logic
-    QLabel* drawStackPlaceholder;
-
-    // The pixmap of the card back and empty drawStack placeholder
-    QPixmap* cardBackPixmap;
-    QPixmap emptyDrawStackPixmap;
 
 };

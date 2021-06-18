@@ -101,20 +101,13 @@
          <number>0</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="drawStackLayout" stretch="0">
+         <layout class="QHBoxLayout" name="drawStackLayout" stretch="">
           <property name="spacing">
            <number>6</number>
           </property>
           <property name="rightMargin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>

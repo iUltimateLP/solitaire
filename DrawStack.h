@@ -3,6 +3,7 @@
 #include <QObject>
 #include "CardStack.h"
 #include "CardVBoxLayout.h"
+#include "ClickableLabel.h"
 
 
 class CDrawStack : public CCardStack
@@ -19,8 +20,7 @@ public:
     virtual bool canDropCard(CCard* cardToDrop) override;
     //~ End CCardCard interface
 
-    // This function is called in the beginning to set the first card visible and the variable currentCard to the top one
-    void setUp();
+    QHBoxLayout* getHBoxLayout();
 
 public slots:
     void showNextCard();
@@ -28,9 +28,17 @@ public slots:
 private:
     // Box layout to display the cards
     CCardVBoxLayout* vbox;
+    QHBoxLayout* boxLayout;
 
     // Holds the index of the current visible card
     int currentCard = 0;
+
+    // Label that represents the unflipped drawStack but needs no logic
+    ClickableLabel* drawStackPlaceholder;
+
+    // The pixmap of the card back and empty drawStack placeholder
+    QPixmap cardBackPixmap;
+    QPixmap emptyDrawStackPixmap;
 };
 
 

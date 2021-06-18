@@ -33,6 +33,8 @@ public:
     // Checks whether a given card can be dropped on this stack
     virtual bool canDropCard(CCard* cardToDrop);
 
+    QList<CCard*> getCards();
+
 public slots:
     // Internally handles when the cards on this stack changed
     void handleCardsChanged();
@@ -41,10 +43,7 @@ signals:
     // When the cards on this stack changed
     void onCardsChanged();
 
-
-//TODO: this is currently changed to protected, so that the drawStack can access this List -> is there a better solution?
-//private:
-protected:
+private:
     // Holds the cards for this stack
     QList<CCard*> cards;
 };

@@ -19,6 +19,7 @@ SOURCES += \
     Card.cpp \
     CardStack.cpp \
     CardVBoxLayout.cpp \
+    ClickableLabel.cpp \
     DrawStack.cpp \
     FinalStack.cpp \
     Game.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     Card.h \
     CardStack.h \
     CardVBoxLayout.h \
+    ClickableLabel.h \
     DrawStack.h \
     FinalStack.h \
     Game.h \
