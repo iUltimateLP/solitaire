@@ -73,3 +73,42 @@ bool CFinalStack::canDropCard(CCard *cardToDrop)
     // Allowed
     return true;
 }
+
+void CFinalStack::dragEnterEvent(QDragEnterEvent* ev)
+{
+    // We can extract the card to drop from the source of the drag event (as we started
+    // the d'n'd operation in the card)
+    CCard* cardToDrop = reinterpret_cast<CCard*>(ev->source());
+
+    // Make sure the card is valid
+    if (!cardToDrop) return;
+
+    // Check if we could drop the card here
+    if (this->canDropCard(cardToDrop))
+    {
+        // Accept the drag operation
+        ev->acceptProposedAction();
+    }
+}
+
+void CFinalStack::dropEvent(QDropEvent* ev)
+{
+    // We can extract the card to drop from the source of the drag event (as we started
+    // the d'n'd operation in the card)
+    CCard* cardToDrop = reinterpret_cast<CCard*>(ev->source());
+
+    // Make sure the card is valid
+    if (!cardToDrop) return;
+
+    // Now, this drop event will only be called if we can actually drop here, the actual
+    // decision happens in dragEnterEvent
+
+    // Remove the card from the stack it's in right now, if it's in any stack
+    if (cardToDrop->getCardStack())
+    {
+        cardToDrop->getCardStack()->removeCard(cardToDrop);
+    }
+
+    // Add it to this stack
+    this->addCard(cardToDrop);
+}

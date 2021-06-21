@@ -5,6 +5,9 @@
 #include <QWidget>
 #include <QLabel>
 
+// Forward declaration
+class CCardStack;
+
 // Card symbol enumeration
 enum ECardSymbol
 {
@@ -96,6 +99,18 @@ public:
         return isFlipped;
     }
 
+    // Sets the stack this card is in
+    void setCardStack(CCardStack* newStack)
+    {
+        currentStack = newStack;
+    }
+
+    // Returns the stack this card is on
+    CCardStack* getCardStack()
+    {
+        return currentStack;
+    }
+
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
@@ -116,5 +131,6 @@ private:
     QPixmap* cardFrontPixmap;
     QPixmap* cardBackPixmap;
 
-    QPoint dragStartPosition;
+    // The stack the card is in right now
+    CCardStack* currentStack;
 };

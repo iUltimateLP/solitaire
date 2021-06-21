@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QDragEnterEvent>
 #include "Card.h"
 
 // Implements a card stack which can hold multiple cards

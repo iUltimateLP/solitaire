@@ -69,8 +69,12 @@ void CDrawStack::removeCard(CCard* cardToRemove)
 
 bool CDrawStack::canDropCard(CCard *cardToDrop)
 {
+    Q_UNUSED(cardToDrop);
+
     // Adding a card to the drawStack is not possible, due to that, this method is not necessary
     qDebug() << "nothing happens";
+
+    return true;
 }
 
 void CDrawStack::showNextCard()

@@ -94,7 +94,7 @@ void CGameWindow::incrementScore(int gameScore)
 void CGameWindow::updateTimer()
 {
     *time = time->addSecs(1);
-    qDebug() << time->toString("mm:ss");
+    //qDebug() << time->toString("mm:ss");
     ui->time_label->setText("Timer: " + time->toString("mm:ss"));
 }
 

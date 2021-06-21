@@ -23,6 +23,11 @@ public:
     //~ End CCardCard interface
 
 private:
+    // Overwritten drag'n'drop events
+    void dragEnterEvent(QDragEnterEvent* ev) override;
+    void dropEvent(QDropEvent* ev) override;
+
+private:
     // The vertical box layout to use for the holding stack
     CCardVBoxLayout* vbox;
 };
