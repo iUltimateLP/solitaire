@@ -41,7 +41,8 @@ void CGame::setUp()
         }
     }
 
-    // Shuffle carddeck
+    // Seed the random number generator and shuffle the carddeck
+    std::srand(time(0));
     std::random_shuffle(deck.begin(), deck.end());
 
 
