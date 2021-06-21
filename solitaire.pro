@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Card.cpp \
+    CardHBoxLayout.cpp \
     CardStack.cpp \
     CardVBoxLayout.cpp \
     ClickableLabel.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
 
 HEADERS += \
     Card.h \
+    CardHBoxLayout.h \
     CardStack.h \
     CardVBoxLayout.h \
     ClickableLabel.h \
