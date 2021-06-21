@@ -30,7 +30,7 @@ CDrawStack::CDrawStack(QWidget* parent)
     emptyDrawStackPixmap = placeholderTile.scaled(CCard::getCardScreenSize().width(), CCard::getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     // Create a QLabel that represents the drawStack but needs no logic
-    drawStackPlaceholder = new ClickableLabel(this);
+    drawStackPlaceholder = new CClickableLabel(this);
     drawStackPlaceholder->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     drawStackPlaceholder->setPixmap(cardBackPixmap);
 
@@ -40,7 +40,7 @@ CDrawStack::CDrawStack(QWidget* parent)
     boxLayout->addWidget(drawStackPlaceholder);
     boxLayout->addWidget(this);
 
-    QObject::connect(drawStackPlaceholder, &ClickableLabel::clicked, this, &CDrawStack::showNextCard);
+    QObject::connect(drawStackPlaceholder, &CClickableLabel::clicked, this, &CDrawStack::showNextCard);
     //addCard()
 }
 

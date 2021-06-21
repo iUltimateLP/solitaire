@@ -34,7 +34,7 @@ private:
     int currentCard = 0;
 
     // Label that represents the unflipped drawStack but needs no logic
-    ClickableLabel* drawStackPlaceholder;
+    CClickableLabel* drawStackPlaceholder;
 
     // The pixmap of the card back and empty drawStack placeholder
     QPixmap cardBackPixmap;

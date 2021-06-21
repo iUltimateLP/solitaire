@@ -1,15 +1,14 @@
+// Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "ClickableLabel.h"
 
-ClickableLabel::ClickableLabel(QWidget* parent, Qt::WindowFlags f)
-    :QLabel(parent)
+CClickableLabel::CClickableLabel(QWidget* parent, Qt::WindowFlags f)
+    : QLabel(parent)
 {
 
 }
 
-ClickableLabel::~ClickableLabel()
-{}
-
-void ClickableLabel::mousePressEvent(QMouseEvent* ev)
+void CClickableLabel::mousePressEvent(QMouseEvent* ev)
 {
+    // Simply emit the signal
     emit clicked();
 }
