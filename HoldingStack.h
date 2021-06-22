@@ -22,6 +22,9 @@ public:
     virtual bool canDropCard(CCard* cardToDrop) override;
     //~ End CCardCard interface
 
+    // Flips the next top card
+    void flipNextCard();
+
 private:
     // Overwritten drag'n'drop events
     void dragEnterEvent(QDragEnterEvent* ev) override;
