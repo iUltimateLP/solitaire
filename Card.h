@@ -118,6 +118,7 @@ private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
     void mouseReleaseEvent(QMouseEvent* ev) override;
+    void mouseMoveEvent(QMouseEvent* ev) override;
     void enterEvent(QEvent* ev) override;
     void leaveEvent(QEvent* ev) override;
 
@@ -136,4 +137,8 @@ private:
 
     // The stack the card is in right now
     CCardStack* currentStack;
+
+    // The position where we started clicking so we know whether it
+    // was a drag request or not
+    QPoint dragStartPos;
 };

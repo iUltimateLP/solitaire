@@ -64,6 +64,11 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
         // If all of these conditions passed, we allow it
         return true;
     }
+    else
+    {
+        // No card, then only a king can start a new stack
+        if (cardToDrop->getType() != ECardType::King) return false;
+    }
 
     // If we don't have any card on this stack, we can always drop
     return true;
