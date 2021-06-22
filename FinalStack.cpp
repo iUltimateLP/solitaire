@@ -1,6 +1,7 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "FinalStack.h"
 #include "CardVBoxLayout.h"
+#include <QDebug>
 
 CFinalStack::CFinalStack(QWidget* parent, ECardSymbol symbol)
     : CCardStack(parent)
@@ -60,14 +61,22 @@ bool CFinalStack::canDropCard(CCard *cardToDrop)
     // Check if the symbol is what we allow on this stack
     if (cardToDrop->getSymbol() != stackSymbol) return false;
 
+    // Get the top card on the stack
+    CCard* topCard = this->getTopCard();
+
     // If we have any card
-    if (this->getNumCards() > 0)
+    if (topCard)
     {
-        // Get the top card on the stack
-        CCard* topCard = this->getTopCard();
+        // If the top card is an Ace, the next allowed card is only a '2'
+        if (topCard->getType() == ECardType::Ace && cardToDrop->getNumberValue() == 2) return true;
 
         // Check whether the value of the card to drop is one higher than the current top card
         if (cardToDrop->getOverallValue() != topCard->getOverallValue() + 1) return false;
+    }
+    else
+    {
+        // When no card is on this stack, the first card to accept is only an Ace
+        if (cardToDrop->getType() != ECardType::Ace) return false;
     }
 
     // Allowed
