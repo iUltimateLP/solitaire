@@ -25,6 +25,9 @@ public:
     // Flips the next top card
     void flipNextCard();
 
+    // Returns all cards above a specific card
+    QList<CCard*> getCardsAbove(CCard* card);
+
 private:
     // Overwritten drag'n'drop events
     void dragEnterEvent(QDragEnterEvent* ev) override;

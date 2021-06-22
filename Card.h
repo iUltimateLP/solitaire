@@ -29,6 +29,22 @@ enum ECardType
     Ace    = 12
 };
 
+// Payload data used for drag-and-drop operations
+struct CardDndPayload
+{
+public:
+    // A list of cards which were dragged
+    QList<class CCard*> cards;
+
+    // Whether this was a single card or a card stack
+    bool isSingleCard;
+
+    // Streaming operators so we can serialize this struct
+    // Taken from here: https://stackoverflow.com/questions/24345681/qdatastream-serialize-pointer
+    friend QDataStream& operator<<(QDataStream& s, const CardDndPayload* payloadPtr);
+    friend QDataStream& operator>>(QDataStream& s, CardDndPayload*& payloadPtr);
+};
+
 // Implements a playing card
 class CCard : public QLabel
 {

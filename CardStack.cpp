@@ -79,7 +79,7 @@ CCard* CCardStack::getTopCard()
     }
 }
 
-bool CCardStack::canDropCard(CCard *cardToDrop)
+bool CCardStack::canDropCard(CCard* cardToDrop)
 {
     Q_UNUSED(cardToDrop);
 
@@ -89,12 +89,13 @@ bool CCardStack::canDropCard(CCard *cardToDrop)
     return true;
 }
 
+int CCardStack::getIndexOfCard(CCard* card)
+{
+    // Find the card
+    return cards.indexOf(card);
+}
+
 void CCardStack::handleCardsChanged()
 {
     qDebug() << "handleCardsChanged!";
-}
-
-QList<CCard*> CCardStack::getCards()
-{
-    return cards;
 }

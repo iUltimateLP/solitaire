@@ -13,7 +13,25 @@
 QSize CCard::cardTileSize = QSize(170, 255);
 float CCard::cardSizeFactor = 0.6;
 
-Q_DECL_IMPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0); // src/widgets/effects/qpixmapfilter.cpp
+// Global streaming operator to serialzie a CardDndPayload into a data stream
+QDataStream& operator<<(QDataStream& s, const CardDndPayload* payloadPtr)
+{
+    // Just serialize the pointer
+    qulonglong ptrval(*reinterpret_cast<qulonglong*>(&payloadPtr));
+    return s << ptrval;
+}
+
+// Global streaming operator to deserialize a CardDndPayload from a data stream
+QDataStream& operator>>(QDataStream& s, CardDndPayload*& payloadPtr)
+{
+    // Deserialize the pointer value from the stream
+    qulonglong ptrval;
+    s >> ptrval;
+
+    // Reinterpret the pointer
+    payloadPtr = *reinterpret_cast<CardDndPayload**>(&ptrval);
+    return s;
+}
 
 CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, const int numberValue)
     : QLabel(parent)
@@ -115,7 +133,7 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
 void CCard::mouseMoveEvent(QMouseEvent* ev)
 {
     // Make sure the left button is held and we dragged a minimum distance to further handle the dragging
-    if (!(ev->buttons() & Qt::LeftButton) || (ev->pos() - dragStartPos).manhattanLength() < 1) return;
+    if (!(ev->buttons() & Qt::LeftButton) || (ev->pos() - dragStartPos).manhattanLength() < 1 || !this->getFlipped()) return;
 
     // Create a new QDrag object to enable drag and drop
     QDrag* drag = new QDrag(this);
@@ -123,17 +141,56 @@ void CCard::mouseMoveEvent(QMouseEvent* ev)
     // Every drag'n'drop action needs MIME data to identify whether drops are allowed at certain
     // places or not.
     QMimeData* mimeData = new QMimeData();
+    CardDndPayload* payload = new CardDndPayload();
 
-    // This however also gives us the option to transmit any payload we want with the drag'n'drop
-    // operation. Here, we're inventing a application/x-card-data mime-type and simply serialize
-    // the pointer to this card in the payload
-    QByteArray dndPayload;
-    dndPayload.fromRawData(reinterpret_cast<char*>(this), sizeof(CCard*));
-    mimeData->setData("application/x-card-data", dndPayload);
+    // Try to cast the stack this card is currently on to a holding stack
+    CHoldingStack* myHoldingStack = dynamic_cast<CHoldingStack*>(this->getCardStack());
+
+    // If this card is in a holding stack
+    if (myHoldingStack)
+    {
+        // Get all cards above this card
+        QList<CCard*> cardsAboveMe = myHoldingStack->getCardsAbove(this);
+
+        // Draw a pixmap containing all cards of the "substack"
+        QPixmap dragPixmap = QPixmap(this->pixmap()->width(), this->pixmap()->height() + ((cardsAboveMe.length() - 1) * 40));
+        QPainter painter;
+        painter.begin(&dragPixmap);
+
+        for (int i = 0; i < cardsAboveMe.length(); i++)
+        {
+            CCard* c = cardsAboveMe[i];
+            painter.drawPixmap(0, i * 40, c->pixmap()->width(), c->pixmap()->height(), *c->pixmap());
+
+            // Add this card to the payload
+            payload->cards.push_back(c);
+        }
+
+        // Not a single card
+        payload->isSingleCard = false;
+
+        // Stop painting and set the pixmap
+        painter.end();
+        drag->setPixmap(dragPixmap);
+    }
+    else
+    {
+        // Just draw the pixmap of this card
+        drag->setPixmap(*this->pixmap());
+
+        // Add this single card to the dnd payload
+        payload->cards.push_back(this);
+        payload->isSingleCard = true;
+    }
+
+    // Serialize the payload into the MIME data
+    QByteArray payloadData;
+    QDataStream payloadDataStream(&payloadData, QIODevice::WriteOnly);
+    payloadDataStream << payload;
+    mimeData->setData("application/x-solitaire-dnd", payloadData);
 
     // Apply the new mime data and set the pixmap image to show when dragging this card
     drag->setMimeData(mimeData);
-    drag->setPixmap(*this->pixmap());
 
     // ev->pos() is relative to the pivot point of the card (topleft)
     // this->pos() is relative to the parent widget (the card stack)
@@ -155,20 +212,13 @@ void CCard::mouseMoveEvent(QMouseEvent* ev)
     QPixmap temp = drag->pixmap();
     painter.begin(&temp);
     painter.setCompositionMode(QPainter::CompositionMode_Multiply);
-    painter.fillRect(temp.rect(), QColor(0,0,0,127));
+    painter.fillRect(temp.rect(), QColor(0, 0, 0, 127));
     painter.end();
     drag->setPixmap(temp);
-
-    // Hide the original card
-    this->hide();
 
     // Start the drag and drop action. This call is blocking!
     Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
     Q_UNUSED(dropAction);
-
-    // Since the above call is blocking, this code here is executed after the card was dropped, so
-    // reshow the card
-    this->show();
 }
 
 void CCard::enterEvent(QEvent* ev)

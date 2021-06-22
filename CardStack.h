@@ -34,7 +34,14 @@ public:
     // Checks whether a given card can be dropped on this stack
     virtual bool canDropCard(CCard* cardToDrop);
 
-    QList<CCard*> getCards();
+    // Returns the cards of this card stack
+    QList<CCard*> getCards()
+    {
+        return cards;
+    }
+
+    // Returns the index of a specified card in the card stack
+    int getIndexOfCard(CCard* card);
 
 public slots:
     // Internally handles when the cards on this stack changed

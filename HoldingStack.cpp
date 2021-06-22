@@ -86,6 +86,30 @@ void CHoldingStack::flipNextCard()
     emit onCardsChanged();
 }
 
+QList<CCard*> CHoldingStack::getCardsAbove(CCard* card)
+{
+    // Will contain the cards
+    QList<CCard*> cardsList;
+
+    // Get the index of this card
+    int index = getCards().indexOf(card);
+
+    // Make sure the index is valid (= card is in the stack)
+    if (index < 0) {
+        qDebug() << "Cannot find " << card->toString();
+        return cardsList;
+    }
+
+    // Iterate over all cards in the region index..numCards
+    for (int i = index; i < getNumCards(); i++)
+    {
+        // Add it to the list
+        cardsList.push_back(getCards()[i]);
+    }
+
+    return cardsList;
+}
+
 void CHoldingStack::dragEnterEvent(QDragEnterEvent *ev)
 {
     // We can extract the card to drop from the source of the drag event (as we started
@@ -105,22 +129,31 @@ void CHoldingStack::dragEnterEvent(QDragEnterEvent *ev)
 
 void CHoldingStack::dropEvent(QDropEvent* ev)
 {
-    // We can extract the card to drop from the source of the drag event (as we started
-    // the d'n'd operation in the card)
-    CCard* cardToDrop = reinterpret_cast<CCard*>(ev->source());
+    // Deserialize the payload from the MIME data
+    QByteArray mimeData = ev->mimeData()->data("application/x-solitaire-dnd");
+    QDataStream mimeDataStream(&mimeData, QIODevice::ReadOnly);
+    CardDndPayload* payload;
+    mimeDataStream >> payload;
 
-    // Make sure the card is valid
-    if (!cardToDrop) return;
+    // Make sure the payload is valid
+    if (!payload) return;
+
+    // Make sure there is a card
+    if (payload->cards.length() <= 0) return;
 
     // Now, this drop event will only be called if we can actually drop here, the actual
     // decision happens in dragEnterEvent
 
-    // Remove the card from the stack it's in right now, if it's in any stack
-    if (cardToDrop->getCardStack())
+    // Go through all cards we're about to drop
+    for (CCard* card : payload->cards)
     {
-        cardToDrop->getCardStack()->removeCard(cardToDrop);
-    }
+        // Remove the card from the stack it's in right now, if any
+        if (card->getCardStack())
+        {
+            card->getCardStack()->removeCard(card);
+        }
 
-    // Add it to this stack
-    this->addCard(cardToDrop);
+        // Add it to this stack
+        this->addCard(card);
+    }
 }
