@@ -70,6 +70,32 @@ void CCard::setCardFlipped(bool shouldFlip)
     this->setGraphicsEffect(DropShadowEffect);
 }
 
+QString CCard::toString()
+{
+    QString str;
+    QTextStream stream(&str);
+
+    // Format type and symbol strings
+    QString typeStr, symbolStr;
+    switch (getType()) {
+        case ECardType::Number: typeStr = "Number";  break;
+        case ECardType::Jack:   typeStr = "Jack";    break;
+        case ECardType::King:   typeStr = "King";    break;
+        case ECardType::Queen:  typeStr = "Queen";   break;
+        case ECardType::Ace:    typeStr = "Ace";     break;
+    }
+    switch (getSymbol()) {
+        case ECardSymbol::Heart:   symbolStr = "Heart";   break;
+        case ECardSymbol::Diamond: symbolStr = "Diamond"; break;
+        case ECardSymbol::Spade:   symbolStr = "Spade";   break;
+        case ECardSymbol::Club:    symbolStr = "Club";    break;
+    }
+
+    // Create final string
+    stream << "(Card " << this << " type=" << typeStr << " symbol=" << symbolStr << " numVal=" << getNumberValue() << " overallValue=" << getOverallValue() << ")";
+    return str;
+}
+
 void CCard::mousePressEvent(QMouseEvent* ev)
 {
     // If the left mouse button was pressed and is flipped

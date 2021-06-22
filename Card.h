@@ -111,6 +111,9 @@ public:
         return currentStack;
     }
 
+    // Converts this card to a human readable string
+    QString toString();
+
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
