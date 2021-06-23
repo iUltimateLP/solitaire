@@ -27,9 +27,10 @@ public:
     //~ End QLayout interface
 
     void clear();
-    void push_back(QLayoutItem *item);
+    // Adds the card at the last position of the three displayed cards. Is called from GameWindwo
+    // when a card from the drawStack is moved
+    void push_back(QWidget *card);
 
 private:
     QVector<QLayoutItem*> m_items;
-    QLayoutItem *lastItem;
 };

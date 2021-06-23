@@ -45,6 +45,8 @@ CGameWindow::CGameWindow(QWidget* parent)
     // Connection from the ui menubar with CGameWindow
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
+    QObject::connect(ui->actionNew_Game, &QAction::triggered, CMain::get()->getGameInstance(), &CGame::restartGame);
+    QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
     // Connection from score changing in CGame with CGameWindow
     QObject::connect(CMain::get()->getGameInstance(), &CGame::onScoreChanged, this, &CGameWindow::updateScore);
 
@@ -110,6 +112,13 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 void CGameWindow::updateScore()
 {
     score = CMain::get()->getGameInstance()->getScore();
+}
+
+void CGameWindow::resetGameWindow()
+{
+    qDebug() << "in reset Game window";
+    time = new QTime(0,0);
+    moves = 0;
 }
 
 CGameWindow::~CGameWindow()

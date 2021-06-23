@@ -101,3 +101,12 @@ void CCardHBoxLayout::clear()
     m_items.clear();
 }
 
+void CCardHBoxLayout::push_back(QWidget *card)
+{
+    // As there is no QLayout-method that inserts a widget at a specific index, we have to add the widget
+    // to the layout first, so it becomes an LayoutItem, then we can rearrange the list of the 3 current cards
+    addWidget(card);
+    QLayoutItem* temp = m_items.back();
+    m_items.pop_back();
+    m_items.push_front(temp);
+}

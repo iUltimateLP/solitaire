@@ -47,6 +47,9 @@ private slots:
     // Called when CGame changes its internal score-variable
     void updateScore();
 
+    // The "new game" menu item
+    void resetGameWindow();
+
 private:
     // Reference to this window
     Ui::CGameWindow* ui;

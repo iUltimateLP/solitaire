@@ -16,11 +16,26 @@ public:
     CHoldingStack(QWidget* parent = nullptr);
 
 public:
+    // The offset in pixels to apply between each card
+    static int CardOffsetInStack;
+
+public:
     //~ Begin CCardStack interface
     virtual void addCard(CCard *cardToAdd) override;
     virtual void removeCard(CCard *cardToRemove) override;
     virtual bool canDropCard(CCard* cardToDrop) override;
     //~ End CCardCard interface
+
+    // Flips the next top card
+    void flipNextCard();
+
+    // Returns all cards above a specific card
+    QList<CCard*> getCardsAbove(CCard* card);
+
+private:
+    // Overwritten drag'n'drop events
+    void dragEnterEvent(QDragEnterEvent* ev) override;
+    void dropEvent(QDropEvent* ev) override;
 
 private:
     // The vertical box layout to use for the holding stack

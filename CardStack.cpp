@@ -7,6 +7,9 @@ CCardStack::CCardStack(QWidget *parent)
 {
     // Connect the event
     QObject::connect(this, &CCardStack::onCardsChanged, this, &CCardStack::handleCardsChanged);
+
+    // Enable dropping elements
+    setAcceptDrops(true);
 }
 
 void CCardStack::addCard(CCard *cardToAdd)
@@ -18,6 +21,9 @@ void CCardStack::addCard(CCard *cardToAdd)
     {
         // Add it to the list
         cards.push_back(cardToAdd);
+
+        // Set the card's stack to this one
+        cardToAdd->setCardStack(this);
 
         // Notify the handler
         emit onCardsChanged();
@@ -33,6 +39,9 @@ void CCardStack::removeCard(CCard *cardToRemove)
     {
         // Remove it from the list
         cards.removeOne(cardToRemove);
+
+        // Clear the card's stack
+        cardToRemove->setCardStack(nullptr);
 
         // Notify the handler
         emit onCardsChanged();
@@ -70,20 +79,23 @@ CCard* CCardStack::getTopCard()
     }
 }
 
-bool CCardStack::canDropCard(CCard *cardToDrop)
+bool CCardStack::canDropCard(CCard* cardToDrop)
 {
+    Q_UNUSED(cardToDrop);
+
     qDebug() << "CanDropCard not overwritten!";
 
     // By default, allow dropping
     return true;
 }
 
+int CCardStack::getIndexOfCard(CCard* card)
+{
+    // Find the card
+    return cards.indexOf(card);
+}
+
 void CCardStack::handleCardsChanged()
 {
     qDebug() << "handleCardsChanged!";
-}
-
-QList<CCard*> CCardStack::getCards()
-{
-    return cards;
 }

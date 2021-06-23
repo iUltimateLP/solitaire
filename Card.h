@@ -4,6 +4,11 @@
 #include <QObject>
 #include <QWidget>
 #include <QLabel>
+#include <QPropertyAnimation>
+#include <QVariantAnimation>
+
+// Forward declaration
+class CCardStack;
 
 // Card symbol enumeration
 enum ECardSymbol
@@ -24,6 +29,22 @@ enum ECardType
     Queen  = 10,
     King   = 11,
     Ace    = 12
+};
+
+// Payload data used for drag-and-drop operations
+struct CardDndPayload
+{
+public:
+    // A list of cards which were dragged
+    QList<class CCard*> cards;
+
+    // Whether this was a single card or a card stack
+    bool isSingleCard;
+
+    // Streaming operators so we can serialize this struct
+    // Taken from here: https://stackoverflow.com/questions/24345681/qdatastream-serialize-pointer
+    friend QDataStream& operator<<(QDataStream& s, const CardDndPayload* payloadPtr);
+    friend QDataStream& operator>>(QDataStream& s, CardDndPayload*& payloadPtr);
 };
 
 // Implements a playing card
@@ -96,10 +117,26 @@ public:
         return isFlipped;
     }
 
+    // Requests a card flip WITH ANIMATION. Not the same as setCardFlipped
+    void requestCardFlip(bool shouldFlip);
+
+    // Sets the stack this card is in
+    void setCardStack(CCardStack* newStack);
+
+    // Returns the stack this card is on
+    CCardStack* getCardStack()
+    {
+        return currentStack;
+    }
+
+    // Converts this card to a human readable string
+    QString toString();
+
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
     void mouseReleaseEvent(QMouseEvent* ev) override;
+    void mouseMoveEvent(QMouseEvent* ev) override;
     void enterEvent(QEvent* ev) override;
     void leaveEvent(QEvent* ev) override;
 
@@ -112,9 +149,19 @@ private:
     // Whether this card is flipped
     bool isFlipped;
 
-    // The pixmap of the card front
+    // The pixmap of the card front and back
     QPixmap* cardFrontPixmap;
     QPixmap* cardBackPixmap;
+    QPixmap currentPixmap;
 
-    QPoint dragStartPosition;
+    // The stack the card is in right now
+    CCardStack* currentStack;
+
+    // The position where we started clicking so we know whether it
+    // was a drag request or not
+    QPoint dragStartPos;
+
+    // Animations
+    QPropertyAnimation* hoverAnim;
+    QVariantAnimation* flipAnim;
 };

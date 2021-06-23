@@ -67,16 +67,20 @@ void CDrawStack::removeCard(CCard* cardToRemove)
     if(currentCard + 2 <= getNumCards()-1)
     {
 
-        hbox->insertWidget(0, getCards()[currentCard+2]);
-      //  hbox->push_back(getCards()[currentCard+2]);
+       // hbox->insertWidget(0, getCards()[currentCard+2]);
+        hbox->push_back(getCards()[currentCard+2]);
         getCards()[currentCard+2]->setVisible(true);
     }
 }
 
 bool CDrawStack::canDropCard(CCard *cardToDrop)
 {
+    Q_UNUSED(cardToDrop);
+
     // Adding a card to the drawStack is not possible, due to that, this method is not necessary
     qDebug() << "nothing happens";
+
+    return true;
 }
 
 void CDrawStack::showNextCard()

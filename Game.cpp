@@ -16,6 +16,14 @@ CGame::CGame(QObject *parent)
 
     // Initially set up the game
     setUp();
+
+    // REMOVE THESE WHEN IMPLEMENTED SCORING
+    Q_UNUSED(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+    Q_UNUSED(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
+    Q_UNUSED(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+    Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+    Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+    Q_UNUSED(GameScoringAttributes::RECYCLING_DRAW_PILE);
 }
 
 void CGame::setUp()
@@ -41,7 +49,8 @@ void CGame::setUp()
         }
     }
 
-    // Shuffle carddeck
+    // Seed the random number generator and shuffle the carddeck
+    std::srand(time(0));
     std::random_shuffle(deck.begin(), deck.end());
 
 
@@ -63,7 +72,11 @@ void CGame::setUp()
     for(int i = 0; i < 7; ++i)
     {
         // Add a new holding stack
-        holdingStacks.push_back(new CHoldingStack());
+        CHoldingStack* newHoldingStack = new CHoldingStack();
+        holdingStacks.push_back(newHoldingStack);
+
+        // Display the new holding stack
+        CMain::get()->getGameWindow()->displayHoldingStack(newHoldingStack, i);
 
         // Every n'th holding stack has n+1 cards
         for(int j = 0; j < i+1; ++j)
@@ -77,13 +90,6 @@ void CGame::setUp()
             // Remove it from the deck list
             deck.pop_front();
         }
-    }
-
-    // Call the CGameWindow to display the initial state of the holdingStacks
-    //for(CHoldingStack* stack : holdingStacks)
-    for(int i = 0; i < holdingStacks.size(); ++i)
-    {
-        CMain::get()->getGameWindow()->displayHoldingStack(holdingStacks[i], i);
     }
 
     // Create the drawStack and adding the left cards of the deck to it
@@ -136,6 +142,10 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destSt
 
 void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
 {
+    // Remove if used
+    Q_UNUSED(srcStack);
+    Q_UNUSED(dstStack);
+
     /*
     // Increment the score with the suitable attribute
     if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
@@ -205,4 +215,12 @@ bool CGame::hasEnded()
             && finalSpade->getNumCards() == 13
             && finalHeart->getNumCards() == 13
             && finalSpade->getNumCards() == 13);
+}
+
+void CGame::restartGame()
+{
+    qDebug() << "in restart Game";
+    setUp();
+    score = 0;
+    emit onScoreChanged();
 }
