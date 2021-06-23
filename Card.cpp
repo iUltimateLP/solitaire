@@ -7,6 +7,7 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QApplication>
+#include <QGraphicsRotation>
 #include "Main.h"
 
 // Set cardTileSize and cardSizeFactor
@@ -63,6 +64,73 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
 
     // Hide the background which this card (a QLabel-child) will inherit from it's parent (the MainWindow)
     this->setStyleSheet("background-color: rgba(0, 0, 0, 0); background: transparent;");
+
+    // Set up the hover anim to just animate the position property
+    this->hoverAnim = new QPropertyAnimation(this, "pos");
+    this->hoverAnim->setDuration(100);
+
+    // Set up the flip animation. This is a little bit more complex, we're not animating a property,
+    // but only a variable.
+    this->flipAnim = new QVariantAnimation(this);
+    this->flipAnim->setDuration(500);
+    this->flipAnim->setStartValue(0.f);
+    this->flipAnim->setEndValue(179.9f); // When using 180°, it's sometimes confused in which direction to rotate
+    this->flipAnim->setEasingCurve(QEasingCurve::InOutCubic);
+
+    // Called when the animation ticks so we can update
+    QObject::connect(this->flipAnim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+        // We store a "targetFlipped" property in the animation to remember the target to animate to
+        bool targetFlipped = this->flipAnim->property("targetFlipped").toBool();
+
+        // Create a transform to use for the rotation of the card
+        QTransform t;
+        QPoint center = currentPixmap.rect().center();
+
+        // Translate to the center, then rotate, then translate back
+        // That sets the rotation origin to the center instead of the top left corner
+        t.translate(center.x(), center.y());
+        t.rotate(value.toReal(), Qt::YAxis);
+
+        // If we reached half the animation (we know that by checking whether we already reached the flip target),
+        // mirror the X axis of the card (as otherwise it'd be mirrored)
+        if (this->getFlipped() == targetFlipped) t.scale(-1, 1);
+
+        // Move the origin back to the top left
+        t.translate(-center.x(), -center.y());
+
+        // Create a new pixmap where we can draw the rotated version on
+        QPixmap rotatedPixmap(currentPixmap.width(), currentPixmap.height());
+
+        // Important, otherwise it will display random bytes
+        rotatedPixmap.fill(QColor(0, 0, 0, 0));
+
+        // Create a new painter and assign the transform
+        QPainter p(&rotatedPixmap);
+        p.setTransform(t);
+
+        // Enable smooth rendering (from https://forum.qt.io/topic/13290/antialiasing-for-qpixmap-scaled-in-a-qgraphicsscene/5)
+        p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+        // Now draw the current pixmap on the rotated pixmap (this will take the transform into account!)
+        p.drawPixmap(currentPixmap.rect(), currentPixmap);
+
+        // If we passed half the animation's time and we have to flip over the card
+        if (this->flipAnim->currentTime() >= this->flipAnim->duration() / 2 && this->getFlipped() != targetFlipped)
+        {
+            // Flip over the card. We do that as the animation alone wouldn't change the card's image between front and back
+            this->setCardFlipped(targetFlipped);
+        }
+
+        // Apply the newly rotated pixmap. Note that we're not overriding "currentPixmap", so we can use it as a reference
+        // again next time we're rotating.
+        this->setPixmap(rotatedPixmap);
+    });
+
+    // Called when the flip animation finishes
+    QObject::connect(this->flipAnim, &QVariantAnimation::finished, [=] {
+        // Fall back to the original pixmap to clean up any left over animation states
+        this->setPixmap(currentPixmap);
+    });
 }
 
 QSize CCard::getCardScreenSize()
@@ -79,7 +147,8 @@ void CCard::setCardFlipped(bool shouldFlip)
     QPixmap pixmap = isFlipped ? *cardFrontPixmap : *cardBackPixmap;
 
     // Set the card image to the container, scaled by the desired screensize of the card
-    this->setPixmap(pixmap.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    currentPixmap = pixmap.scaled(getCardScreenSize().width(), getCardScreenSize().height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    this->setPixmap(currentPixmap);
 
     // Create a drop shadow effect to make it easier to distinguish cards on one stack
     QGraphicsDropShadowEffect* DropShadowEffect = new QGraphicsDropShadowEffect();
@@ -87,6 +156,20 @@ void CCard::setCardFlipped(bool shouldFlip)
     DropShadowEffect->setOffset(0, 0);
     DropShadowEffect->setColor(QColor(0, 0, 0, 64));
     this->setGraphicsEffect(DropShadowEffect);
+}
+
+void CCard::requestCardFlip(bool shouldFlip)
+{
+    // Set the targetFlipped property so the animation knows where to stop
+    this->flipAnim->setProperty("targetFlipped", shouldFlip);
+
+    // Start the animation. setCardFlipped will be called from the animation when it's time
+    this->flipAnim->start();
+}
+
+void CCard::setCardStack(CCardStack *newStack)
+{
+    currentStack = newStack;
 }
 
 QString CCard::toString()
@@ -153,17 +236,20 @@ void CCard::mouseMoveEvent(QMouseEvent* ev)
         QList<CCard*> cardsAboveMe = myHoldingStack->getCardsAbove(this);
 
         // Draw a pixmap containing all cards of the "substack"
-        QPixmap dragPixmap = QPixmap(this->pixmap()->width(), this->pixmap()->height() + ((cardsAboveMe.length() - 1) * 40));
+        QPixmap dragPixmap = QPixmap(this->pixmap()->width(), this->pixmap()->height() + ((cardsAboveMe.length() - 1) * CHoldingStack::CardOffsetInStack));
         QPainter painter;
         painter.begin(&dragPixmap);
 
         for (int i = 0; i < cardsAboveMe.length(); i++)
         {
             CCard* c = cardsAboveMe[i];
-            painter.drawPixmap(0, i * 40, c->pixmap()->width(), c->pixmap()->height(), *c->pixmap());
+            painter.drawPixmap(0, i * CHoldingStack::CardOffsetInStack, c->pixmap()->width(), c->pixmap()->height(), *c->pixmap());
 
             // Add this card to the payload
             payload->cards.push_back(c);
+
+            // Hide all the "real" cards
+            c->hide();
         }
 
         // Not a single card
@@ -177,6 +263,9 @@ void CCard::mouseMoveEvent(QMouseEvent* ev)
     {
         // Just draw the pixmap of this card
         drag->setPixmap(*this->pixmap());
+
+        // Hide this card
+        this->hide();
 
         // Add this single card to the dnd payload
         payload->cards.push_back(this);
@@ -219,14 +308,37 @@ void CCard::mouseMoveEvent(QMouseEvent* ev)
     // Start the drag and drop action. This call is blocking!
     Qt::DropAction dropAction = drag->exec(Qt::MoveAction);
     Q_UNUSED(dropAction);
+
+    // Since the above call is blocking, code here get's executed once the d'n'd operation
+    // is finished. Show all cards again
+    for (CCard* card : payload->cards)
+    {
+        card->show();
+    }
 }
 
 void CCard::enterEvent(QEvent* ev)
 {
     Q_UNUSED(ev);
+
+    // Only play the hover animation if this card is flipped and not playing the animation already
+    if (this->getFlipped() && this->hoverAnim->currentTime() == 0)
+    {
+        this->hoverAnim->setStartValue(this->pos());
+        this->hoverAnim->setEndValue(this->pos() + QPoint(0, 10));
+        this->hoverAnim->setDirection(QPropertyAnimation::Direction::Forward);
+        this->hoverAnim->start();
+    }
 }
 
 void CCard::leaveEvent(QEvent* ev)
 {
     Q_UNUSED(ev);
+
+    // Only play the reversed hover animation if this card is flipped
+    if (this->getFlipped())
+    {
+        this->hoverAnim->setDirection(QPropertyAnimation::Direction::Backward);
+        this->hoverAnim->start();
+    }
 }

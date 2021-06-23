@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QWidget>
 #include <QLabel>
+#include <QPropertyAnimation>
+#include <QVariantAnimation>
 
 // Forward declaration
 class CCardStack;
@@ -115,11 +117,11 @@ public:
         return isFlipped;
     }
 
+    // Requests a card flip WITH ANIMATION. Not the same as setCardFlipped
+    void requestCardFlip(bool shouldFlip);
+
     // Sets the stack this card is in
-    void setCardStack(CCardStack* newStack)
-    {
-        currentStack = newStack;
-    }
+    void setCardStack(CCardStack* newStack);
 
     // Returns the stack this card is on
     CCardStack* getCardStack()
@@ -147,9 +149,10 @@ private:
     // Whether this card is flipped
     bool isFlipped;
 
-    // The pixmap of the card front
+    // The pixmap of the card front and back
     QPixmap* cardFrontPixmap;
     QPixmap* cardBackPixmap;
+    QPixmap currentPixmap;
 
     // The stack the card is in right now
     CCardStack* currentStack;
@@ -157,4 +160,8 @@ private:
     // The position where we started clicking so we know whether it
     // was a drag request or not
     QPoint dragStartPos;
+
+    // Animations
+    QPropertyAnimation* hoverAnim;
+    QVariantAnimation* flipAnim;
 };

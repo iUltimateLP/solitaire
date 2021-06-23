@@ -16,6 +16,10 @@ public:
     CHoldingStack(QWidget* parent = nullptr);
 
 public:
+    // The offset in pixels to apply between each card
+    static int CardOffsetInStack;
+
+public:
     //~ Begin CCardStack interface
     virtual void addCard(CCard *cardToAdd) override;
     virtual void removeCard(CCard *cardToRemove) override;

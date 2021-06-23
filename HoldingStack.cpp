@@ -4,22 +4,25 @@
 #include <QImage>
 #include <QMimeData>
 
+// Set the card offset
+int CHoldingStack::CardOffsetInStack = 45;
+
 CHoldingStack::CHoldingStack(QWidget* parent)
     : CCardStack(parent)
 {
     qDebug() << "Created CCardStack";
 
     // Create the vbox layout
-    vbox = new CCardVBoxLayout(45, this);
+    vbox = new CCardVBoxLayout(CardOffsetInStack, this);
 }
 
 void CHoldingStack::addCard(CCard *cardToAdd)
 {
-    // Call the superclasses' addCard
-    CCardStack::addCard(cardToAdd);
-
     // Add the card to our vbox
     vbox->addWidget(cardToAdd);
+
+    // Call the superclasses' addCard
+    CCardStack::addCard(cardToAdd);
 }
 
 void CHoldingStack::removeCard(CCard *cardToRemove)
@@ -80,7 +83,7 @@ void CHoldingStack::flipNextCard()
     if (getNumCards() == 0) return;
 
     // Flip the top card
-    getTopCard()->setCardFlipped(true);
+    getTopCard()->requestCardFlip(true);
 
     // Emit that the stack changed
     emit onCardsChanged();
