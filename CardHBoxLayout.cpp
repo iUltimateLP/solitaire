@@ -92,3 +92,12 @@ QSize CCardHBoxLayout::minimumSize() const
     }
     return s + n * QSize(spacing(), 0);
 }
+
+void CCardHBoxLayout::clear()
+{
+    this->removeItem(m_items[2]);
+       this->removeItem(m_items[1]);
+        this->removeItem(m_items[0]);
+    m_items.clear();
+}
+

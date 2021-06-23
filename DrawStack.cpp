@@ -3,7 +3,6 @@
 #include "CardVBoxLayout.h"
 #include <QDebug>
 
-#include <QPushButton>
 #include <Main.h>
 
 CDrawStack::CDrawStack(QWidget* parent)
@@ -14,7 +13,7 @@ CDrawStack::CDrawStack(QWidget* parent)
     //this->setGeometry(0, 0, CCard::cardTileSize.width(), CCard::cardTileSize.height());
 
     // Create the dummy vbox layout with zero spacing, so they get overlayed
-    vbox = new CCardVBoxLayout(0, this);
+    hbox = new CCardHBoxLayout(20, this);
 
     // Create the boxLayout that contains the playholder and the cards
     boxLayout = new QHBoxLayout();
@@ -48,7 +47,7 @@ void CDrawStack::addCard(CCard* cardToAdd)
 {
     CCardStack::addCard(cardToAdd);
     //boxLayout->addWidget(cardToAdd)5
-    vbox->addWidget(cardToAdd);
+   // hbox->addWidget(cardToAdd);
 }
 
 void CDrawStack::removeCard(CCard* cardToRemove)
@@ -56,15 +55,22 @@ void CDrawStack::removeCard(CCard* cardToRemove)
     // Call the superclasses' removeCard
     CCardStack::removeCard(cardToRemove);
 
-    // When a card is removed, the next card in the stack will be displayed
-    --currentCard;
-    if(currentCard > 0)
+    // Remove the card from the layout
+    hbox->removeItem(hbox->itemAt(2));
+
+    // If the removed card was the first one of the stack, currentCard has to be decremented
+    if(currentCard == getNumCards())
     {
-       getCards()[currentCard]->setVisible(1);
+        --currentCard;
     }
+    // When a card is removed, the last third card in the stack will be displayed, if existent
+    if(currentCard + 2 <= getNumCards()-1)
+    {
 
-    vbox->removeWidget(cardToRemove);
-
+        hbox->insertWidget(0, getCards()[currentCard+2]);
+      //  hbox->push_back(getCards()[currentCard+2]);
+        getCards()[currentCard+2]->setVisible(true);
+    }
 }
 
 bool CDrawStack::canDropCard(CCard *cardToDrop)
@@ -75,17 +81,25 @@ bool CDrawStack::canDropCard(CCard *cardToDrop)
 
 void CDrawStack::showNextCard()
 {
-    // The current card is set to invisible
-    getCards()[currentCard]->setVisible(0);
+    // The cards that shouldn't be displayed have to be invisible, even if the card is removed from
+    // the layout (the card is still in the background of the layout)
     // If there are cards left on the stack, the variable "currentCard" gets decremented
-
     if(currentCard > 0 )
     {
         --currentCard;
         if(currentCard > 0 )
         {
+            // When the Boxlayout shows already 3 cards, the last one is removed, so that a new one can
+            // be displayed
+            if(hbox->count() == 3)
+            {
+                hbox->removeItem(hbox->itemAt(0));
+                getCards()[currentCard+3]->setVisible(false);
+            }
             // If there are still cards after decrementing the variable, the following card is set to visible
-            getCards()[currentCard]->setVisible(1);
+            hbox->addWidget(getCards()[currentCard]);
+            getCards()[currentCard]->setVisible(true);
+
             if(currentCard == 1)
             {
                 // Additionally, if it is the last card, the placeholder displays the empty tile
@@ -95,15 +109,19 @@ void CDrawStack::showNextCard()
         else
         {
             drawStackPlaceholder->setPixmap(cardBackPixmap);
+            hbox->clear();
+            getCards()[currentCard+3]->setVisible(false);
+            getCards()[currentCard+1]->setVisible(false);
+            getCards()[currentCard+2]->setVisible(false);
         }
     }
     // Otherwise, the stack is recycled by setting the currentCard to the topCard again
     else
     {
         currentCard = getNumCards()-1;
-        getCards()[currentCard]->setVisible(1);
+        hbox->addWidget(getCards()[currentCard]);
+        getCards()[currentCard]->setVisible(true);
     }
-    qDebug() << "click and show next card";
 }
 
 QHBoxLayout* CDrawStack::getHBoxLayout()

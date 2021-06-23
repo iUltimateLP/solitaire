@@ -2,7 +2,7 @@
 #pragma once
 #include <QObject>
 #include "CardStack.h"
-#include "CardVBoxLayout.h"
+#include "CardHBoxLayout.h"
 #include "ClickableLabel.h"
 
 
@@ -27,7 +27,7 @@ public slots:
 
 private:
     // Box layout to display the cards
-    CCardVBoxLayout* vbox;
+    CCardHBoxLayout* hbox;
     QHBoxLayout* boxLayout;
 
     // Holds the index of the current visible card

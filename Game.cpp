@@ -91,7 +91,7 @@ void CGame::setUp()
     for(int i = 0; i < deck.size(); ++i)
     {
         // Every card on the drawStack is initially invisible -> only the "topCard" will be visible
-        deck[i]->setVisible(0);
+       // deck[i]->setVisible(0);
         drawStack->addCard(deck[i]);
     }
     //TODO: empty deck

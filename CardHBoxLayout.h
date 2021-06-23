@@ -26,6 +26,10 @@ public:
     void setGeometry(const QRect &rect) override;
     //~ End QLayout interface
 
+    void clear();
+    void push_back(QLayoutItem *item);
+
 private:
     QVector<QLayoutItem*> m_items;
+    QLayoutItem *lastItem;
 };
