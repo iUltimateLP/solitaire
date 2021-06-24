@@ -33,22 +33,18 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
-
-
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
     timer->start(1000);
     time = new QTime(0,0);
     // Connection from timer and the CGameWindow
     QObject::connect(timer, &QTimer::timeout, this, &CGameWindow::updateTimer);
-
+ //   QObject::connect(ui->actionNew_Game, &QAction::triggered, CMain::get()->getGameInstance(), &CGame::restartGame);
     // Connection from the ui menubar with CGameWindow
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
-    QObject::connect(ui->actionNew_Game, &QAction::triggered, CMain::get()->getGameInstance(), &CGame::restartGame);
     QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
-    // Connection from score changing in CGame with CGameWindow
-    QObject::connect(CMain::get()->getGameInstance(), &CGame::onScoreChanged, this, &CGameWindow::updateScore);
+
 
 
     // Set the distance between the 3 labels
@@ -62,28 +58,36 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->move_label->setStyleSheet("QLabel {color: white}");
     ui->time_label->setStyleSheet("QLabel {color: white}");
     ui->statusbar->hide();
+
+    QWidget *layout = new QWidget();
+    mainGrid = new QGridLayout();
+    layout->setLayout(mainGrid);
+    ui->gridLayout->addWidget(layout);
 }
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
+
    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
-    ui->gridLayout_3->addWidget(stack, 1, column, 1, 1);
+    mainGrid->addWidget(stack, 1, column, 1, 1);
+
 }
 
 void CGameWindow::displayFinalStack(CFinalStack* final, int column)
 {
     //final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
-    ui->gridLayout_3->addWidget(final, 0, column + 3, 1, 1);
+    mainGrid->addWidget(final, 0, column + 3, 1, 1);
 }
 
 void CGameWindow::displayDrawStack(CDrawStack *draw)
 {
-    ui->gridLayout_3->addLayout(draw->getHBoxLayout(), 0, 0, 1, 2);
+    mainGrid->addLayout(draw->getHBoxLayout(), 0, 0, 1, 2);
 }
 
 void CGameWindow::incrementMove()
 {
     ++moves;
+    qDebug() << "move +1";
     ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
@@ -116,9 +120,31 @@ void CGameWindow::updateScore()
 
 void CGameWindow::resetGameWindow()
 {
-    qDebug() << "in reset Game window";
+    removeAllWidgets(mainGrid);
     time = new QTime(0,0);
     moves = 0;
+    emit resetGame();
+}
+
+void CGameWindow::removeAllWidgets(QLayout* layout)
+{
+    QLayoutItem *child;
+
+    // Iterating over all children from the layout
+    // if child is layout: call this method again, otherwise delete the child
+    // See: https://forum.qt.io/topic/57350/solved-delete-all-items-from-layout/2
+    while(layout->count() != 0)
+    {
+        child = layout->takeAt(0);
+        if(child->layout() != 0)
+        {
+            removeAllWidgets(child->layout());
+        }
+        else if(child->widget() != 0)
+        {
+            delete child->widget();
+        }
+    }
 }
 
 CGameWindow::~CGameWindow()

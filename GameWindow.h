@@ -36,6 +36,13 @@ public:
     void incrementMove();
     void incrementScore(int gameScore);
 
+    // Clears the gridlayout where all cards are displayed, needed, when new game is chosen
+    void removeAllWidgets(QLayout *layout);
+
+signals:
+    // This signal is send when the new game menu item is chosen, connected with slot from CGame
+    void resetGame();
+
 
 private slots:
     // Called every second
@@ -44,11 +51,13 @@ private slots:
     // The "About" menu item
     void showAbout();
 
+    // The "new game" menu item
+    void resetGameWindow();
+
+public slots:
     // Called when CGame changes its internal score-variable
     void updateScore();
 
-    // The "new game" menu item
-    void resetGameWindow();
 
 private:
     // Reference to this window
@@ -60,6 +69,6 @@ private:
     QTimer* timer;
     QTime* time;
 
-
+QGridLayout* mainGrid;
 
 };

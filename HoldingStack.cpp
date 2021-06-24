@@ -10,7 +10,7 @@ int CHoldingStack::CardOffsetInStack = 45;
 CHoldingStack::CHoldingStack(QWidget* parent)
     : CCardStack(parent)
 {
-    qDebug() << "Created CCardStack";
+   // qDebug() << "Created CCardStack";
 
     // Create the vbox layout
     vbox = new CCardVBoxLayout(CardOffsetInStack, this);

@@ -14,8 +14,16 @@ CGame::CGame(QObject *parent)
 {
     qDebug() << "Created CGame";
 
+
+
     // Initially set up the game
     setUp();
+
+    // Connection, when New Game menu item is pressed
+    QObject::connect(CMain::get()->getGameWindow(), &CGameWindow::resetGame, this, &CGame::restartGame);
+
+    // Connection from score changing in CGame with CGameWindow
+    QObject::connect(this, &CGame::onScoreChanged, CMain::get()->getGameWindow(), &CGameWindow::updateScore);
 
     // REMOVE THESE WHEN IMPLEMENTED SCORING
     Q_UNUSED(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
@@ -28,6 +36,7 @@ CGame::CGame(QObject *parent)
 
 void CGame::setUp()
 {
+
     const ECardSymbol symbolVector[] = {Club, Heart, Diamond, Spade};
     const ECardType typeVector[] = {Jack, Queen, King, Ace};
 
@@ -53,7 +62,6 @@ void CGame::setUp()
     std::srand(time(0));
     std::random_shuffle(deck.begin(), deck.end());
 
-
     // TODO: Could we declare the CFinalStacks directly in the GameWindow?
     // Declaration of the 4 final stacks, these are initially empty
     finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
@@ -62,11 +70,13 @@ void CGame::setUp()
     finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
 
     // Call the CGameWindow to display the initial state of the finalStacks
-    //TODO. don't hardcode the int for column
     CMain::get()->getGameWindow()->displayFinalStack(finalHeart, (int)ECardSymbol::Heart);
     CMain::get()->getGameWindow()->displayFinalStack(finalDiamond, (int)ECardSymbol::Diamond);
     CMain::get()->getGameWindow()->displayFinalStack(finalSpade, (int)ECardSymbol::Spade);
     CMain::get()->getGameWindow()->displayFinalStack(finalClub, (int)ECardSymbol::Club);
+
+    // List of all holding stacks
+    QList<CHoldingStack*> holdingStacks;
 
     // Create seven holding stacks and fill with cards
     for(int i = 0; i < 7; ++i)
@@ -83,7 +93,6 @@ void CGame::setUp()
         {
             // Add the next card from the deck
             holdingStacks[i]->addCard(deck.front());
-
             // Flip the card if it's not the top card in the stack
             deck.front()->setCardFlipped(j >= i);
 
@@ -96,18 +105,17 @@ void CGame::setUp()
     drawStack = new CDrawStack(CMain::get()->getGameWindow());
     for(int i = 0; i < deck.size(); ++i)
     {
-        // Every card on the drawStack is initially invisible -> only the "topCard" will be visible
-       // deck[i]->setVisible(0);
         drawStack->addCard(deck[i]);
     }
-    //TODO: empty deck
-    // Call the CGameWindow to display the initial state of the drawStack
-    CMain::get()->getGameWindow()->displayDrawStack(drawStack);
 
+    // Call the CGameWindow to display the initial state of the drawStack and clear the deck
+    CMain::get()->getGameWindow()->displayDrawStack(drawStack);
+    deck.clear();
 }
 
 void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack)
 {
+    qDebug() << "in move card";
     // Can we drop the card?
     if(destStack->canDropCard(cardToDrop))
     {
@@ -219,7 +227,6 @@ bool CGame::hasEnded()
 
 void CGame::restartGame()
 {
-    qDebug() << "in restart Game";
     setUp();
     score = 0;
     emit onScoreChanged();

@@ -14,7 +14,7 @@ CCardStack::CCardStack(QWidget *parent)
 
 void CCardStack::addCard(CCard *cardToAdd)
 {
-    qDebug() << "CCardStack::addCard";
+ //   qDebug() << "CCardStack::addCard";
 
     // Make sure the card is valid
     if (cardToAdd)
@@ -97,5 +97,5 @@ int CCardStack::getIndexOfCard(CCard* card)
 
 void CCardStack::handleCardsChanged()
 {
-    qDebug() << "handleCardsChanged!";
+  //qDebug() << "handleCardsChanged!";
 }

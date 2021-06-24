@@ -72,9 +72,6 @@ private:
     CFinalStack* finalSpade;
     CFinalStack* finalClub;
 
-    // List of all holding stacks
-    QList<CHoldingStack*> holdingStacks;
-
     // The deck contains all cards in the whole game
     QList<CCard*> deck;
 
