@@ -40,6 +40,7 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     , cardType(type)
     , cardNumberValue(numberValue)
     , isFlipped(true)
+    , canInteract(true)
 {
     // Load the pixmap of the cards tileset
     QPixmap tileset(":/assets/card_tileset.png");
@@ -198,10 +199,15 @@ QString CCard::toString()
     return str;
 }
 
+void CCard::setCanInteract(bool canInteract)
+{
+    this->canInteract = canInteract;
+}
+
 void CCard::mousePressEvent(QMouseEvent* ev)
 {
-    // If the left mouse button was pressed and is flipped
-    if (ev->button() == Qt::LeftButton && this->getFlipped())
+    // If the left mouse button was pressed, is flipped and we can interact
+    if (ev->button() == Qt::LeftButton && this->getFlipped() && canInteract)
     {
         // Remember this position
         dragStartPos = ev->pos();
@@ -216,7 +222,7 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
 void CCard::mouseMoveEvent(QMouseEvent* ev)
 {
     // Make sure the left button is held and we dragged a minimum distance to further handle the dragging
-    if (!(ev->buttons() & Qt::LeftButton) || (ev->pos() - dragStartPos).manhattanLength() < 1 || !this->getFlipped()) return;
+    if (!(ev->buttons() & Qt::LeftButton) || (ev->pos() - dragStartPos).manhattanLength() < 1 || !this->getFlipped() || !canInteract) return;
 
     // Create a new QDrag object to enable drag and drop
     QDrag* drag = new QDrag(this);
@@ -322,7 +328,7 @@ void CCard::enterEvent(QEvent* ev)
     Q_UNUSED(ev);
 
     // Only play the hover animation if this card is flipped and not playing the animation already
-    if (this->getFlipped() && this->hoverAnim->currentTime() == 0)
+    if (this->getFlipped() && this->hoverAnim->currentTime() == 0 && canInteract)
     {
         this->hoverAnim->setStartValue(this->pos());
         this->hoverAnim->setEndValue(this->pos() + QPoint(0, 10));
@@ -336,7 +342,7 @@ void CCard::leaveEvent(QEvent* ev)
     Q_UNUSED(ev);
 
     // Only play the reversed hover animation if this card is flipped
-    if (this->getFlipped())
+    if (this->getFlipped() && canInteract)
     {
         this->hoverAnim->setDirection(QPropertyAnimation::Direction::Backward);
         this->hoverAnim->start();

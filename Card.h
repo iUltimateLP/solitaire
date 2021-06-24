@@ -132,6 +132,9 @@ public:
     // Converts this card to a human readable string
     QString toString();
 
+    // Sets whether the player can interact with this card (click it, drag it, etc.)
+    void setCanInteract(bool canInteract);
+
 private:
     // Overwritten mouse events
     void mousePressEvent(QMouseEvent* ev) override;
@@ -148,6 +151,9 @@ private:
 
     // Whether this card is flipped
     bool isFlipped;
+
+    // Whether this card can be dragged or interacted with
+    bool canInteract;
 
     // The pixmap of the card front and back
     QPixmap* cardFrontPixmap;
