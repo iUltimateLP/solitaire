@@ -166,6 +166,9 @@ void CCard::requestCardFlip(bool shouldFlip)
 
     // Start the animation. setCardFlipped will be called from the animation when it's time
     this->flipAnim->start();
+
+    // Flipping a card changes the score
+    CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
 }
 
 void CCard::setCardStack(CCardStack *newStack)
@@ -216,7 +219,12 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
-    Q_UNUSED(ev);
+    if((ev->pos()-dragStartPos).manhattanLength() < 1)
+    {
+       CMain::get()->getGameInstance()->moveCard(this, getCardStack());
+      //look at all other possibilities what to do
+    }
+    //Q_UNUSED(ev);
 }
 
 void CCard::mouseMoveEvent(QMouseEvent* ev)

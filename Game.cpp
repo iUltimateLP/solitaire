@@ -14,8 +14,6 @@ CGame::CGame(QObject *parent)
 {
     qDebug() << "Created CGame";
 
-
-
     // Initially set up the game
     setUp();
 
@@ -26,17 +24,16 @@ CGame::CGame(QObject *parent)
     QObject::connect(this, &CGame::onScoreChanged, CMain::get()->getGameWindow(), &CGameWindow::updateScore);
 
     // REMOVE THESE WHEN IMPLEMENTED SCORING
-    Q_UNUSED(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+    /*  Q_UNUSED(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     Q_UNUSED(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
     Q_UNUSED(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
     Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
-    Q_UNUSED(GameScoringAttributes::RECYCLING_DRAW_PILE);
+    Q_UNUSED(GameScoringAttributes::RECYCLING_DRAW_PILE);*/
 }
 
 void CGame::setUp()
 {
-
     const ECardSymbol symbolVector[] = {Club, Heart, Diamond, Spade};
     const ECardType typeVector[] = {Jack, Queen, King, Ace};
 
@@ -62,21 +59,21 @@ void CGame::setUp()
     std::srand(time(0));
     std::random_shuffle(deck.begin(), deck.end());
 
-    // TODO: Could we declare the CFinalStacks directly in the GameWindow?
+    // Clear the holding- and finalStacks before creating them is necessary for the "new game"-action
+    holdingStacks.clear();
+    finalStacks.clear();
+
     // Declaration of the 4 final stacks, these are initially empty
-    finalHeart = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart);
-    finalDiamond = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond);
-    finalClub = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club);
-    finalSpade = new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade);
+    finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart));
+    finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond));
+    finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club));
+    finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Spade));
 
     // Call the CGameWindow to display the initial state of the finalStacks
-    CMain::get()->getGameWindow()->displayFinalStack(finalHeart, (int)ECardSymbol::Heart);
-    CMain::get()->getGameWindow()->displayFinalStack(finalDiamond, (int)ECardSymbol::Diamond);
-    CMain::get()->getGameWindow()->displayFinalStack(finalSpade, (int)ECardSymbol::Spade);
-    CMain::get()->getGameWindow()->displayFinalStack(finalClub, (int)ECardSymbol::Club);
-
-    // List of all holding stacks
-    QList<CHoldingStack*> holdingStacks;
+    for(int i = 0; i < 4; ++i)
+    {
+        CMain::get()->getGameWindow()->displayFinalStack(finalStacks[i], i);
+    }
 
     // Create seven holding stacks and fill with cards
     for(int i = 0; i < 7; ++i)
@@ -113,39 +110,58 @@ void CGame::setUp()
     deck.clear();
 }
 
-void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack)
+void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 {
-    qDebug() << "in move card";
-    // Can we drop the card?
-    if(destStack->canDropCard(cardToDrop))
+    // Iterate over the stacks and check if card can be dropped
+    for(CFinalStack* final: finalStacks)
     {
+        // If the card fits on a final stack, it has to be the top card as only a single card can be dropped there
+        if(final->canDropCard(cardToDrop) && cardToDrop == srcStack->getTopCard())
+        {
+            srcStack->removeCard(cardToDrop);
+            final->addCard(cardToDrop);
+
+            // Increment the amount of steps
+            CMain::get()->getGameWindow()->incrementMove();
+            return;
+        }
+    }
+    for(CHoldingStack* holding: holdingStacks)
+    {
+        if(holding->canDropCard(cardToDrop))
+        {
+            // We need a list, if the cardToDrop is not the topCard
+            QList<CCard*> cardsToMove;
+
+            // While cardToDrop is not the last card, all cards are safed in list and removed
+            while (cardToDrop != srcStack->getTopCard())
+            {
+                cardsToMove.push_back(srcStack->getTopCard());
+                srcStack->removeCardAt(srcStack->getNumCards()-1);
+            }
+
+            // Finally remove the cardToDrop from the source stack and add it to the destination stack
+            srcStack->removeCard(cardToDrop);
+            holding->addCard(cardToDrop);
+
+            // While cardsToMove list is not empty, add the cards to destination stack
+            while(cardsToMove.size() > 0)
+            {
+                holding->addCard(cardsToMove.front());
+                cardsToMove.pop_front();
+            }
+
+            // Increment the amount of steps
+            CMain::get()->getGameWindow()->incrementMove();
+            return;
+        }
+
+        // TODO: Scoring
+    }
+    /*
         // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
         evaluateScore(srcStack, destStack);
-
-        // Movement of the card:
-        QList<CCard*> cardsToMove;
-
-        // While cardToDrop is not the last card, all cards are safed in list and removed
-        while (cardToDrop != srcStack->getTopCard())
-        {
-            cardsToMove.push_back(srcStack->getTopCard());
-            srcStack->removeCardAt(srcStack->getNumCards()-1);
-        }
-
-        // Finally remove the cardToDrop from the source stack and add it to the destination stack
-        srcStack->removeCard(cardToDrop);
-        destStack->addCard(cardToDrop);
-
-        // While cardsToMove list is not empty, add the cards to destination stack
-        while(cardsToMove.size() > 0)
-        {
-            destStack->addCard(cardsToMove.front());
-            cardsToMove.pop_front();
-        }
-
-        // Increment the amount of steps
-        CMain::get()->getGameWindow()->incrementMove();
-    }
+    }*/
 }
 
 void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)

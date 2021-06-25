@@ -43,11 +43,11 @@ public:
     // and calls the GameWindow to display everything
     void setUp();
 
-    // Moves a card from one stack to another, checks first if the move is valid
-    void moveCard(CCard* cardToDrop, CCardStack* srcStack, CCardStack* destStack);
+    // Moves a card, when clicked and a movement is possible
+    void moveCard(CCard* cardToDrop, CCardStack* srcStack);
 
     // Evaluates which scoring attribute should be added to the score
-    void evaluateScore(CCardStack* srcStack, CCardStack* dstStack);
+    void evaluateScore(CCardStack* srcStack, CCardStack* destStack);
 
     // Actually changes the variable score
     void changeScore(int points);
@@ -67,6 +67,10 @@ public slots:
 private:
     CDrawStack* drawStack;
     // The final stacks at the top
+    QList<CFinalStack*> finalStacks;
+    QList<CHoldingStack*> holdingStacks;
+
+
     CFinalStack* finalDiamond;
     CFinalStack* finalHeart;
     CFinalStack* finalSpade;
@@ -75,5 +79,5 @@ private:
     // The deck contains all cards in the whole game
     QList<CCard*> deck;
 
-    int score;
+    int score = 0;
 };

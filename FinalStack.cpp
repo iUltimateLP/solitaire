@@ -2,6 +2,7 @@
 #include "FinalStack.h"
 #include "CardVBoxLayout.h"
 #include <QDebug>
+#include <Main.h>
 
 CFinalStack::CFinalStack(QWidget* parent, ECardSymbol symbol)
     : CCardStack(parent)
@@ -111,6 +112,22 @@ void CFinalStack::dropEvent(QDropEvent* ev)
 
     // Now, this drop event will only be called if we can actually drop here, the actual
     // decision happens in dragEnterEvent
+
+    // Call the Scoring in the GameInstance with the suitable enum
+    if (dynamic_cast<CDrawStack*>(cardToDrop->getCardStack()) != NULL)
+    {
+        // If the card comes from a DrawStack
+        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+    }
+    else if(dynamic_cast<CHoldingStack*>(cardToDrop->getCardStack()) != NULL)
+    {
+        // If the card comes from a HoldingStack
+        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+    }
+
+
+    // Increment the amount of steps
+    CMain::get()->getGameWindow()->incrementMove();
 
     // Remove the card from the stack it's in right now, if it's in any stack
     if (cardToDrop->getCardStack())

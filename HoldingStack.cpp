@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QMimeData>
+#include <Main.h>
 
 // Set the card offset
 int CHoldingStack::CardOffsetInStack = 45;
@@ -33,8 +34,13 @@ void CHoldingStack::removeCard(CCard *cardToRemove)
     // Remove the card from our vbox
     vbox->removeWidget(cardToRemove);
 
-    // A card was removed from this stack, so flip the next card
-    flipNextCard();
+    // A card was removed from this stack, so flip the next card if the next card is not flipped yet
+    // The condition is necessary, otherwise already flipped cards would play the anim when clicking
+    // on multiple cards
+    if(!getTopCard()->getFlipped())
+    {
+        flipNextCard();
+    }
 }
 
 bool CHoldingStack::canDropCard(CCard *cardToDrop)
@@ -147,6 +153,23 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
     // Now, this drop event will only be called if we can actually drop here, the actual
     // decision happens in dragEnterEvent
 
+    // Call the method to change the score in the GameInstance with the suitable enum
+    if (dynamic_cast<CFinalStack*>(payload->cards[0]->getCardStack()) != NULL)
+    {
+        // If the card comes from a FinalStack
+        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+    }
+    else if(dynamic_cast<CDrawStack*>(payload->cards[0]->getCardStack()) != NULL)
+    {
+        // If the card comes from the DrawStack
+        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+    }
+    else if(dynamic_cast<CFinalStack*>(payload->cards[0]->getCardStack()) != NULL)
+    {
+        // If the card comes from the DrawStack
+        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+    }
+
     // Go through all cards we're about to drop
     for (CCard* card : payload->cards)
     {
@@ -159,4 +182,7 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
         // Add it to this stack
         this->addCard(card);
     }
+
+    // Increment the amount of steps
+    CMain::get()->getGameWindow()->incrementMove();
 }

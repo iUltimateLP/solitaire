@@ -18,6 +18,7 @@ public:
     virtual void addCard(CCard *cardToAdd) override;
     virtual void removeCard(CCard *cardToRemove) override;
     virtual bool canDropCard(CCard* cardToDrop) override;
+    virtual CCard* getTopCard() override;
     //~ End CCardCard interface
 
     QHBoxLayout* getHBoxLayout();

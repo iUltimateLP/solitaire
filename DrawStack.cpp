@@ -63,11 +63,14 @@ void CDrawStack::removeCard(CCard* cardToRemove)
     {
         --currentCard;
     }
+    // Otherwise, there is already a card, which should be set to canInteract
+    else
+    {
+        getCards()[currentCard]->setCanInteract(true);
+    }
     // When a card is removed, the last third card in the stack will be displayed, if existent
     if(currentCard + 2 <= getNumCards()-1)
     {
-
-       // hbox->insertWidget(0, getCards()[currentCard+2]);
         hbox->push_back(getCards()[currentCard+2]);
         getCards()[currentCard+2]->setVisible(true);
     }
@@ -83,11 +86,16 @@ bool CDrawStack::canDropCard(CCard *cardToDrop)
     return true;
 }
 
+CCard* CDrawStack::getTopCard()
+{
+    return getCards()[currentCard];
+}
+
 void CDrawStack::showNextCard()
 {
     // The cards that shouldn't be displayed have to be invisible, even if the card is removed from
     // the layout (the card is still in the background of the layout)
-    // If there are cards left on the stack, the variable "currentCard" gets decremented
+    // If there are cards left on the stack, the variable "currentCard" is decremented
     if(currentCard > 0 )
     {
         --currentCard;
@@ -100,31 +108,41 @@ void CDrawStack::showNextCard()
                 hbox->removeItem(hbox->itemAt(0));
                 getCards()[currentCard+3]->setVisible(false);
             }
-            // If there are still cards after decrementing the variable, the following card is set to visible
+            // If there are still cards after decrementing the variable, the following card is added to the boxlayout and set to visible
             hbox->addWidget(getCards()[currentCard]);
             getCards()[currentCard]->setVisible(true);
 
+            // Interaction with the added card should be possible, with the former front card impossible (only if there is a former card)
+            getCards()[currentCard]->setCanInteract(true);
+            if(currentCard < getNumCards())
+                getCards()[currentCard+1]->setCanInteract(false);
+
             if(currentCard == 1)
             {
-                // Additionally, if it is the last card, the placeholder displays the empty tile
+                // Additionally, if it is the last card = no cards are left on the stack, the placeholder displays the empty tile
                 drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
             }
         }
         else
         {
+            // CurrentCard = 0 means, that no card is displayed, so the drawStack gets recycled
             drawStackPlaceholder->setPixmap(cardBackPixmap);
             hbox->clear();
+            // Recycling the draw stack changes the score
+            CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
+            // TODO: Beautify?
             getCards()[currentCard+3]->setVisible(false);
             getCards()[currentCard+1]->setVisible(false);
             getCards()[currentCard+2]->setVisible(false);
         }
     }
-    // Otherwise, the stack is recycled by setting the currentCard to the topCard again
+    // Otherwise, the currentCard is set to the topCard again, the first card is set to visible and caninteract
     else
     {
         currentCard = getNumCards()-1;
         hbox->addWidget(getCards()[currentCard]);
         getCards()[currentCard]->setVisible(true);
+        getCards()[currentCard]->setCanInteract(true);
     }
 }
 

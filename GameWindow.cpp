@@ -37,15 +37,14 @@ CGameWindow::CGameWindow(QWidget* parent)
     timer = new QTimer(this);
     timer->start(1000);
     time = new QTime(0,0);
+
     // Connection from timer and the CGameWindow
     QObject::connect(timer, &QTimer::timeout, this, &CGameWindow::updateTimer);
- //   QObject::connect(ui->actionNew_Game, &QAction::triggered, CMain::get()->getGameInstance(), &CGame::restartGame);
+
     // Connection from the ui menubar with CGameWindow
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
     QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
-
-
 
     // Set the distance between the 3 labels
     ui->labelLayout->setSpacing(25);
@@ -61,13 +60,14 @@ CGameWindow::CGameWindow(QWidget* parent)
 
     QWidget *layout = new QWidget();
     mainGrid = new QGridLayout();
+    mainGrid->setRowStretch(0,1);
+    mainGrid->setRowStretch(1,3);
     layout->setLayout(mainGrid);
     ui->gridLayout->addWidget(layout);
 }
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
-
    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
     mainGrid->addWidget(stack, 1, column, 1, 1);
 
@@ -87,7 +87,6 @@ void CGameWindow::displayDrawStack(CDrawStack *draw)
 void CGameWindow::incrementMove()
 {
     ++moves;
-    qDebug() << "move +1";
     ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
@@ -116,6 +115,7 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 void CGameWindow::updateScore()
 {
     score = CMain::get()->getGameInstance()->getScore();
+    ui->score_label->setText("Score : " + QString::number(score));
 }
 
 void CGameWindow::resetGameWindow()

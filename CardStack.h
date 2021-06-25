@@ -29,7 +29,7 @@ public:
     int getNumCards() const;
 
     // Gets the current topmost card
-    CCard* getTopCard();
+    virtual CCard* getTopCard();
 
     // Checks whether a given card can be dropped on this stack
     virtual bool canDropCard(CCard* cardToDrop);
