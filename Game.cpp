@@ -100,7 +100,8 @@ void CGame::setUp()
 
     // Create the drawStack and adding the left cards of the deck to it
     drawStack = new CDrawStack(CMain::get()->getGameWindow());
-    for(int i = 0; i < deck.size(); ++i)
+    for(int i = 0; i < 4; i++)
+   // for(int i = 0; i < deck.size(); ++i)
     {
         drawStack->addCard(deck[i]);
     }

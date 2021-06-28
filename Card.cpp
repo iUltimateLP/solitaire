@@ -219,10 +219,10 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
+    // If the card is only clicked, we call the moveCard method in game and check if the card can be dropped elsewhere
     if((ev->pos()-dragStartPos).manhattanLength() < 1)
     {
        CMain::get()->getGameInstance()->moveCard(this, getCardStack());
-      //look at all other possibilities what to do
     }
     //Q_UNUSED(ev);
 }

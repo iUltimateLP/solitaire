@@ -32,7 +32,7 @@ private:
     QHBoxLayout* boxLayout;
 
     // Holds the index of the current visible card
-    int currentCard = 0;
+    int currentCard = -1;
 
     // Label that represents the unflipped drawStack but needs no logic
     CClickableLabel* drawStackPlaceholder;

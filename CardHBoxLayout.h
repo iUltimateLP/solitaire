@@ -31,6 +31,11 @@ public:
     // when a card from the drawStack is moved
     void push_back(QWidget *card);
 
+    // Returns the number of displayed items
+    int getItemCount() const;
+
+    QLayoutItem* getFirstItem() const;
+
 private:
     QVector<QLayoutItem*> m_items;
 };

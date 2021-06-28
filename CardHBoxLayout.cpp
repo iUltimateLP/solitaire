@@ -93,11 +93,22 @@ QSize CCardHBoxLayout::minimumSize() const
     return s + n * QSize(spacing(), 0);
 }
 
+int CCardHBoxLayout::getItemCount() const
+{
+    return m_items.size();
+}
+
+QLayoutItem* CCardHBoxLayout::getFirstItem() const
+{
+    return m_items.front();
+}
+
 void CCardHBoxLayout::clear()
 {
-    this->removeItem(m_items[2]);
-       this->removeItem(m_items[1]);
-        this->removeItem(m_items[0]);
+    for(QLayoutItem* item: m_items)
+    {
+        this->removeItem(item);
+    }
     m_items.clear();
 }
 
