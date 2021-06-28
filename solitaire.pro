@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,7 +26,8 @@ SOURCES += \
     Game.cpp \
     HoldingStack.cpp \
     Main.cpp \
-    GameWindow.cpp
+    GameWindow.cpp \
+    SoundManager.cpp
 
 HEADERS += \
     Card.h \
@@ -39,7 +40,8 @@ HEADERS += \
     Game.h \
     GameWindow.h \
     HoldingStack.h \
-    Main.h
+    Main.h \
+    SoundManager.h
 
 FORMS += \
     GameWindow.ui

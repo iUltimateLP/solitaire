@@ -66,11 +66,10 @@ public slots:
 
 private:
     CDrawStack* drawStack;
+
     // The final stacks at the top
     QList<CFinalStack*> finalStacks;
     QList<CHoldingStack*> holdingStacks;
-
-
     CFinalStack* finalDiamond;
     CFinalStack* finalHeart;
     CFinalStack* finalSpade;
