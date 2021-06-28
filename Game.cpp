@@ -110,7 +110,7 @@ void CGame::setUp()
     deck.clear();
 }
 
-void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
+bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 {
     // Iterate over the stacks and check if card can be dropped
     for(CFinalStack* final: finalStacks)
@@ -123,7 +123,7 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 
             // Increment the amount of steps
             CMain::get()->getGameWindow()->incrementMove();
-            return;
+            return true;
         }
     }
     for(CHoldingStack* holding: holdingStacks)
@@ -153,7 +153,7 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 
             // Increment the amount of steps
             CMain::get()->getGameWindow()->incrementMove();
-            return;
+            return true;
         }
 
         // TODO: Scoring
@@ -162,6 +162,8 @@ void CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
         // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
         evaluateScore(srcStack, destStack);
     }*/
+
+    return false;
 }
 
 void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)

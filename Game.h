@@ -44,7 +44,7 @@ public:
     void setUp();
 
     // Moves a card, when clicked and a movement is possible
-    void moveCard(CCard* cardToDrop, CCardStack* srcStack);
+    bool moveCard(CCard* cardToDrop, CCardStack* srcStack);
 
     // Evaluates which scoring attribute should be added to the score
     void evaluateScore(CCardStack* srcStack, CCardStack* destStack);
