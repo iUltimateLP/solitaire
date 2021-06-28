@@ -137,6 +137,11 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     this->cannotMoveAnim = new QPropertyAnimation(this, "pos");
     this->cannotMoveAnim->setDuration(200);
     this->cannotMoveAnim->setEasingCurve(QEasingCurve::InOutBounce);
+
+    // Set up the moving animatino
+    this->moveAnim = new QPropertyAnimation(this, "pos");
+    this->moveAnim->setDuration(1000);
+    this->moveAnim->setEasingCurve(QEasingCurve::InOutBounce);
 }
 
 QSize CCard::getCardScreenSize()
