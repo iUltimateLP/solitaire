@@ -132,6 +132,11 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
         // Fall back to the original pixmap to clean up any left over animation states
         this->setPixmap(currentPixmap);
     });
+
+    // Set up the cannot move animation
+    this->cannotMoveAnim = new QPropertyAnimation(this, "pos");
+    this->cannotMoveAnim->setDuration(200);
+    this->cannotMoveAnim->setEasingCurve(QEasingCurve::InOutBounce);
 }
 
 QSize CCard::getCardScreenSize()
@@ -219,11 +224,24 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
+    // Only trigger when didn't move
     if ((ev->pos() - dragStartPos).manhattanLength() < 1)
     {
-        CMain::get()->getGameInstance()->moveCard(this, getCardStack());
+        // Try to move the card
+        bool didMoveCard = CMain::get()->getGameInstance()->moveCard(this, getCardStack());
 
-        //look at all other possibilities what to do
+        // If moving didn't work and we're not playing the "cannot move" animation already
+        if (!didMoveCard && this->cannotMoveAnim->state() != QAbstractAnimation::Running)
+        {
+            // Set up the keyframes and play the animation
+            this->cannotMoveAnim->setKeyValueAt(0, this->pos());
+            this->cannotMoveAnim->setKeyValueAt(0.35, this->pos() - QPoint(10, 0));
+            this->cannotMoveAnim->setKeyValueAt(0.65, this->pos() + QPoint(10, 0));
+            this->cannotMoveAnim->setKeyValueAt(1, this->pos());
+            this->cannotMoveAnim->start();
+        }
+
+        // look at all other possibilities what to do
     }
 }
 
