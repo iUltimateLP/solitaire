@@ -68,8 +68,9 @@ CGameWindow::CGameWindow(QWidget* parent)
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
-   // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
+    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
     mainGrid->addWidget(stack, 1, column, 1, 1, Qt::AlignTop);
+    stack->setMinimumHeight(CCard::getCardScreenSize().height());
 
     // We need a dummy-widget with size policy set to expanding in vertical to force the layout to not change when adding cards
     // to a holdingstack
