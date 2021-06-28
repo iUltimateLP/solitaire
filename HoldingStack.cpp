@@ -36,8 +36,8 @@ void CHoldingStack::removeCard(CCard *cardToRemove)
 
     // A card was removed from this stack, so flip the next card if the next card is not flipped yet
     // The condition is necessary, otherwise already flipped cards would play the anim when clicking
-    // on multiple cards
-    if(!getTopCard()->getFlipped())
+    // on multiple cards. Also make sure there IS a top card
+    if(getTopCard() && !getTopCard()->getFlipped())
     {
         flipNextCard();
     }
