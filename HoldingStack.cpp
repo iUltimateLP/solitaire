@@ -78,6 +78,14 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
             return false;
         }
 
+        // Also, don't allow dropping kings on aces in holding stacks
+        if (topCard->getType() == ECardType::Ace && cardToDrop->getType() == ECardType::King)
+        {
+            // No aces on kings
+            qDebug() << "No aces on kings";
+            return false;
+        }
+
         // If all of these conditions passed, we allow it
         return true;
     }
