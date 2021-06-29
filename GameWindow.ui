@@ -104,6 +104,8 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionNew_Game"/>
+    <addaction name="actionMusic"/>
+    <addaction name="actionSound"/>
     <addaction name="actionQuit"/>
    </widget>
    <addaction name="menuMore"/>
@@ -122,6 +124,28 @@
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionMusic">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Music</string>
+   </property>
+  </action>
+  <action name="actionSound">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sound</string>
    </property>
   </action>
  </widget>

@@ -21,6 +21,9 @@ int CMain::run(int argc, char* argv[])
     // Create the game instance
     gameInstance = new CGame();
 
+    // Create the sound manager instance
+    soundManager = new CSoundManager();
+
     qDebug() << "Entering app loop";
 
     // Run the app loop
@@ -43,6 +46,12 @@ CGame* CMain::getGameInstance() const
 {
     // Returns the game instance
     return gameInstance;
+}
+
+CSoundManager *CMain::getSoundManager() const
+{
+    // Returns the sound manager
+    return soundManager;
 }
 
 // Applications entry point

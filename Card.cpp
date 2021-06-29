@@ -177,6 +177,9 @@ void CCard::requestCardFlip(bool shouldFlip)
     // Start the animation. setCardFlipped will be called from the animation when it's time
     this->flipAnim->start();
 
+    // Play a sound
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardFlip);
+
     // Flipping a card changes the score
     CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
 }
@@ -244,6 +247,12 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
             this->cannotMoveAnim->setKeyValueAt(0.65, this->pos() + QPoint(10, 0));
             this->cannotMoveAnim->setKeyValueAt(1, this->pos());
             this->cannotMoveAnim->start();
+        }
+
+        // If it worked, play a sound
+        if (didMoveCard)
+        {
+            CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
         }
 
         // look at all other possibilities what to do

@@ -45,6 +45,8 @@ CGameWindow::CGameWindow(QWidget* parent)
     QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
     QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
+    QObject::connect(ui->actionMusic, &QAction::triggered, this, &CGameWindow::setMusic);
+    QObject::connect(ui->actionSound, &QAction::triggered, this, &CGameWindow::setSound);
 
     // Set the distance between the 3 labels
     ui->labelLayout->setSpacing(25);
@@ -134,6 +136,18 @@ void CGameWindow::resetGameWindow()
     time = new QTime(0,0);
     moves = 0;
     emit resetGame();
+}
+
+void CGameWindow::setMusic(bool checked)
+{
+    // Enable music on the sound manager
+    CMain::get()->getSoundManager()->setEnableMusic(checked);
+}
+
+void CGameWindow::setSound(bool checked)
+{
+    // Enable sound effects on the sound manager
+    CMain::get()->getSoundManager()->setEnableSoundEffects(checked);
 }
 
 void CGameWindow::removeAllWidgets(QLayout* layout)

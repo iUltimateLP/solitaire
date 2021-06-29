@@ -9,11 +9,11 @@
         <file>assets/card_02.wav</file>
         <file>assets/card_03.wav</file>
         <file>assets/card_04.wav</file>
-        <file>assets/card_flip.mp3</file>
         <file>assets/card_stack_01.wav</file>
         <file>assets/card_stack_02.wav</file>
         <file>assets/card_stack_03.wav</file>
         <file>assets/card_stack_04.wav</file>
         <file>assets/card_stack_05.wav</file>
+        <file>assets/card_flip.wav</file>
     </qresource>
 </RCC>

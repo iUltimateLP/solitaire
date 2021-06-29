@@ -144,6 +144,8 @@ void CDrawStack::showNextCard()
         getCards()[currentCard]->setVisible(true);
         getCards()[currentCard]->setCanInteract(true);
     }
+
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
 }
 
 QHBoxLayout* CDrawStack::getHBoxLayout()

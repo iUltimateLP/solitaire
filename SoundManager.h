@@ -5,6 +5,7 @@
 #include <QMap>
 #include <QVector>
 #include <QSoundEffect>
+#include <QMediaPlayer>
 
 // The types of sound effects we can play
 enum SoundEffectType
@@ -27,10 +28,19 @@ public:
     // Plays the given sound effect
     void playSoundEffect(SoundEffectType sfxType);
 
+    // Sets whether to enable sound effects
+    void setEnableSoundEffects(bool enabled);
+
+    // Sets whether to enable music
+    void setEnableMusic(bool enabled);
+
 private:
     // List of sound effect files associated to their resepctive effect type
     QMap<SoundEffectType, QVector<QString>> soundFiles;
 
-    // The sound effect player
-    QSoundEffect* player;
+    // The media player for the bg music
+    QMediaPlayer* bgMusicPlayer;
+
+    // Whether to enable sound effects
+    bool enableSfx;
 };
