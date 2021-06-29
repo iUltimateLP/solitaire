@@ -145,6 +145,8 @@ void CDrawStack::showNextCard()
         getCards()[currentCard]->setCanInteract(true);
     }
 
+    // TODO: Make this a transaction
+
     CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
 }
 

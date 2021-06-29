@@ -172,6 +172,14 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
     // Now check if a stack was found
     if (foundStack)
     {
+        // Register a new transaction
+        Transaction t;
+        t.type = Transaction::TransactionType::StackToStack;
+        t.stack1 = srcStack;
+        t.stack2 = foundStack;
+        t.cards = cardsToMove;
+        this->addTransaction(t);
+
         // Go over all cards to move from front to back
         while (cardsToMove.size() > 0)
         {
@@ -185,7 +193,6 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 
     // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
     // evaluateScore(srcStack, destStack);
-
 
     return false;
 }
@@ -265,6 +272,35 @@ bool CGame::hasEnded()
             && finalSpade->getNumCards() == 13
             && finalHeart->getNumCards() == 13
             && finalSpade->getNumCards() == 13);
+}
+
+void CGame::addTransaction(Transaction newTransaction)
+{
+    qDebug() << newTransaction.toString();
+
+    // Add it
+    transactions.push_back(newTransaction);
+}
+
+void CGame::undoLastMove()
+{
+    // Make sure there is at least one transaction to undo
+    if (transactions.empty()) return;
+
+    // Last transaction
+    Transaction lastTrans = transactions.back();
+
+    if (lastTrans.type == Transaction::TransactionType::StackToStack)
+    {
+        qDebug() << "Undoing stack to stack";
+    }
+    else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
+    {
+        qDebug() << "Undoing shuffle draw";
+    }
+
+    // Pop it from the list
+    transactions.pop_back();
 }
 
 void CGame::restartGame()
