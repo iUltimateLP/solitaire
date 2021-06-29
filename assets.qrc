@@ -15,5 +15,6 @@
         <file>assets/card_stack_04.wav</file>
         <file>assets/card_stack_05.wav</file>
         <file>assets/card_flip.wav</file>
+        <file>assets/card_cant_move.wav</file>
     </qresource>
 </RCC>

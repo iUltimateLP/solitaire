@@ -193,6 +193,9 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
 
     // Increment the amount of steps
     CMain::get()->getGameWindow()->incrementMove();
+
+    // Play a sound
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
 }
 
 void CHoldingStack::checkCollapseStack()

@@ -249,11 +249,8 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
             this->cannotMoveAnim->start();
         }
 
-        // If it worked, play a sound
-        if (didMoveCard)
-        {
-            CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
-        }
+        // Play the sound
+        CMain::get()->getSoundManager()->playSoundEffect(didMoveCard ? SoundEffectType::CardClick : SoundEffectType::CardCannotMove);
 
         // look at all other possibilities what to do
     }
