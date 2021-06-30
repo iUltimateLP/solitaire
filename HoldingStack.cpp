@@ -78,6 +78,14 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
             return false;
         }
 
+        // Also, don't allow dropping kings on aces in holding stacks
+        if (topCard->getType() == ECardType::Ace && cardToDrop->getType() == ECardType::King)
+        {
+            // No aces on kings
+            qDebug() << "No aces on kings";
+            return false;
+        }
+
         // If all of these conditions passed, we allow it
         return true;
     }
@@ -178,6 +186,14 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
         CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     }
 
+    // Register a new transaction
+    Transaction t;
+    t.type = Transaction::TransactionType::StackToStack;
+    t.stack1 = payload->cards.front()->getCardStack();
+    t.stack2 = this;
+    t.cards = payload->cards;
+    CMain::get()->getGameInstance()->addTransaction(t);
+
     // Go through all cards we're about to drop
     for (CCard* card : payload->cards)
     {
@@ -193,6 +209,9 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
 
     // Increment the amount of steps
     CMain::get()->getGameWindow()->incrementMove();
+
+    // Play a sound
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
 }
 
 void CHoldingStack::checkCollapseStack()

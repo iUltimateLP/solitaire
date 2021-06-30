@@ -132,6 +132,16 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
         // Fall back to the original pixmap to clean up any left over animation states
         this->setPixmap(currentPixmap);
     });
+
+    // Set up the cannot move animation
+    this->cannotMoveAnim = new QPropertyAnimation(this, "pos");
+    this->cannotMoveAnim->setDuration(200);
+    this->cannotMoveAnim->setEasingCurve(QEasingCurve::InOutBounce);
+
+    // Set up the moving animatino
+    this->moveAnim = new QPropertyAnimation(this, "pos");
+    this->moveAnim->setDuration(1000);
+    this->moveAnim->setEasingCurve(QEasingCurve::InOutBounce);
 }
 
 QSize CCard::getCardScreenSize()
@@ -166,6 +176,9 @@ void CCard::requestCardFlip(bool shouldFlip)
 
     // Start the animation. setCardFlipped will be called from the animation when it's time
     this->flipAnim->start();
+
+    // Play a sound
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardFlip);
 
     // Flipping a card changes the score
     CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
@@ -219,10 +232,25 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
-    // If the card is only clicked, we call the moveCard method in game and check if the card can be dropped elsewhere
-    if((ev->pos()-dragStartPos).manhattanLength() < 1)
+    // Only trigger when didn't move
+    if ((ev->pos() - dragStartPos).manhattanLength() < 1)
     {
-       CMain::get()->getGameInstance()->moveCard(this, getCardStack());
+        // Try to move the card
+        bool didMoveCard = CMain::get()->getGameInstance()->moveCard(this, getCardStack());
+
+        // If moving didn't work and we're not playing the "cannot move" animation already
+        if (!didMoveCard && this->cannotMoveAnim->state() != QAbstractAnimation::Running)
+        {
+            // Set up the keyframes and play the animation
+            this->cannotMoveAnim->setKeyValueAt(0, this->pos());
+            this->cannotMoveAnim->setKeyValueAt(0.35, this->pos() - QPoint(10, 0));
+            this->cannotMoveAnim->setKeyValueAt(0.65, this->pos() + QPoint(10, 0));
+            this->cannotMoveAnim->setKeyValueAt(1, this->pos());
+            this->cannotMoveAnim->start();
+        }
+
+        // Play the sound
+        CMain::get()->getSoundManager()->playSoundEffect(didMoveCard ? SoundEffectType::CardClick : SoundEffectType::CardCannotMove);
     }
 }
 

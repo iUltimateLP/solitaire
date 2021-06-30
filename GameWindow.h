@@ -43,7 +43,6 @@ signals:
     // This signal is send when the new game menu item is chosen, connected with slot from CGame
     void resetGame();
 
-
 private slots:
     // Called every second
     void updateTimer();
@@ -53,6 +52,12 @@ private slots:
 
     // The "new game" menu item
     void resetGameWindow();
+
+    // The "Music" menu item
+    void setMusic(bool checked);
+
+    // The "Sound" menu item
+    void setSound(bool checked);
 
 public slots:
     // Called when CGame changes its internal score-variable
@@ -69,6 +74,5 @@ private:
     QTimer* timer;
     QTime* time;
 
-QGridLayout* mainGrid;
-
+    QGridLayout* mainGrid;
 };

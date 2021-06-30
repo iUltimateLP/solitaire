@@ -158,6 +158,10 @@ void CDrawStack::showNextCard()
         if(getNumCards()-1 == 0)
             drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
     }
+
+    // TODO: Make this a transaction
+
+    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
 }
 
 QHBoxLayout* CDrawStack::getHBoxLayout()

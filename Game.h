@@ -7,6 +7,7 @@
 #include "Card.h"
 #include <QTimer>
 #include "DrawStack.h"
+#include <QTextStream>
 
 // Contains the scoring attributes for the game
 namespace GameScoringAttributes
@@ -29,6 +30,35 @@ namespace GameScoringAttributes
     // Moving a card back from a FinalStack to a HoldingStack
     static int FOUNDATION_TO_TABLEAU = -15;
 }
+
+// A transaction is an action by the user, such as move a card
+struct Transaction
+{
+    enum TransactionType {
+        StackToStack,
+        DrawFromDrawStack
+    } type;
+
+    CCardStack* stack1;
+    CCardStack* stack2;
+    QList<CCard*> cards;
+
+    QString toString() {
+        QString str;
+        QTextStream stream(&str);
+
+        // Format type and symbol strings
+        QString typeStr;
+        switch (type) {
+            case TransactionType::StackToStack: typeStr = "Stack<->Stack";  break;
+            case TransactionType::DrawFromDrawStack:  typeStr = "DrawFromDrawStack";    break;
+        }
+
+        // Create final string
+        stream << "(Transaction " << this << " type=" << typeStr << " stack1=" << stack1 << " stack2=" << stack2;
+        return str;
+    }
+};
 
 // Implements the game logic
 class CGame : public QObject
@@ -56,6 +86,12 @@ public:
     // Returns whether the game has ended (all finalStacks have 13 cards)
     bool hasEnded();
 
+    // Registers a new transaction
+    void addTransaction(Transaction newTransaction);
+
+    // Undoes the last move
+    void undoLastMove();
+
 signals:
     // The "new game" menu item
     void onScoreChanged();
@@ -66,11 +102,10 @@ public slots:
 
 private:
     CDrawStack* drawStack;
+
     // The final stacks at the top
     QList<CFinalStack*> finalStacks;
     QList<CHoldingStack*> holdingStacks;
-
-
     CFinalStack* finalDiamond;
     CFinalStack* finalHeart;
     CFinalStack* finalSpade;
@@ -78,6 +113,9 @@ private:
 
     // The deck contains all cards in the whole game
     QList<CCard*> deck;
+
+    // List of latest transactions the player has made
+    QList<Transaction> transactions;
 
     int score = 0;
 };

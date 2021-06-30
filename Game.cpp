@@ -113,56 +113,87 @@ void CGame::setUp()
 
 bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 {
-    // Iterate over the stacks and check if card can be dropped
-    for(CFinalStack* final: finalStacks)
+    // The found stack where we can add the card to
+    CCardStack* foundStack = nullptr;
+
+    // We need a list, if the cardToDrop is not the topCard
+    QList<CCard*> cardsToMove;
+
+    // Iterate over the final stacks and check if card can be dropped
+    for (CFinalStack* final : finalStacks)
     {
         // If the card fits on a final stack, it has to be the top card as only a single card can be dropped there
-        if(final->canDropCard(cardToDrop) && cardToDrop == srcStack->getTopCard())
+        if (final->canDropCard(cardToDrop) && cardToDrop == srcStack->getTopCard() && final != srcStack)
         {
-            srcStack->removeCard(cardToDrop);
-            final->addCard(cardToDrop);
+            // Add the card to the cardsToMove list and assign the found stack
+            cardsToMove.push_back(cardToDrop);
+            foundStack = final;
 
             // Increment the amount of steps
             CMain::get()->getGameWindow()->incrementMove();
-            return true;
+            break;
         }
     }
-    for(CHoldingStack* holding: holdingStacks)
+
+    // If we didn't find a suitable stack yet
+    if (!foundStack)
     {
-        if(holding->canDropCard(cardToDrop))
+        // Try to find a suitable holding stack
+        for (CHoldingStack* holding : holdingStacks)
         {
-            // We need a list, if the cardToDrop is not the topCard
-            QList<CCard*> cardsToMove;
-
-            // While cardToDrop is not the last card, all cards are safed in list and removed
-            while (cardToDrop != srcStack->getTopCard())
+            // Can it be dropped?
+            if (holding->canDropCard(cardToDrop) && holding != srcStack)
             {
-                cardsToMove.push_back(srcStack->getTopCard());
-                srcStack->removeCardAt(srcStack->getNumCards()-1);
+                // Add it to the list and mark that we found it
+                cardsToMove.push_back(cardToDrop);
+                foundStack = holding;
+
+                // If the source stack is a holding stack too...
+                if (dynamic_cast<CHoldingStack*>(srcStack) != NULL)
+                {
+                    // ...get all cards above this one and add them too
+                    for (CCard* card : dynamic_cast<CHoldingStack*>(srcStack)->getCardsAbove(cardToDrop))
+                    {
+                        // Ignore the card to drop
+                        if (card == cardToDrop) continue;
+
+                        cardsToMove.push_back(card);
+                    }
+                }
+
+                // Increment the amount of steps
+                CMain::get()->getGameWindow()->incrementMove();
+                break;
             }
 
-            // Finally remove the cardToDrop from the source stack and add it to the destination stack
-            srcStack->removeCard(cardToDrop);
-            holding->addCard(cardToDrop);
+            // TODO: Scoring
+        }
+    }
 
-            // While cardsToMove list is not empty, add the cards to destination stack
-            while(cardsToMove.size() > 0)
-            {
-                holding->addCard(cardsToMove.front());
-                cardsToMove.pop_front();
-            }
+    // Now check if a stack was found
+    if (foundStack)
+    {
+        // Register a new transaction
+        Transaction t;
+        t.type = Transaction::TransactionType::StackToStack;
+        t.stack1 = srcStack;
+        t.stack2 = foundStack;
+        t.cards = cardsToMove;
+        this->addTransaction(t);
 
-            // Increment the amount of steps
-            CMain::get()->getGameWindow()->incrementMove();
-            return true;
+        // Go over all cards to move from front to back
+        while (cardsToMove.size() > 0)
+        {
+            srcStack->removeCard(cardsToMove.front());
+            foundStack->addCard(cardsToMove.front());
+            cardsToMove.pop_front();
         }
 
-        // TODO: Scoring
+        return true;
     }
-    /*
-        // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
-        evaluateScore(srcStack, destStack);
-    }*/
+
+    // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
+    // evaluateScore(srcStack, destStack);
 
     return false;
 }
@@ -242,6 +273,35 @@ bool CGame::hasEnded()
             && finalSpade->getNumCards() == 13
             && finalHeart->getNumCards() == 13
             && finalSpade->getNumCards() == 13);
+}
+
+void CGame::addTransaction(Transaction newTransaction)
+{
+    qDebug() << newTransaction.toString();
+
+    // Add it
+    transactions.push_back(newTransaction);
+}
+
+void CGame::undoLastMove()
+{
+    // Make sure there is at least one transaction to undo
+    if (transactions.empty()) return;
+
+    // Last transaction
+    Transaction lastTrans = transactions.back();
+
+    if (lastTrans.type == Transaction::TransactionType::StackToStack)
+    {
+        qDebug() << "Undoing stack to stack";
+    }
+    else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
+    {
+        qDebug() << "Undoing shuffle draw";
+    }
+
+    // Pop it from the list
+    transactions.pop_back();
 }
 
 void CGame::restartGame()

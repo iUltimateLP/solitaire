@@ -4,6 +4,7 @@
 #include <QObject>
 #include "GameWindow.h"
 #include "Game.h"
+#include "SoundManager.h"
 
 // Main program entry class
 class CMain : public QObject
@@ -27,6 +28,9 @@ public:
     // Returns the Game instance
     CGame* getGameInstance() const;
 
+    // Returns the SoundManager instance
+    CSoundManager* getSoundManager() const;
+
 private:
     // Singleton instance
     static CMain* singletonInstance;
@@ -36,4 +40,7 @@ private:
 
     // The CGame instance
     CGame* gameInstance;
+
+    // The CSoundManager instance
+    CSoundManager* soundManager;
 };
