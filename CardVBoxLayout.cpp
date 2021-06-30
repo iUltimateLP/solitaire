@@ -3,6 +3,41 @@
 #include <QDebug>
 #include "Card.h"
 
+CCardVBoxLayout::CCardVBoxLayout(int spacing)
+    : QLayout()
+{
+    // Set the initial spacing
+    setSpacing(spacing);
+
+    // Set up animation
+    this->spacingAnim = new QVariantAnimation(this);
+    this->spacingAnim->setDuration(100);
+
+    // Called when the animation ticks so we can update
+    QObject::connect(this->spacingAnim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+        // Just set the new spacing
+        this->setSpacing(value.toInt());
+    });
+}
+
+CCardVBoxLayout::CCardVBoxLayout(int spacing, QWidget *parent)
+    : QLayout(parent)
+{
+    // Set the initial spacing
+    setSpacing(spacing);
+
+    // Set up animation
+    this->spacingAnim = new QVariantAnimation(this);
+    this->spacingAnim->setDuration(200);
+    this->spacingAnim->setEasingCurve(QEasingCurve::InOutElastic);
+
+    // Called when the animation ticks so we can update
+    QObject::connect(this->spacingAnim, &QVariantAnimation::valueChanged, [=](const QVariant& value) {
+        // Just set the new spacing
+        this->setSpacing(value.toInt());
+    });
+}
+
 int CCardVBoxLayout::count() const
 {
     // QVector::size() returns the number of QLayoutItems in m_items
@@ -56,6 +91,17 @@ void CCardVBoxLayout::setGeometry(const QRect &r)
         o->setGeometry(geom);
         ++i;
     }
+}
+
+void CCardVBoxLayout::setSpacingWithAnimation(int newSpacing)
+{
+    // Don't when the new spacing is the same as the current spacing
+    if (this->spacing() == newSpacing) return;
+
+    // Set the animation start and end
+    this->spacingAnim->setStartValue(this->spacing());
+    this->spacingAnim->setEndValue(newSpacing);
+    this->spacingAnim->start();
 }
 
 QSize CCardVBoxLayout::sizeHint() const

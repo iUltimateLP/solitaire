@@ -170,4 +170,7 @@ private:
     // Animations
     QPropertyAnimation* hoverAnim;
     QVariantAnimation* flipAnim;
+
+    // Whether this card was clicked and should automatically move to another position
+    CCardStack* stackBeforeHoverAnim;
 };

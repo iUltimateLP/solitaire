@@ -5,8 +5,10 @@
 #include <QMimeData>
 #include <Main.h>
 
-// Set the card offset
+// Set the static variables
 int CHoldingStack::CardOffsetInStack = 45;
+int CHoldingStack::CardOffsetInStackSmaller = 24;
+int CHoldingStack::StackCollapseNumCards = 12;
 
 CHoldingStack::CHoldingStack(QWidget* parent)
     : CCardStack(parent)
@@ -24,6 +26,9 @@ void CHoldingStack::addCard(CCard *cardToAdd)
 
     // Call the superclasses' addCard
     CCardStack::addCard(cardToAdd);
+
+    // Check whether we should collapse the stack
+    this->checkCollapseStack();
 }
 
 void CHoldingStack::removeCard(CCard *cardToRemove)
@@ -41,6 +46,9 @@ void CHoldingStack::removeCard(CCard *cardToRemove)
     {
         flipNextCard();
     }
+
+    // Check whether we should collapse the stack
+    this->checkCollapseStack();
 }
 
 bool CHoldingStack::canDropCard(CCard *cardToDrop)
@@ -185,4 +193,19 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
 
     // Increment the amount of steps
     CMain::get()->getGameWindow()->incrementMove();
+}
+
+void CHoldingStack::checkCollapseStack()
+{
+    // Check whether we should collapse
+    if (this->getNumCards() >= CHoldingStack::StackCollapseNumCards)
+    {
+        // Set the spacing to smaller
+        vbox->setSpacingWithAnimation(CHoldingStack::CardOffsetInStackSmaller);
+    }
+    else
+    {
+        // Set the spacing back to normla
+        vbox->setSpacingWithAnimation(CHoldingStack::CardOffsetInStack);
+    }
 }

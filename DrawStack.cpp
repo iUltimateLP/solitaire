@@ -47,31 +47,39 @@ void CDrawStack::addCard(CCard* cardToAdd)
 
 void CDrawStack::removeCard(CCard* cardToRemove)
 {
-    // If the removed card was the first one of the stack, currentCard has to be decremented
-    if(currentCard != getNumCards())
-    {
-        currentCard = 0;
-    }
-    // Otherwise, there is already a card, which should be set to canInteract
-    else
-    {
-        getCards()[currentCard]->setCanInteract(true);
-    }
-    // When a card is removed, the last third card in the stack will be displayed, if existent
-    if(currentCard + 2 <= getNumCards()-1)
-    {
-        hbox->push_back(getCards()[currentCard+2]);
-        getCards()[currentCard+2]->setVisible(true);
-    }
-
-    qDebug() << "currentCard" << currentCard;
 
     // Call the superclasses' removeCard
     CCardStack::removeCard(cardToRemove);
 
     // Remove the card from the layout which is the first one
-    hbox->removeItem(hbox->getFirstItem());
+    if(hbox->itemAt(2))
+        hbox->removeItem(hbox->itemAt(2));
+    else if(hbox->itemAt(1))
+        hbox->removeItem(hbox->itemAt(1));
+    else
+        hbox->removeItem(hbox->itemAt(0));
 
+    // If the removed card was the first one of the stack, currentCard has to be decremented
+    if(currentCard > getNumCards()-1)
+    {
+        currentCard = -1;
+        qDebug() << "currentCard is set to -1";
+    }
+    // Otherwise, there is already a card, which should be set to canInteract
+    else
+    {
+        qDebug() << "next card is set to interact";
+        getCards()[currentCard]->setCanInteract(true);
+        // When a card is removed, the last third card in the stack will be displayed, if existent
+        if(currentCard + 2 <= getNumCards()-1)
+        {
+            qDebug() << "next card should be displayed";
+            hbox->push_back(getCards()[currentCard+2]);
+            getCards()[currentCard+2]->setVisible(true);
+        }
+    }
+
+    qDebug() << "currentCard" << currentCard;
 }
 
 bool CDrawStack::canDropCard(CCard *cardToDrop)
@@ -141,12 +149,14 @@ void CDrawStack::showNextCard()
         --currentCard;
     }
     // Otherwise, the currentCard is set to the topCard again, the first card is set to visible and caninteract
-    else
+    else if(getNumCards() > 0)
     {
         currentCard = getNumCards()-1;
         hbox->addWidget(getCards()[currentCard]);
         getCards()[currentCard]->setVisible(true);
         getCards()[currentCard]->setCanInteract(true);
+        if(getNumCards()-1 == 0)
+            drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
     }
 }
 

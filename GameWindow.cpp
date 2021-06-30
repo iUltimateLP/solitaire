@@ -60,7 +60,8 @@ CGameWindow::CGameWindow(QWidget* parent)
 
     QWidget *layout = new QWidget();
     mainGrid = new QGridLayout();
-   // mainGrid->setRowStretch(0,2);
+    //mainGrid->setRowStretch(0,2);
+    //mainGrid->setRowStretch(1,3);
     //mainGrid->setSpacing(4);
     layout->setLayout(mainGrid);
     ui->gridLayout->addWidget(layout);
@@ -69,6 +70,7 @@ CGameWindow::CGameWindow(QWidget* parent)
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
    // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
+    stack->setMinimumHeight(CCard::getCardScreenSize().height());
     mainGrid->addWidget(stack, 1, column, 1, 1, Qt::AlignTop);
 
     // We need a dummy-widget with size policy set to expanding in vertical to force the layout to not change when adding cards

@@ -224,7 +224,6 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
     {
        CMain::get()->getGameInstance()->moveCard(this, getCardStack());
     }
-    //Q_UNUSED(ev);
 }
 
 void CCard::mouseMoveEvent(QMouseEvent* ev)
@@ -336,11 +335,12 @@ void CCard::enterEvent(QEvent* ev)
     Q_UNUSED(ev);
 
     // Only play the hover animation if this card is flipped and not playing the animation already
-    if (this->getFlipped() && this->hoverAnim->currentTime() == 0 && canInteract)
+    if (this->getFlipped() && this->hoverAnim->state() == QAbstractAnimation::Stopped && canInteract)
     {
         this->hoverAnim->setStartValue(this->pos());
         this->hoverAnim->setEndValue(this->pos() + QPoint(0, 10));
         this->hoverAnim->setDirection(QPropertyAnimation::Direction::Forward);
+        stackBeforeHoverAnim = this->getCardStack();
         this->hoverAnim->start();
     }
 }
@@ -349,10 +349,16 @@ void CCard::leaveEvent(QEvent* ev)
 {
     Q_UNUSED(ev);
 
-    // Only play the reversed hover animation if this card is flipped
-    if (this->getFlipped() && canInteract)
+    // Check whether the stack changed (e.g. because the card was moved)
+    bool didStackChange = stackBeforeHoverAnim != this->getCardStack();
+
+    // Don't play this animation if not flipped, or because this card was moved by code and not by hand
+    if (this->getFlipped() && !didStackChange && canInteract)
     {
         this->hoverAnim->setDirection(QPropertyAnimation::Direction::Backward);
         this->hoverAnim->start();
     }
+
+    // Reset the wasClicked flag if set
+    if (didStackChange) stackBeforeHoverAnim = this->getCardStack();
 }

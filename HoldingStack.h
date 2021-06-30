@@ -19,6 +19,12 @@ public:
     // The offset in pixels to apply between each card
     static int CardOffsetInStack;
 
+    // The offset in pixels to apply between each card when making the stack smaller
+    static int CardOffsetInStackSmaller;
+
+    // The amount of cards to allow per holding stack before collapsing them
+    static int StackCollapseNumCards;
+
 public:
     //~ Begin CCardStack interface
     virtual void addCard(CCard *cardToAdd) override;
@@ -36,6 +42,9 @@ private:
     // Overwritten drag'n'drop events
     void dragEnterEvent(QDragEnterEvent* ev) override;
     void dropEvent(QDropEvent* ev) override;
+
+    // Checks (and potentially performs) whether to collapse this stack or not
+    void checkCollapseStack();
 
 private:
     // The vertical box layout to use for the holding stack
