@@ -97,5 +97,5 @@ int CCardStack::getIndexOfCard(CCard* card)
 
 void CCardStack::handleCardsChanged()
 {
-  //qDebug() << "handleCardsChanged!";
+    //qDebug() << "handleCardsChanged!";
 }

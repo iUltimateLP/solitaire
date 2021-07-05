@@ -181,7 +181,7 @@ void CCard::requestCardFlip(bool shouldFlip)
     CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardFlip);
 
     // Flipping a card changes the score
-    CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
+    CMain::get()->getGameInstance()->addScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
 }
 
 void CCard::setCardStack(CCardStack *newStack)

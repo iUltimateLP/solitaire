@@ -134,7 +134,7 @@ void CDrawStack::showNextCard()
         drawStackPlaceholder->setPixmap(cardBackPixmap);
 
         // Recycling the draw stack changes the score
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
 
         // Iterating over the remaining cards and setting them to invisible and not interactable
         for(int i = 0; i < hbox->getItemCount(); ++i)
