@@ -284,7 +284,7 @@ void CGame::undoLastMove()
         qDebug() << "Undoing stack to stack";
 
         // If we have to, flip the current top card of the stack1
-        if (lastTrans.flipCardBefore)
+        if (lastTrans.flipCardBefore && lastTrans.stack1->getTopCard() != nullptr)
         {
             lastTrans.stack1->getTopCard()->setCardFlipped(false);
         }
