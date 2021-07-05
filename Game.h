@@ -34,15 +34,25 @@ namespace GameScoringAttributes
 // A transaction is an action by the user, such as move a card
 struct Transaction
 {
+    // The type of this transaction
     enum TransactionType {
         StackToStack,
         DrawFromDrawStack
     } type;
 
-    CCardStack* stack1;
-    CCardStack* stack2;
+    // The involved cards and stacks
+    CCardStack* stack1 = nullptr;
+    CCardStack* stack2 = nullptr;
     QList<CCard*> cards;
 
+    // The score before and after this transaction
+    int scoreBefore = 0;
+    int scoreAfter = 0;
+
+    // If type == StackToStack, whether the card before was flipped or not
+    bool flipCardBefore = false;
+
+    // ToString method
     QString toString() {
         QString str;
         QTextStream stream(&str);
@@ -50,12 +60,19 @@ struct Transaction
         // Format type and symbol strings
         QString typeStr;
         switch (type) {
-            case TransactionType::StackToStack: typeStr = "Stack<->Stack";  break;
-            case TransactionType::DrawFromDrawStack:  typeStr = "DrawFromDrawStack";    break;
+            case TransactionType::StackToStack: typeStr = "Stack<->Stack"; break;
+            case TransactionType::DrawFromDrawStack: typeStr = "DrawFromDrawStack"; break;
         }
 
         // Create final string
-        stream << "(Transaction " << this << " type=" << typeStr << " stack1=" << stack1 << " stack2=" << stack2;
+        stream << "(Transaction " << this
+               << " type=" << typeStr
+               << " stack1=" << stack1
+               << " stack2=" << stack2
+               << " cards=" << cards.length()
+               << " scoreBefore=" << scoreBefore
+               << " scoreAfter=" << scoreAfter
+               << " flipCardBefore=" << flipCardBefore;
         return str;
     }
 };
@@ -80,7 +97,7 @@ public:
     void evaluateScore(CCardStack* srcStack, CCardStack* destStack);
 
     // Actually changes the variable score
-    void changeScore(int points);
+    void addScore(int points);
     int getScore();
 
     // Returns whether the game has ended (all finalStacks have 13 cards)

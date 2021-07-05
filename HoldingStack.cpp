@@ -173,17 +173,17 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
     if (dynamic_cast<CFinalStack*>(payload->cards[0]->getCardStack()) != NULL)
     {
         // If the card comes from a FinalStack
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     }
     else if(dynamic_cast<CDrawStack*>(payload->cards[0]->getCardStack()) != NULL)
     {
         // If the card comes from the DrawStack
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
     }
     else if(dynamic_cast<CFinalStack*>(payload->cards[0]->getCardStack()) != NULL)
     {
         // If the card comes from the DrawStack
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     }
 
     // Register a new transaction
@@ -192,7 +192,8 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
     t.stack1 = payload->cards.front()->getCardStack();
     t.stack2 = this;
     t.cards = payload->cards;
-    CMain::get()->getGameInstance()->addTransaction(t);
+    t.scoreBefore = CMain::get()->getGameInstance()->getScore();
+    t.flipCardBefore = payload->cards[0]->getCardStack()->getTopCard()->getFlipped();
 
     // Go through all cards we're about to drop
     for (CCard* card : payload->cards)
@@ -206,6 +207,12 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
         // Add it to this stack
         this->addCard(card);
     }
+
+    // Store the score after evaluation in the transaction
+    t.scoreAfter = CMain::get()->getGameInstance()->getScore();
+
+    // Add the transaction
+    CMain::get()->getGameInstance()->addTransaction(t);
 
     // Increment the amount of steps
     CMain::get()->getGameWindow()->incrementMove();

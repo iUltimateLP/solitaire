@@ -117,12 +117,12 @@ void CFinalStack::dropEvent(QDropEvent* ev)
     if (dynamic_cast<CDrawStack*>(cardToDrop->getCardStack()) != NULL)
     {
         // If the card comes from a DrawStack
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     }
     else if(dynamic_cast<CHoldingStack*>(cardToDrop->getCardStack()) != NULL)
     {
         // If the card comes from a HoldingStack
-        CMain::get()->getGameInstance()->changeScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+        CMain::get()->getGameInstance()->addScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
     }
 
 

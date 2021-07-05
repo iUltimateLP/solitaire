@@ -34,6 +34,7 @@ public:
 
     // Is called after every move
     void incrementMove();
+    void decrementMove();
     void incrementScore(int gameScore);
 
     // Clears the gridlayout where all cards are displayed, needed, when new game is chosen
@@ -58,6 +59,9 @@ private slots:
 
     // The "Sound" menu item
     void setSound(bool checked);
+
+    // The "Undo" button
+    void undo();
 
 public slots:
     // Called when CGame changes its internal score-variable

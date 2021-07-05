@@ -177,7 +177,8 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
         t.stack1 = srcStack;
         t.stack2 = foundStack;
         t.cards = cardsToMove;
-        this->addTransaction(t);
+        t.scoreBefore = this->score;
+        t.flipCardBefore = (srcStack->getTopCard() != nullptr ? srcStack->getTopCard()->getFlipped() : false);
 
         // Go over all cards to move from front to back
         while (cardsToMove.size() > 0)
@@ -190,8 +191,15 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
         // Change the score
         evaluateScore(srcStack, foundStack);
 
+        // Store the score after evaluation in the transaction
+        t.scoreAfter = this->score;
+
+        // Add the transaction
+        this->addTransaction(t);
+
         return true;
     }
+
     return false;
 }
 
@@ -205,27 +213,27 @@ void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
     if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
         // Points for moving a card from a HoldingStack to a FinalStack
-        changeScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
+        addScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
     }
     else if (dynamic_cast<CFinalStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
     {
         // Minus points if card is moved from FinalStack back to a HoldingStack
-        changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
+        addScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     }
     else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
     {
         // Points for moving a card from the DrawStack to a HoldingStack
-        changeScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
+        addScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
     }
     else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
         // Points for moving a card directly from the DrawStack to a FinalStack
-        changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
+        addScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     }
 
 }
 
-void CGame::changeScore(int points)
+void CGame::addScore(int points)
 {
     score += points;
     if(score < 0)
@@ -266,9 +274,24 @@ void CGame::undoLastMove()
     // Last transaction
     Transaction lastTrans = transactions.back();
 
+    qDebug() << "Last transaction: " << lastTrans.toString();
+
     if (lastTrans.type == Transaction::TransactionType::StackToStack)
     {
         qDebug() << "Undoing stack to stack";
+
+        // If we have to, flip the current top card of the stack1
+        if (lastTrans.flipCardBefore)
+        {
+            lastTrans.stack1->getTopCard()->setCardFlipped(false);
+        }
+
+        // Move the cards back from stack2 to stack1
+        for (CCard* card : lastTrans.cards)
+        {
+            lastTrans.stack2->removeCard(card);
+            lastTrans.stack1->addCard(card);
+        }
     }
     else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
     {
@@ -277,6 +300,13 @@ void CGame::undoLastMove()
 
     // Pop it from the list
     transactions.pop_back();
+
+    // Decrement the moves
+    CMain::get()->getGameWindow()->decrementMove();
+
+    // Change the score back
+    this->score = lastTrans.scoreBefore;
+    emit onScoreChanged();
 }
 
 void CGame::restartGame()

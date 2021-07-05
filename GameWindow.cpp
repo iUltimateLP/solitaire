@@ -33,7 +33,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
-ui->pushButton->setStyleSheet("background-color: white");
+    ui->undoButton->setStyleSheet("background-color: white");
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
@@ -49,6 +49,9 @@ ui->pushButton->setStyleSheet("background-color: white");
     QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
     QObject::connect(ui->actionMusic, &QAction::triggered, this, &CGameWindow::setMusic);
     QObject::connect(ui->actionSound, &QAction::triggered, this, &CGameWindow::setSound);
+
+    // Connection from the ui undo button with CGameWindow
+    QObject::connect(ui->undoButton, &QPushButton::clicked, this, &CGameWindow::undo);
 
     // Set the distance between the 3 labels
     ui->labelLayout->setSpacing(25);
@@ -103,6 +106,12 @@ void CGameWindow::incrementMove()
     ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
+void CGameWindow::decrementMove()
+{
+    --moves;
+    ui->move_label->setText("Moves: " + QString::number(moves));
+}
+
 void CGameWindow::incrementScore(int gameScore)
 {
     score += gameScore;
@@ -149,6 +158,12 @@ void CGameWindow::setSound(bool checked)
 {
     // Enable sound effects on the sound manager
     CMain::get()->getSoundManager()->setEnableSoundEffects(checked);
+}
+
+void CGameWindow::undo()
+{
+    // Tell the game instance to undo the last move
+    CMain::get()->getGameInstance()->undoLastMove();
 }
 
 void CGameWindow::removeAllWidgets(QLayout* layout)
