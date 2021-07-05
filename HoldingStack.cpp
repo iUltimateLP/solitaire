@@ -8,7 +8,7 @@
 // Set the static variables
 int CHoldingStack::CardOffsetInStack = 45;
 int CHoldingStack::CardOffsetInStackSmaller = 24;
-int CHoldingStack::StackCollapseNumCards = 12;
+int CHoldingStack::StackCollapseNumCards = 9;
 
 CHoldingStack::CHoldingStack(QWidget* parent)
     : CCardStack(parent)

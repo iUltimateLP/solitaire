@@ -25,13 +25,15 @@ CGameWindow::CGameWindow(QWidget* parent)
 
     qDebug() << "Created CGameWindow";
 
-    // Set background-color
+    // Set background-image
     ui->centralwidget->setStyleSheet("background-image: url(:/assets/table_background.png);");
     ui->centralwidget->resize(1000, 800);
 
     // Displays the initial score and moves
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
+
+ui->pushButton->setStyleSheet("background-color: white");
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);

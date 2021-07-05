@@ -165,8 +165,6 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
                 CMain::get()->getGameWindow()->incrementMove();
                 break;
             }
-
-            // TODO: Scoring
         }
     }
 
@@ -189,22 +187,20 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
             cardsToMove.pop_front();
         }
 
+        // Change the score
+        evaluateScore(srcStack, foundStack);
+
         return true;
     }
-
-    // Check if the move has an impact on the score -> this is done before the movement, so it can be checked if a card will be flipped
-    // evaluateScore(srcStack, destStack);
-
     return false;
 }
 
 void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
 {
     // Remove if used
-    Q_UNUSED(srcStack);
-    Q_UNUSED(dstStack);
-
-    /*
+    //Q_UNUSED(srcStack);
+    //Q_UNUSED(dstStack);
+/*
     // Increment the score with the suitable attribute
     if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
@@ -247,7 +243,7 @@ void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
         // Points for moving a card directly from the DrawStack to a FinalStack
         changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     }
-    */
+*/
 }
 
 void CGame::changeScore(int points)
