@@ -97,6 +97,29 @@ CCard* CDrawStack::getTopCard()
     return getCards()[currentCard];
 }
 
+void CDrawStack::addCardToUi()
+{
+    // When the Boxlayout shows already 3 cards, the last one is removed, so that a new one can be displayed
+    if(hbox->count() == 3 && getNumCards() > 3)
+    {
+        hbox->removeItem(hbox->itemAt(0));
+        getCards()[currentCard+3]->setVisible(false);
+    }
+
+    // The following card is added to the boxlayout and set to visible
+    hbox->addWidget(getCards()[currentCard]);
+    getCards()[currentCard]->setVisible(true);
+
+    // Interaction with the added card should be possible, with the former front card impossible (only if there is a former card)
+    getCards()[currentCard]->setCanInteract(true);
+    if(currentCard < getNumCards())
+       getCards()[currentCard+1]->setCanInteract(false);
+
+    // Additionally, if it is the last card of the stack, the placeholder displays the empty tile
+    if(currentCard == 0)
+        drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
+}
+
 void CDrawStack::showNextCard()
 {
     qDebug() << "current card" << currentCard;
@@ -106,25 +129,7 @@ void CDrawStack::showNextCard()
     if(currentCard > 0)
     {
         --currentCard;
-        // When the Boxlayout shows already 3 cards, the last one is removed, so that a new one can be displayed
-        if(hbox->count() == 3 && getNumCards() > 3)
-        {
-            hbox->removeItem(hbox->itemAt(0));
-            getCards()[currentCard+3]->setVisible(false);
-        }
-
-        // The following card is added to the boxlayout and set to visible
-        hbox->addWidget(getCards()[currentCard]);
-        getCards()[currentCard]->setVisible(true);
-
-        // Interaction with the added card should be possible, with the former front card impossible (only if there is a former card)
-        getCards()[currentCard]->setCanInteract(true);
-        if(currentCard < getNumCards())
-           getCards()[currentCard+1]->setCanInteract(false);
-
-        // Additionally, if it is the last card of the stack, the placeholder displays the empty tile
-        if(currentCard == 0)
-            drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
+        addCardToUi();
     }
     else if(currentCard == 0)
     {
@@ -162,6 +167,23 @@ void CDrawStack::showNextCard()
     // TODO: Make this a transaction
 
     CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
+}
+
+void CDrawStack::undo(CCard* card)
+{
+
+    if(card)
+    {
+       ++currentCard;
+       insertCardAt(card, currentCard);
+       addCardToUi();
+    }
+    /*
+    else
+    {
+        currentCard = 0;
+        drawStackPlaceholder->setPixmap(cardBackPixmap);
+    }*/
 }
 
 QHBoxLayout* CDrawStack::getHBoxLayout()

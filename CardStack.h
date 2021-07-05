@@ -19,6 +19,9 @@ public:
     // Adds a new card to the stack
     virtual void addCard(CCard* cardToAdd);
 
+    // Inserts a card at a specific position
+    void insertCardAt(int insertAt, CCard* cardToInsert);
+
     // Removes a card from the stack
     virtual void removeCard(CCard* cardToRemove);
 

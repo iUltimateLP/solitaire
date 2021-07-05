@@ -30,6 +30,22 @@ void CCardStack::addCard(CCard *cardToAdd)
     }
 }
 
+void CCardStack::insertCardAt(int insertAt, CCard* cardToInsert)
+{
+    // Make sure the card is valid
+    if (cardToInsert)
+    {
+        // Add it to the list
+        cards.insert(insertAt, cardToInsert);
+
+        // Set the card's stack to this one
+        cardToInsert->setCardStack(this);
+
+        // Notify the handler
+        emit onCardsChanged();
+    }
+}
+
 void CCardStack::removeCard(CCard *cardToRemove)
 {
     qDebug() << "CCardStack::removeCard";

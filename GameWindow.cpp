@@ -64,9 +64,7 @@ ui->pushButton->setStyleSheet("background-color: white");
 
     QWidget *layout = new QWidget();
     mainGrid = new QGridLayout();
-    //mainGrid->setRowStretch(0,2);
-    //mainGrid->setRowStretch(1,3);
-    //mainGrid->setSpacing(4);
+    mainGrid->setSpacing(12);
     layout->setLayout(mainGrid);
     ui->gridLayout->addWidget(layout);
 }

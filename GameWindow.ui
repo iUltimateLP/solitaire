@@ -29,7 +29,7 @@
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <property name="leftMargin">
-         <number>700</number>
+         <number>500</number>
         </property>
         <property name="topMargin">
          <number>10</number>

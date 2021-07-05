@@ -23,6 +23,9 @@ public:
 
     QHBoxLayout* getHBoxLayout();
 
+    // When the undo-Button is clicked and the last move was recycling the drawstack
+    void undo(CCard* card = nullptr);
+
 public slots:
     void showNextCard();
 
@@ -40,6 +43,8 @@ private:
     // The pixmap of the card back and empty drawStack placeholder
     QPixmap cardBackPixmap;
     QPixmap emptyDrawStackPixmap;
+
+    void addCardToUi();
 };
 
 
