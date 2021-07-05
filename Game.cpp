@@ -200,50 +200,29 @@ void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
     // Remove if used
     //Q_UNUSED(srcStack);
     //Q_UNUSED(dstStack);
-/*
+
     // Increment the score with the suitable attribute
     if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
         // Points for moving a card from a HoldingStack to a FinalStack
         changeScore(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
-        if (srcStack.getNumberUnflippedCards() > 0)
-        {
-            // Extra points if the next card from the HoldingStack gets flipped
-            changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
-        }
     }
     else if (dynamic_cast<CFinalStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
     {
         // Minus points if card is moved from FinalStack back to a HoldingStack
         changeScore(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
     }
-    else if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
-    {
-        if(srcStack->getNumberUnflippedCards() > 0)
-        {
-            // Extra points if the next card from the HoldingStack gets flipped
-            changeScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
-        }
-    }
     else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CHoldingStack*>(dstStack) != NULL)
     {
-        //TODO: check if DrawStack is empty -> "incrementScore" and recycle
-        if (srcStack.isEmpty())
-        {
-            srcStack->recycle();
-            // Minus points if the DrawStack is empty and gets recycled
-            changeScore(GameScoringAttributes::RECYCLING_DRAW_PILE);
-        }
         // Points for moving a card from the DrawStack to a HoldingStack
         changeScore(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
     }
     else if (dynamic_cast<CDrawStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
-        //TODO: check if DrawStack is empty -> "incrementScore" and recycle
         // Points for moving a card directly from the DrawStack to a FinalStack
         changeScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     }
-*/
+
 }
 
 void CGame::changeScore(int points)
