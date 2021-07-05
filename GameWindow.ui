@@ -29,7 +29,7 @@
          <enum>QLayout::SetDefaultConstraint</enum>
         </property>
         <property name="leftMargin">
-         <number>800</number>
+         <number>700</number>
         </property>
         <property name="topMargin">
          <number>10</number>
@@ -64,7 +64,7 @@
          <widget class="QLabel" name="score_label">
           <property name="baseSize">
            <size>
-            <width>0</width>
+            <width>30</width>
             <height>0</height>
            </size>
           </property>
