@@ -287,6 +287,8 @@ void CGame::undoLastMove()
     // Last transaction
     Transaction lastTrans = transactions.back();
 
+    qDebug() << "Last transaction: " << lastTrans.toString();
+
     if (lastTrans.type == Transaction::TransactionType::StackToStack)
     {
         qDebug() << "Undoing stack to stack";

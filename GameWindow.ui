@@ -35,7 +35,7 @@
          <number>10</number>
         </property>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="undoButton">
           <property name="layoutDirection">
            <enum>Qt::RightToLeft</enum>
           </property>
