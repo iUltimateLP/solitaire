@@ -72,7 +72,8 @@ struct Transaction
                << " cards=" << cards.length()
                << " scoreBefore=" << scoreBefore
                << " scoreAfter=" << scoreAfter
-               << " flipCardBefore=" << flipCardBefore;
+               << " flipCardBefore=" << flipCardBefore
+               << ")";
         return str;
     }
 };

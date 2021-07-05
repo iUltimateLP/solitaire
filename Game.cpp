@@ -109,6 +109,9 @@ void CGame::setUp()
     // Call the CGameWindow to display the initial state of the drawStack and clear the deck
     CMain::get()->getGameWindow()->displayDrawStack(drawStack);
     deck.clear();
+
+    // Clear the transaction buffer
+    transactions.clear();
 }
 
 bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
