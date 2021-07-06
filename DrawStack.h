@@ -45,6 +45,7 @@ private:
     QPixmap emptyDrawStackPixmap;
 
     void addCardToUi();
+    void removeCardFromUi();
 };
 
 

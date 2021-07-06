@@ -50,36 +50,7 @@ void CDrawStack::removeCard(CCard* cardToRemove)
 
     // Call the superclasses' removeCard
     CCardStack::removeCard(cardToRemove);
-
-    // Remove the card from the layout which is the first one
-    if(hbox->itemAt(2))
-        hbox->removeItem(hbox->itemAt(2));
-    else if(hbox->itemAt(1))
-        hbox->removeItem(hbox->itemAt(1));
-    else
-        hbox->removeItem(hbox->itemAt(0));
-
-    // If the removed card was the first one of the stack, currentCard has to be decremented
-    if(currentCard > getNumCards()-1)
-    {
-        currentCard = -1;
-        qDebug() << "currentCard is set to -1";
-    }
-    // Otherwise, there is already a card, which should be set to canInteract
-    else
-    {
-        qDebug() << "next card is set to interact";
-        getCards()[currentCard]->setCanInteract(true);
-        // When a card is removed, the last third card in the stack will be displayed, if existent
-        if(currentCard + 2 <= getNumCards()-1)
-        {
-            qDebug() << "next card should be displayed";
-            hbox->push_back(getCards()[currentCard+2]);
-            getCards()[currentCard+2]->setVisible(true);
-        }
-    }
-
-    qDebug() << "currentCard" << currentCard;
+    removeCardFromUi();
 }
 
 bool CDrawStack::canDropCard(CCard *cardToDrop)
@@ -112,12 +83,37 @@ void CDrawStack::addCardToUi()
 
     // Interaction with the added card should be possible, with the former front card impossible (only if there is a former card)
     getCards()[currentCard]->setCanInteract(true);
-    if(currentCard < getNumCards())
+    if(currentCard < getNumCards()-1)
        getCards()[currentCard+1]->setCanInteract(false);
 
-    // Additionally, if it is the last card of the stack, the placeholder displays the empty tile
-    if(currentCard == 0)
+    // Additionally, if it is the last card of the stack or if there is no card left, the placeholder displays the empty tile
+    if(currentCard == 0 || getNumCards()-1 == 0)
         drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
+}
+
+void CDrawStack::removeCardFromUi()
+{
+    // Remove the card from the layout which is the first one
+    if(hbox->itemAt(2))
+        hbox->removeItem(hbox->itemAt(2));
+    else if(hbox->itemAt(1))
+        hbox->removeItem(hbox->itemAt(1));
+    else
+        hbox->removeItem(hbox->itemAt(0));
+
+    // The next card should be interactable, if there is one
+    if(currentCard <= getNumCards()-1)
+    {
+        qDebug() << "next card is set to interact";
+        getCards()[currentCard]->setCanInteract(true);
+        // When a card is removed, the last third card in the stack will be displayed, if existent
+        if(currentCard + 2 <= getNumCards()-1)
+        {
+            qDebug() << "next card should be displayed";
+            hbox->push_back(getCards()[currentCard+2]);
+            getCards()[currentCard+2]->setVisible(true);
+        }
+    }
 }
 
 void CDrawStack::showNextCard()
@@ -157,33 +153,48 @@ void CDrawStack::showNextCard()
     else if(getNumCards() > 0)
     {
         currentCard = getNumCards()-1;
-        hbox->addWidget(getCards()[currentCard]);
-        getCards()[currentCard]->setVisible(true);
-        getCards()[currentCard]->setCanInteract(true);
-        if(getNumCards()-1 == 0)
-            drawStackPlaceholder->setPixmap(emptyDrawStackPixmap);
+        addCardToUi();
     }
 
-    // TODO: Make this a transaction
+    // Register a new transaction
+    Transaction t;
+    t.type = Transaction::TransactionType::DrawFromDrawStack;
+    t.stack1 = this;
+
+    CMain::get()->getGameInstance()->addTransaction(t);
 
     CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
 }
 
 void CDrawStack::undo(CCard* card)
 {
-
+    // If a card has to be readded to the drawstack
     if(card)
     {
-       ++currentCard;
-       insertCardAt(card, currentCard);
+       insertCardAt(currentCard, card);
        addCardToUi();
     }
-    /*
     else
     {
-        currentCard = 0;
-        drawStackPlaceholder->setPixmap(cardBackPixmap);
-    }*/
+        // If the recycling has to be undone:
+        if (currentCard == -1)
+        {
+            // TODO: Beautify
+            currentCard = 2;
+            addCardToUi();
+            currentCard = 1;
+            addCardToUi();
+            currentCard = 0;
+            addCardToUi();
+            drawStackPlaceholder->setPixmap(cardBackPixmap);
+        }
+        else
+        {
+            getCards()[currentCard]->setVisible(false);
+            ++currentCard;
+            removeCardFromUi();
+        }
+    }
 }
 
 QHBoxLayout* CDrawStack::getHBoxLayout()

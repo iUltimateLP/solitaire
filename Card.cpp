@@ -232,6 +232,7 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
+
     // Only trigger when didn't move
     if ((ev->pos() - dragStartPos).manhattanLength() < 1)
     {

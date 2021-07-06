@@ -37,7 +37,8 @@ struct Transaction
     // The type of this transaction
     enum TransactionType {
         StackToStack,
-        DrawFromDrawStack
+        DrawFromDrawStack,
+        DrawToStack
     } type;
 
     // The involved cards and stacks
@@ -123,10 +124,6 @@ private:
     // The final stacks at the top
     QList<CFinalStack*> finalStacks;
     QList<CHoldingStack*> holdingStacks;
-    CFinalStack* finalDiamond;
-    CFinalStack* finalHeart;
-    CFinalStack* finalSpade;
-    CFinalStack* finalClub;
 
     // The deck contains all cards in the whole game
     QList<CCard*> deck;

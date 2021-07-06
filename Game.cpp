@@ -113,6 +113,8 @@ void CGame::setUp()
 
 bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 {
+
+
     // The found stack where we can add the card to
     CCardStack* foundStack = nullptr;
 
@@ -134,7 +136,6 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
             break;
         }
     }
-
     // If we didn't find a suitable stack yet
     if (!foundStack)
     {
@@ -156,7 +157,6 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
                     {
                         // Ignore the card to drop
                         if (card == cardToDrop) continue;
-
                         cardsToMove.push_back(card);
                     }
                 }
@@ -173,7 +173,15 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
     {
         // Register a new transaction
         Transaction t;
-        t.type = Transaction::TransactionType::StackToStack;
+
+        if(dynamic_cast<CDrawStack*>(srcStack) != NULL)
+        {
+            t.type = Transaction::TransactionType::DrawToStack;
+        }
+        else
+        {
+            t.type = Transaction::TransactionType::StackToStack;
+        }
         t.stack1 = srcStack;
         t.stack2 = foundStack;
         t.cards = cardsToMove;
@@ -252,10 +260,11 @@ bool CGame::hasEnded()
 {
     // Check if all final stacks got 13 cards
     // TODO: use finalXY->isComplete() when implemented
+    /*
     return (finalDiamond->getNumCards() == 13
             && finalSpade->getNumCards() == 13
             && finalHeart->getNumCards() == 13
-            && finalSpade->getNumCards() == 13);
+            && finalSpade->getNumCards() == 13);*/
 }
 
 void CGame::addTransaction(Transaction newTransaction)
@@ -296,6 +305,13 @@ void CGame::undoLastMove()
     else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
     {
         qDebug() << "Undoing shuffle draw";
+        static_cast<CDrawStack*>(lastTrans.stack1)->undo();
+    }
+    else if (lastTrans.type == Transaction::TransactionType::DrawToStack)
+    {
+        qDebug() << "Undoing draw to stack";
+        lastTrans.stack2->removeCard(lastTrans.cards[0]);
+        static_cast<CDrawStack*>(lastTrans.stack1)->undo(lastTrans.cards[0]);
     }
 
     // Pop it from the list
