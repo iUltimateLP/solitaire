@@ -63,7 +63,7 @@ void CGame::setUp()
     holdingStacks.clear();
     finalStacks.clear();
 
-    // Declaration of the 4 final stacks, these are initially empty
+    // Creation of the 4 final stacks, these are initially empty
     finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Heart));
     finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Diamond));
     finalStacks.append(new CFinalStack(CMain::get()->getGameWindow(), ECardSymbol::Club));
@@ -73,6 +73,9 @@ void CGame::setUp()
     for(int i = 0; i < 4; ++i)
     {
         CMain::get()->getGameWindow()->displayFinalStack(finalStacks[i], i);
+
+        // Hook their onCardsChange signal so we can detect wins
+        QObject::connect(finalStacks[i], &CFinalStack::onCardsChanged, this, &CGame::checkHasEnded);
     }
 
     // Create seven holding stacks and fill with cards
@@ -109,6 +112,9 @@ void CGame::setUp()
     // Call the CGameWindow to display the initial state of the drawStack and clear the deck
     CMain::get()->getGameWindow()->displayDrawStack(drawStack);
     deck.clear();
+
+    // Clear the transaction buffer
+    transactions.clear();
 }
 
 bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
@@ -256,15 +262,25 @@ int CGame::getScore()
     return score;
 }
 
-bool CGame::hasEnded()
+void CGame::checkHasEnded()
 {
     // Check if all final stacks got 13 cards
-    // TODO: use finalXY->isComplete() when implemented
-    /*
-    return (finalDiamond->getNumCards() == 13
-            && finalSpade->getNumCards() == 13
-            && finalHeart->getNumCards() == 13
-            && finalSpade->getNumCards() == 13);*/
+    bool hasEnded = true;
+    for (CFinalStack* finalStack : finalStacks)
+    {
+        hasEnded &= (finalStack->getNumCards() == 13);
+    }
+
+    if (hasEnded)
+    {
+        // We won!
+        qDebug() << "Won!";
+    }
+    else
+    {
+        // Not won yet!
+        qDebug() << "Not won!";
+    }
 }
 
 void CGame::addTransaction(Transaction newTransaction)
@@ -290,7 +306,7 @@ void CGame::undoLastMove()
         qDebug() << "Undoing stack to stack";
 
         // If we have to, flip the current top card of the stack1
-        if (lastTrans.flipCardBefore)
+        if (lastTrans.flipCardBefore && lastTrans.stack1->getTopCard() != nullptr)
         {
             lastTrans.stack1->getTopCard()->setCardFlipped(false);
         }

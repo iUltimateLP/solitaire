@@ -84,6 +84,22 @@ bool CFinalStack::canDropCard(CCard *cardToDrop)
     return true;
 }
 
+void CFinalStack::handleCardsChanged()
+{
+    // Only show the last five cards to avoid weird overlapping shadows
+    for (int i = 0; i < getCards().length(); i++)
+    {
+        if (i >= getCards().length() - 5)
+        {
+            getCards()[i]->show();
+        }
+        else
+        {
+            getCards()[i]->hide();
+        }
+    }
+}
+
 void CFinalStack::dragEnterEvent(QDragEnterEvent* ev)
 {
     // We can extract the card to drop from the source of the drag event (as we started

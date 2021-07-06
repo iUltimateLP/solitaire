@@ -20,6 +20,7 @@ public:
     virtual void addCard(CCard *cardToAdd) override;
     virtual void removeCard(CCard *cardToRemove) override;
     virtual bool canDropCard(CCard* cardToDrop) override;
+    virtual void handleCardsChanged() override;
     //~ End CCardCard interface
 
 private:

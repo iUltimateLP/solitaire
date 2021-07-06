@@ -48,7 +48,7 @@ public:
 
 public slots:
     // Internally handles when the cards on this stack changed
-    void handleCardsChanged();
+    virtual void handleCardsChanged();
 
 signals:
     // When the cards on this stack changed

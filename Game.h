@@ -73,7 +73,8 @@ struct Transaction
                << " cards=" << cards.length()
                << " scoreBefore=" << scoreBefore
                << " scoreAfter=" << scoreAfter
-               << " flipCardBefore=" << flipCardBefore;
+               << " flipCardBefore=" << flipCardBefore
+               << ")";
         return str;
     }
 };
@@ -101,8 +102,8 @@ public:
     void addScore(int points);
     int getScore();
 
-    // Returns whether the game has ended (all finalStacks have 13 cards)
-    bool hasEnded();
+    // Checks whether the game has ended (all finalStacks have 13 cards)
+    void checkHasEnded();
 
     // Registers a new transaction
     void addTransaction(Transaction newTransaction);

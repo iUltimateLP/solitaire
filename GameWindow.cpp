@@ -137,7 +137,7 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 void CGameWindow::updateScore()
 {
     score = CMain::get()->getGameInstance()->getScore();
-    ui->score_label->setText("Score : " + QString::number(score));
+    ui->score_label->setText("Score: " + QString::number(score));
 }
 
 void CGameWindow::resetGameWindow()
