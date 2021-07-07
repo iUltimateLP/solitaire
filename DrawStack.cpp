@@ -156,13 +156,17 @@ void CDrawStack::showNextCard()
         addCardToUi();
     }
 
-    // Register a new transaction
+    // Register a new transaction that we drew a card
     Transaction t;
     t.type = Transaction::TransactionType::DrawFromDrawStack;
     t.stack1 = this;
 
     CMain::get()->getGameInstance()->addTransaction(t);
 
+    // Drawing a card counts as a move
+    CMain::get()->getGameWindow()->incrementMove();
+
+    // Play a sound effect
     CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
 }
 

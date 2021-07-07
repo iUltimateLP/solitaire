@@ -119,8 +119,6 @@ void CGame::setUp()
 
 bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 {
-
-
     // The found stack where we can add the card to
     CCardStack* foundStack = nullptr;
 
@@ -142,6 +140,7 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
             break;
         }
     }
+
     // If we didn't find a suitable stack yet
     if (!foundStack)
     {
@@ -180,14 +179,12 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
         // Register a new transaction
         Transaction t;
 
+        // If the source stack was a DrawStack, we need to flag that in the type
         if(dynamic_cast<CDrawStack*>(srcStack) != NULL)
-        {
             t.type = Transaction::TransactionType::DrawToStack;
-        }
         else
-        {
             t.type = Transaction::TransactionType::StackToStack;
-        }
+
         t.stack1 = srcStack;
         t.stack2 = foundStack;
         t.cards = cardsToMove;
@@ -219,10 +216,6 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 
 void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
 {
-    // Remove if used
-    //Q_UNUSED(srcStack);
-    //Q_UNUSED(dstStack);
-
     // Increment the score with the suitable attribute
     if(dynamic_cast<CHoldingStack*>(srcStack) != NULL && dynamic_cast<CFinalStack*>(dstStack) != NULL)
     {
@@ -244,7 +237,6 @@ void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
         // Points for moving a card directly from the DrawStack to a FinalStack
         addScore(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
     }
-
 }
 
 void CGame::addScore(int points)
