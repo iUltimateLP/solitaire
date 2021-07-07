@@ -85,6 +85,10 @@ class CGame : public QObject
     Q_OBJECT
 
 public:
+    // How many steps we allow to undo
+    static int MaxUndoSteps;
+
+public:
     // Constructor
     CGame(QObject* parent = nullptr);
 
@@ -115,11 +119,11 @@ signals:
     // The "new game" menu item
     void onScoreChanged();
 
-
 public slots:
     void restartGame();
 
 private:
+    // Reference to the draw stack
     CDrawStack* drawStack;
 
     // The final stacks at the top
@@ -132,5 +136,6 @@ private:
     // List of latest transactions the player has made
     QList<Transaction> transactions;
 
+    // The score of the game
     int score = 0;
 };

@@ -9,6 +9,9 @@
 #include "CardStack.h"
 #include "FinalStack.h"
 
+// Set the static variables
+int CGame::MaxUndoSteps = 3;
+
 CGame::CGame(QObject *parent)
     : QObject(parent)
 {
@@ -22,14 +25,6 @@ CGame::CGame(QObject *parent)
 
     // Connection from score changing in CGame with CGameWindow
     QObject::connect(this, &CGame::onScoreChanged, CMain::get()->getGameWindow(), &CGameWindow::updateScore);
-
-    // REMOVE THESE WHEN IMPLEMENTED SCORING
-    /*  Q_UNUSED(GameScoringAttributes::FOUNDATION_TO_TABLEAU);
-    Q_UNUSED(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
-    Q_UNUSED(GameScoringAttributes::TABLEAU_TO_FOUNDATION);
-    Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_FOUNDATION);
-    Q_UNUSED(GameScoringAttributes::WASTE_PILE_TO_TABLEAU);
-    Q_UNUSED(GameScoringAttributes::RECYCLING_DRAW_PILE);*/
 }
 
 void CGame::setUp()
@@ -276,6 +271,15 @@ void CGame::checkHasEnded()
 
 void CGame::addTransaction(Transaction newTransaction)
 {
+    // Remove transactions from the front to stay at MaxUndoSteps
+    int transactionsToRemove = transactions.length() - CGame::MaxUndoSteps + 1;
+    if (transactionsToRemove > 0) {
+        for (int i = 0; i < transactionsToRemove; i++)
+        {
+            transactions.pop_front();
+        }
+    }
+
     // Add it
     transactions.push_back(newTransaction);
 
