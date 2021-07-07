@@ -241,11 +241,10 @@ void CGame::evaluateScore(CCardStack *srcStack, CCardStack *dstStack)
 
 void CGame::addScore(int points)
 {
-    score += points;
-    if(score < 0)
-    {
-        score = 0;
-    }
+    // Update the score and make sure it does not go below zero
+    score = qMax<int>(0, score + points);
+
+    // Emit the signal
     emit onScoreChanged();
 }
 
@@ -277,10 +276,11 @@ void CGame::checkHasEnded()
 
 void CGame::addTransaction(Transaction newTransaction)
 {
-    qDebug() << newTransaction.toString();
-
     // Add it
     transactions.push_back(newTransaction);
+
+    // If the button was disabled before, we can now enable it
+    CMain::get()->getGameWindow()->setUndoButtonEnabled(true);
 }
 
 void CGame::undoLastMove()
@@ -291,12 +291,11 @@ void CGame::undoLastMove()
     // Last transaction
     Transaction lastTrans = transactions.back();
 
-    qDebug() << "Last transaction: " << lastTrans.toString();
+    qDebug() << "Undoing" << lastTrans.toString();
 
+    // If it was a Stack<->Stack transaction
     if (lastTrans.type == Transaction::TransactionType::StackToStack)
     {
-        qDebug() << "Undoing stack to stack";
-
         // If we have to, flip the current top card of the stack1
         if (lastTrans.flipCardBefore && lastTrans.stack1->getTopCard() != nullptr)
         {
@@ -310,15 +309,19 @@ void CGame::undoLastMove()
             lastTrans.stack1->addCard(card);
         }
     }
+    // If in this transaction the player drew a card from the draw stack
     else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
-    {
-        qDebug() << "Undoing shuffle draw";
+    {     
+        // Stack1 has to be a draw stack, so call undo without any card
         static_cast<CDrawStack*>(lastTrans.stack1)->undo();
     }
+    // If in this transaction the player dragged a card from the draw stack to any other stack
     else if (lastTrans.type == Transaction::TransactionType::DrawToStack)
     {
-        qDebug() << "Undoing draw to stack";
+        // Remove the card from Stack2
         lastTrans.stack2->removeCard(lastTrans.cards[0]);
+
+        // Undo the draw of this card from Stack1 which has to be a draw stack
         static_cast<CDrawStack*>(lastTrans.stack1)->undo(lastTrans.cards[0]);
     }
 
@@ -331,6 +334,12 @@ void CGame::undoLastMove()
     // Change the score back
     this->score = lastTrans.scoreBefore;
     emit onScoreChanged();
+
+    // If this was the last transaction to undo, disable the button again
+    if (transactions.empty())
+    {
+        CMain::get()->getGameWindow()->setUndoButtonEnabled(false);
+    }
 }
 
 void CGame::restartGame()

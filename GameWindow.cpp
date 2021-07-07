@@ -33,7 +33,8 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
-    ui->undoButton->setStyleSheet("background-color: white");
+    //ui->undoButton->setStyleSheet("background-color: white");
+    ui->undoButton->setEnabled(false);
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
@@ -185,6 +186,11 @@ void CGameWindow::removeAllWidgets(QLayout* layout)
             delete child->widget();
         }
     }
+}
+
+void CGameWindow::setUndoButtonEnabled(bool enabled)
+{
+    ui->undoButton->setEnabled(enabled);
 }
 
 CGameWindow::~CGameWindow()

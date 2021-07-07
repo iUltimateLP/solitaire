@@ -40,6 +40,9 @@ public:
     // Clears the gridlayout where all cards are displayed, needed, when new game is chosen
     void removeAllWidgets(QLayout *layout);
 
+    // Sets whether the undo button is enabled or not
+    void setUndoButtonEnabled(bool enabled);
+
 signals:
     // This signal is send when the new game menu item is chosen, connected with slot from CGame
     void resetGame();
@@ -67,7 +70,6 @@ public slots:
     // Called when CGame changes its internal score-variable
     void updateScore();
 
-
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
@@ -78,5 +80,6 @@ private:
     QTimer* timer;
     QTime* time;
 
+    // The main grid layout
     QGridLayout* mainGrid;
 };
