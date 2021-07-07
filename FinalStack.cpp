@@ -1,8 +1,8 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "FinalStack.h"
 #include "CardVBoxLayout.h"
+#include "Main.h"
 #include <QDebug>
-#include <Main.h>
 
 CFinalStack::CFinalStack(QWidget* parent, ECardSymbol symbol)
     : CCardStack(parent)

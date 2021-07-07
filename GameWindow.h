@@ -2,12 +2,12 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QTimer>
+#include <QTime>
 #include "Card.h"
 #include "HoldingStack.h"
 #include "FinalStack.h"
 #include "DrawStack.h"
-#include <QTimer>
-#include <QTime>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CGameWindow; }

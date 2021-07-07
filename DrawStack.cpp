@@ -1,9 +1,8 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "DrawStack.h"
+#include "Main.h"
 #include "CardVBoxLayout.h"
 #include <QDebug>
-
-#include <Main.h>
 
 CDrawStack::CDrawStack(QWidget* parent)
     : CCardStack(parent)

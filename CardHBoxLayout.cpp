@@ -1,7 +1,7 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "CardHBoxLayout.h"
-#include <QDebug>
 #include "Card.h"
+#include <QDebug>
 
 int CCardHBoxLayout::count() const
 {

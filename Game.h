@@ -2,12 +2,12 @@
 #pragma once
 
 #include <QObject>
+#include <QTimer>
+#include <QTextStream>
 #include "HoldingStack.h"
 #include "FinalStack.h"
 #include "Card.h"
-#include <QTimer>
 #include "DrawStack.h"
-#include <QTextStream>
 
 // Contains the scoring attributes for the game
 namespace GameScoringAttributes

@@ -1,12 +1,12 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
-#include <QDesktopWidget>
 #include "GameWindow.h"
 #include "ui_GameWindow.h"
-#include <QDebug>
-#include <QMessageBox>
 #include "Card.h"
 #include "HoldingStack.h"
 #include "Main.h"
+#include <QDesktopWidget>
+#include <QDebug>
+#include <QMessageBox>
 
 CGameWindow::CGameWindow(QWidget* parent)
     : QMainWindow(parent)

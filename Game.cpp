@@ -1,13 +1,11 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "Game.h"
-#include <QDebug>
-
-#include <Main.h>
-
+#include "Main.h"
 #include "GameWindow.h"
 #include "HoldingStack.h"
 #include "CardStack.h"
 #include "FinalStack.h"
+#include <QDebug>
 
 // Set the static variables
 int CGame::MaxUndoSteps = 3;

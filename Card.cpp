@@ -1,5 +1,6 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "Card.h"
+#include "Main.h"
 #include <QDebug>
 #include <QMouseEvent>
 #include <QGraphicsDropShadowEffect>
@@ -8,7 +9,6 @@
 #include <QPainter>
 #include <QApplication>
 #include <QGraphicsRotation>
-#include "Main.h"
 
 // Set cardTileSize and cardSizeFactor
 QSize CCard::cardTileSize = QSize(170, 255);

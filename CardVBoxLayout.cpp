@@ -1,7 +1,7 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "CardVBoxLayout.h"
-#include <QDebug>
 #include "Card.h"
+#include <QDebug>
 
 CCardVBoxLayout::CCardVBoxLayout(int spacing)
     : QLayout()

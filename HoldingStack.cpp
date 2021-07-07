@@ -1,9 +1,9 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "HoldingStack.h"
+#include "Main.h"
 #include <QDebug>
 #include <QImage>
 #include <QMimeData>
-#include <Main.h>
 
 // Set the static variables
 int CHoldingStack::CardOffsetInStack = 45;
