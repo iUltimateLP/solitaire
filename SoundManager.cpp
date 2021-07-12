@@ -15,6 +15,7 @@ CSoundManager::CSoundManager(QObject *parent)
     soundFiles[SoundEffectType::CardFlip] = {":/assets/card_flip.wav"};
     soundFiles[SoundEffectType::CardStack] = {":/assets/card_stack_01.wav", ":/assets/card_stack_02.wav", ":/assets/card_stack_03.wav", ":/assets/card_stack_04.wav", ":/assets/card_stack_05.wav"};
     soundFiles[SoundEffectType::CardCannotMove] = {":/assets/card_cant_move.wav"};
+    soundFiles[SoundEffectType::Win] = {":/assets/win.wav"};
 
     // Create a media playlist containing the background music on a loop
     QMediaPlaylist* musicPlaylist = new QMediaPlaylist();

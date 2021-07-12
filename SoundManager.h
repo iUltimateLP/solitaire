@@ -13,7 +13,8 @@ enum SoundEffectType
     CardClick,
     CardFlip,
     CardStack,
-    CardCannotMove
+    CardCannotMove,
+    Win
 };
 
 // A global class to handle various audio from the game
