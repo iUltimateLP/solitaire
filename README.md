@@ -15,5 +15,6 @@ The project is licensed under the MIT license. See [`LICENSE`](LICENSE) for more
 ## Credits
 This project uses the following assets which are available for use online:
  - https://freesound.org/people/LittleRobotSoundFactory/sounds/270404/
+ - https://i.pinimg.com/originals/10/80/a4/1080a4bd1a33cec92019fab5efb3995d.png
 
 All other assets were created by ourselves and can be used under the license terms of this repository.
