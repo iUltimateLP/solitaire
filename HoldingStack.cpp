@@ -183,7 +183,7 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
 
     // Register a new transaction
     Transaction t;
-    t.type = Transaction::TransactionType::StackToStack;
+    t.type = Transaction::ETransactionType::StackToStack;
     t.stack1 = payload->cards.front()->getCardStack();
     t.stack2 = this;
     t.cards = payload->cards;
@@ -213,7 +213,7 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
     CMain::get()->getGameWindow()->incrementMove();
 
     // Play a sound
-    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
+    CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::CardClick);
 }
 
 void CHoldingStack::checkCollapseStack()

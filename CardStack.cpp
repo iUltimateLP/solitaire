@@ -46,8 +46,6 @@ void CCardStack::insertCardAt(int insertAt, CCard* cardToInsert)
 
 void CCardStack::removeCard(CCard *cardToRemove)
 {
-    qDebug() << "CCardStack::removeCard";
-
     // Make sure the card is valid
     if (cardToRemove)
     {

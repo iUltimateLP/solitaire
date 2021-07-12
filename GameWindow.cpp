@@ -23,8 +23,6 @@ CGameWindow::CGameWindow(QWidget* parent)
     int windowH = this->size().height();
     this->move((screenW / 2) - (windowW / 2), (screenH / 2) - (windowH / 2));
 
-    qDebug() << "Created CGameWindow";
-
     // Set background-image
     ui->centralwidget->setStyleSheet("background-image: url(:/assets/table_background.png);");
     ui->centralwidget->resize(1000, 800);

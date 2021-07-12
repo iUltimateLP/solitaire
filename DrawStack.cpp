@@ -147,7 +147,7 @@ void CDrawStack::showNextCard()
 
     // Register a new transaction that we drew a card
     Transaction t;
-    t.type = Transaction::TransactionType::DrawFromDrawStack;
+    t.type = Transaction::ETransactionType::DrawFromDrawStack;
     t.stack1 = this;
 
     CMain::get()->getGameInstance()->addTransaction(t);
@@ -156,7 +156,7 @@ void CDrawStack::showNextCard()
     CMain::get()->getGameWindow()->incrementMove();
 
     // Play a sound effect
-    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
+    CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::CardStack);
 }
 
 void CDrawStack::undo(CCard* card)

@@ -8,7 +8,7 @@
 #include <QMediaPlayer>
 
 // The types of sound effects we can play
-enum SoundEffectType
+enum ESoundEffectType
 {
     CardClick,
     CardFlip,
@@ -28,7 +28,7 @@ public:
 
 public:
     // Plays the given sound effect
-    void playSoundEffect(SoundEffectType sfxType);
+    void playSoundEffect(ESoundEffectType sfxType);
 
     // Sets whether to enable sound effects
     void setEnableSoundEffects(bool enabled);
@@ -38,7 +38,7 @@ public:
 
 private:
     // List of sound effect files associated to their resepctive effect type
-    QMap<SoundEffectType, QVector<QString>> soundFiles;
+    QMap<ESoundEffectType, QVector<QString>> soundFiles;
 
     // The media player for the bg music
     QMediaPlayer* bgMusicPlayer;

@@ -13,8 +13,6 @@ int CGame::MaxUndoSteps = 3;
 CGame::CGame(QObject *parent)
     : QObject(parent)
 {
-    qDebug() << "Created CGame";
-
     // Initially set up the game
     setUp();
 
@@ -174,9 +172,9 @@ bool CGame::moveCard(CCard* cardToDrop, CCardStack* srcStack)
 
         // If the source stack was a DrawStack, we need to flag that in the type
         if(dynamic_cast<CDrawStack*>(srcStack) != NULL)
-            t.type = Transaction::TransactionType::DrawToStack;
+            t.type = Transaction::ETransactionType::DrawToStack;
         else
-            t.type = Transaction::TransactionType::StackToStack;
+            t.type = Transaction::ETransactionType::StackToStack;
 
         t.stack1 = srcStack;
         t.stack2 = foundStack;
@@ -258,7 +256,7 @@ void CGame::checkHasEnded()
     if (hasEnded)
     {
         // We won! Play the sound effect
-        CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::Win);
+        CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::Win);
 
         // Show window
     }
@@ -293,7 +291,7 @@ void CGame::undoLastMove()
     qDebug() << "Undoing" << lastTrans.toString();
 
     // If it was a Stack<->Stack transaction
-    if (lastTrans.type == Transaction::TransactionType::StackToStack)
+    if (lastTrans.type == Transaction::ETransactionType::StackToStack)
     {
         // If we have to, flip the current top card of the stack1
         if (lastTrans.flipCardBefore && lastTrans.stack1->getTopCard() != nullptr)
@@ -309,13 +307,13 @@ void CGame::undoLastMove()
         }
     }
     // If in this transaction the player drew a card from the draw stack
-    else if (lastTrans.type == Transaction::TransactionType::DrawFromDrawStack)
+    else if (lastTrans.type == Transaction::ETransactionType::DrawFromDrawStack)
     {     
         // Stack1 has to be a draw stack, so call undo without any card
         static_cast<CDrawStack*>(lastTrans.stack1)->undo();
     }
     // If in this transaction the player dragged a card from the draw stack to any other stack
-    else if (lastTrans.type == Transaction::TransactionType::DrawToStack)
+    else if (lastTrans.type == Transaction::ETransactionType::DrawToStack)
     {
         // Remove the card from Stack2
         lastTrans.stack2->removeCard(lastTrans.cards[0]);
