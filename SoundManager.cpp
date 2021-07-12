@@ -51,6 +51,6 @@ void CSoundManager::setEnableSoundEffects(bool enabled)
 
 void CSoundManager::setEnableMusic(bool enabled)
 {
-    // Set the music's volume
+    // Set the music's volume so it won't completely stop when disabled
     this->bgMusicPlayer->setVolume(enabled ? 50 : 0);
 }

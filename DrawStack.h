@@ -18,7 +18,6 @@ public:
 
 public:
     //~ Begin CCardStack interface
-    virtual void addCard(CCard *cardToAdd) override;
     virtual void removeCard(CCard *cardToRemove) override;
     virtual bool canDropCard(CCard* cardToDrop) override;
     virtual CCard* getTopCard() override;

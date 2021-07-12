@@ -346,7 +346,10 @@ void CGame::undoLastMove()
 
 void CGame::restartGame()
 {
+    // Set up the new game board
     setUp();
+
+    // Reset the score
     score = 0;
     emit onScoreChanged();
 }

@@ -12,6 +12,10 @@ class CFinalStack : public CCardStack
     Q_OBJECT
 
 public:
+    // How many cards to render on a final stack to avoid glitches with the shadows
+    static int NumCardsToRender;
+
+public:
     // Constructor
     CFinalStack(QWidget* parent = nullptr, ECardSymbol symbol = ECardSymbol::Heart);
 

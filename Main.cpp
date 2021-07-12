@@ -24,8 +24,6 @@ int CMain::run(int argc, char* argv[])
     // Create the sound manager instance
     soundManager = new CSoundManager();
 
-    qDebug() << "Entering app loop";
-
     // Run the app loop
     return app.exec();
 }
