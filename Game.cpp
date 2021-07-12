@@ -257,13 +257,10 @@ void CGame::checkHasEnded()
 
     if (hasEnded)
     {
-        // We won!
-        qDebug() << "Won!";
-    }
-    else
-    {
-        // Not won yet!
-        qDebug() << "Not won!";
+        // We won! Play the sound effect
+        CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::Win);
+
+        // Show window
     }
 }
 
