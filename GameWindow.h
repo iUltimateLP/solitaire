@@ -8,6 +8,7 @@
 #include "HoldingStack.h"
 #include "FinalStack.h"
 #include "DrawStack.h"
+#include "Winscreen.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CGameWindow; }
@@ -43,6 +44,8 @@ public:
     // Sets whether the undo button is enabled or not
     void setUndoButtonEnabled(bool enabled);
 
+    void showWinScreen();
+
 signals:
     // This signal is send when the new game menu item is chosen, connected with slot from CGame
     void resetGame();
@@ -54,8 +57,6 @@ private slots:
     // The "About" menu item
     void showAbout();
 
-    // The "new game" menu item
-    void resetGameWindow();
 
     // The "Music" menu item
     void setMusic(bool checked);
@@ -70,6 +71,11 @@ public slots:
     // Called when CGame changes its internal score-variable
     void updateScore();
 
+    // The "new game" menu item
+    void resetGameWindow();
+
+    void closeWindows();
+
 private:
     // Reference to this window
     Ui::CGameWindow* ui;
@@ -80,6 +86,11 @@ private:
     QTimer* timer;
     QTime* time;
 
+    WinScreen* winScreen = nullptr;
+
     // The main grid layout
     QGridLayout* mainGrid;
+    // The layout for the winning score
+    QWidget * winningRow;
+    QHBoxLayout* winningLayout;
 };

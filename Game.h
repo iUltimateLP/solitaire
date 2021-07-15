@@ -108,6 +108,7 @@ public:
 
     // Checks whether the game has ended (all finalStacks have 13 cards)
     void checkHasEnded();
+    bool hasEnded();
 
     // Registers a new transaction
     void addTransaction(Transaction newTransaction);
@@ -138,4 +139,6 @@ private:
 
     // The score of the game
     int score = 0;
+
+    bool isWon;
 };

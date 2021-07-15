@@ -33,8 +33,11 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
-    //ui->undoButton->setStyleSheet("background-color: white");
+    QPixmap undoArrow(":/assets/backarrow.png");
     ui->undoButton->setEnabled(false);
+    ui->undoButton->setFlat(true);
+    ui->undoButton->setIcon(undoArrow);
+    ui->undoButton->setGeometry(0,0,20,20);
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
@@ -45,7 +48,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     QObject::connect(timer, &QTimer::timeout, this, &CGameWindow::updateTimer);
 
     // Connection from the ui menubar with CGameWindow
-    QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::close);
+    QObject::connect(ui->actionQuit, &QAction::triggered, this, &CGameWindow::closeWindows);
     QObject::connect(ui->actionAbout, &QAction::triggered, this, &CGameWindow::showAbout);
     QObject::connect(ui->actionNew_Game, &QAction::triggered, this, &CGameWindow::resetGameWindow);
     QObject::connect(ui->actionMusic, &QAction::triggered, this, &CGameWindow::setMusic);
@@ -70,7 +73,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     mainGrid = new QGridLayout();
     mainGrid->setSpacing(12);
     layout->setLayout(mainGrid);
-    ui->gridLayout->addWidget(layout);
+    ui->gridLayout_3->addWidget(layout);
 }
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
@@ -99,6 +102,44 @@ void CGameWindow::displayFinalStack(CFinalStack* final, int column)
 void CGameWindow::displayDrawStack(CDrawStack *draw)
 {
     mainGrid->addLayout(draw->getHBoxLayout(), 0, 0, 1, 2);
+}
+
+void CGameWindow::showWinScreen()
+{
+    int windowW = this->size().width();
+    int windowH = this->size().height();
+    int windowX = this->pos().x();
+    int windowY = this->pos().y();
+    timer->stop();
+    winScreen = new WinScreen(windowW, windowH, windowX, windowY);
+    winScreen->show();
+
+    QLabel* score_label = new QLabel();
+    score_label->setText("Score: " + QString::number(score) + "");
+    score_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
+    QLabel* moves_label = new QLabel();
+    moves_label->setText("Moves: " + QString::number(moves));
+    moves_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
+    QLabel* time_label = new QLabel();
+    time_label->setText("Time: " + time->toString("mm:ss"));
+    time_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
+
+    QFont font = moves_label->font();
+    font.setBold(true);
+    font.setPointSize(30);
+    moves_label->setFont(font);
+    score_label->setFont(font);
+    time_label->setFont(font);
+
+    winningRow = new QWidget();
+    winningLayout = new QHBoxLayout();
+    winningRow->setLayout(winningLayout);
+    ui->gridLayout->addWidget(winningRow);
+    winningLayout->setMargin(100);
+
+    winningLayout->addWidget(score_label);
+    winningLayout->addWidget(moves_label);
+    winningLayout->addWidget(time_label);
 }
 
 void CGameWindow::incrementMove()
@@ -144,9 +185,20 @@ void CGameWindow::updateScore()
 void CGameWindow::resetGameWindow()
 {
     removeAllWidgets(mainGrid);
+    if(winningLayout)
+        removeAllWidgets(winningLayout);
+    if(winScreen)
+        winScreen->close();
     time = new QTime(0,0);
     moves = 0;
     emit resetGame();
+}
+
+void CGameWindow::closeWindows()
+{
+    if(winScreen)
+        winScreen->close();
+    this->close();
 }
 
 void CGameWindow::setMusic(bool checked)
@@ -165,6 +217,7 @@ void CGameWindow::undo()
 {
     // Tell the game instance to undo the last move
     CMain::get()->getGameInstance()->undoLastMove();
+    showWinScreen();
 }
 
 void CGameWindow::removeAllWidgets(QLayout* layout)

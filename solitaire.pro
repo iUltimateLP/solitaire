@@ -2,7 +2,7 @@ QT       += core gui multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++11
+CONFIG += c++11 resources_big
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -27,7 +27,8 @@ SOURCES += \
     HoldingStack.cpp \
     Main.cpp \
     GameWindow.cpp \
-    SoundManager.cpp
+    SoundManager.cpp \
+    Winscreen.cpp
 
 HEADERS += \
     Card.h \
@@ -41,10 +42,12 @@ HEADERS += \
     GameWindow.h \
     HoldingStack.h \
     Main.h \
-    SoundManager.h
+    SoundManager.h \
+    Winscreen.h
 
 FORMS += \
-    GameWindow.ui
+    GameWindow.ui \
+    Winscreen.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

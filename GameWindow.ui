@@ -43,7 +43,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Undo Step</string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -97,6 +97,9 @@
          <number>20</number>
         </property>
        </layout>
+      </item>
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
       </item>
      </layout>
     </item>

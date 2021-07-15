@@ -257,6 +257,8 @@ void CGame::checkHasEnded()
 
     if (hasEnded)
     {
+        CMain::get()->getGameWindow()->showWinScreen();
+        this->isWon = true;
         // We won!
         qDebug() << "Won!";
     }
@@ -265,6 +267,11 @@ void CGame::checkHasEnded()
         // Not won yet!
         qDebug() << "Not won!";
     }
+}
+
+bool CGame::hasEnded()
+{
+    return this->isWon;
 }
 
 void CGame::addTransaction(Transaction newTransaction)
@@ -287,6 +294,9 @@ void CGame::addTransaction(Transaction newTransaction)
 
 void CGame::undoLastMove()
 {
+
+    //TODO: UNDO THIS
+    this->isWon = true;
     // Make sure there is at least one transaction to undo
     if (transactions.empty()) return;
 
@@ -348,5 +358,6 @@ void CGame::restartGame()
 {
     setUp();
     score = 0;
+    isWon = false;
     emit onScoreChanged();
 }
