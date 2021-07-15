@@ -178,7 +178,7 @@ void CCard::requestCardFlip(bool shouldFlip)
     this->flipAnim->start();
 
     // Play a sound
-    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardFlip);
+    CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::CardFlip);
 
     // Flipping a card changes the score
     CMain::get()->getGameInstance()->addScore(GameScoringAttributes::TURN_OVER_TABLEAU_CARD);
@@ -251,7 +251,7 @@ void CCard::mouseReleaseEvent(QMouseEvent* ev)
         }
 
         // Play the sound
-        CMain::get()->getSoundManager()->playSoundEffect(didMoveCard ? SoundEffectType::CardClick : SoundEffectType::CardCannotMove);
+        CMain::get()->getSoundManager()->playSoundEffect(didMoveCard ? ESoundEffectType::CardClick : ESoundEffectType::CardCannotMove);
     }
 }
 

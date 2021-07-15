@@ -18,5 +18,6 @@
         <file>assets/card_cant_move.wav</file>
         <file>assets/backarrow.png</file>
         <file>assets/winscreen.png</file>
+        <file>assets/win.wav</file>
     </qresource>
 </RCC>

@@ -13,29 +13,29 @@
 namespace GameScoringAttributes
 {
     // DrawStack is empty after a move and has to be recycled
-    static int RECYCLING_DRAW_PILE = -100;
+    static const int RECYCLING_DRAW_PILE = -100;
 
     // Moving a card form the DrawStack to a HoldingStack
-    static int WASTE_PILE_TO_TABLEAU = 5;
+    static const int WASTE_PILE_TO_TABLEAU = 5;
 
     // Moving a card from the DrawStack to a FinalStack
-    static int WASTE_PILE_TO_FOUNDATION = 10;
+    static const int WASTE_PILE_TO_FOUNDATION = 10;
 
     // Moving a card from a HoldingStack to a FinalStack
-    static int TABLEAU_TO_FOUNDATION = 10;
+    static const int TABLEAU_TO_FOUNDATION = 10;
 
     // Flipping a card form a HoldingStack when previous card is moved
-    static int TURN_OVER_TABLEAU_CARD = 5;
+    static const int TURN_OVER_TABLEAU_CARD = 5;
 
     // Moving a card back from a FinalStack to a HoldingStack
-    static int FOUNDATION_TO_TABLEAU = -15;
+    static const int FOUNDATION_TO_TABLEAU = -15;
 }
 
 // A transaction is an action by the user, such as move a card
 struct Transaction
 {
     // The type of this transaction
-    enum TransactionType {
+    enum ETransactionType {
         StackToStack,
         DrawFromDrawStack,
         DrawToStack
@@ -61,8 +61,9 @@ struct Transaction
         // Format type and symbol strings
         QString typeStr;
         switch (type) {
-            case TransactionType::StackToStack: typeStr = "Stack<->Stack"; break;
-            case TransactionType::DrawFromDrawStack: typeStr = "DrawFromDrawStack"; break;
+            case ETransactionType::StackToStack: typeStr = "Stack<->Stack"; break;
+            case ETransactionType::DrawFromDrawStack: typeStr = "DrawFromDrawStack"; break;
+            case ETransactionType::DrawToStack: typeStr = "DrawToStack"; break;
         }
 
         // Create final string

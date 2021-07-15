@@ -11,10 +11,11 @@ CSoundManager::CSoundManager(QObject *parent)
     , enableSfx(true)
 {
     // Populate the paths for the sound effects
-    soundFiles[SoundEffectType::CardClick] = {":/assets/card_01.wav", ":/assets/card_02.wav", ":/assets/card_03.wav", ":/assets/card_04.wav"};
-    soundFiles[SoundEffectType::CardFlip] = {":/assets/card_flip.wav"};
-    soundFiles[SoundEffectType::CardStack] = {":/assets/card_stack_01.wav", ":/assets/card_stack_02.wav", ":/assets/card_stack_03.wav", ":/assets/card_stack_04.wav", ":/assets/card_stack_05.wav"};
-    soundFiles[SoundEffectType::CardCannotMove] = {":/assets/card_cant_move.wav"};
+    soundFiles[ESoundEffectType::CardClick] = {":/assets/card_01.wav", ":/assets/card_02.wav", ":/assets/card_03.wav", ":/assets/card_04.wav"};
+    soundFiles[ESoundEffectType::CardFlip] = {":/assets/card_flip.wav"};
+    soundFiles[ESoundEffectType::CardStack] = {":/assets/card_stack_01.wav", ":/assets/card_stack_02.wav", ":/assets/card_stack_03.wav", ":/assets/card_stack_04.wav", ":/assets/card_stack_05.wav"};
+    soundFiles[ESoundEffectType::CardCannotMove] = {":/assets/card_cant_move.wav"};
+    soundFiles[ESoundEffectType::Win] = {":/assets/win.wav"};
 
     // Create a media playlist containing the background music on a loop
     QMediaPlaylist* musicPlaylist = new QMediaPlaylist();
@@ -28,7 +29,7 @@ CSoundManager::CSoundManager(QObject *parent)
     this->bgMusicPlayer->play();
 }
 
-void CSoundManager::playSoundEffect(SoundEffectType sfxType)
+void CSoundManager::playSoundEffect(ESoundEffectType sfxType)
 {
     // Don't if SFX are disabled
     if (!enableSfx) return;
@@ -51,6 +52,6 @@ void CSoundManager::setEnableSoundEffects(bool enabled)
 
 void CSoundManager::setEnableMusic(bool enabled)
 {
-    // Set the music's volume
+    // Set the music's volume so it won't completely stop when disabled
     this->bgMusicPlayer->setVolume(enabled ? 50 : 0);
 }

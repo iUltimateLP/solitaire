@@ -14,8 +14,6 @@ CCardStack::CCardStack(QWidget *parent)
 
 void CCardStack::addCard(CCard *cardToAdd)
 {
- //   qDebug() << "CCardStack::addCard";
-
     // Make sure the card is valid
     if (cardToAdd)
     {
@@ -48,8 +46,6 @@ void CCardStack::insertCardAt(int insertAt, CCard* cardToInsert)
 
 void CCardStack::removeCard(CCard *cardToRemove)
 {
-    qDebug() << "CCardStack::removeCard";
-
     // Make sure the card is valid
     if (cardToRemove)
     {
@@ -99,8 +95,6 @@ bool CCardStack::canDropCard(CCard* cardToDrop)
 {
     Q_UNUSED(cardToDrop);
 
-    qDebug() << "CanDropCard not overwritten!";
-
     // By default, allow dropping
     return true;
 }
@@ -113,5 +107,5 @@ int CCardStack::getIndexOfCard(CCard* card)
 
 void CCardStack::handleCardsChanged()
 {
-    //qDebug() << "handleCardsChanged!";
+
 }

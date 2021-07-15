@@ -13,8 +13,6 @@ int CHoldingStack::StackCollapseNumCards = 9;
 CHoldingStack::CHoldingStack(QWidget* parent)
     : CCardStack(parent)
 {
-   // qDebug() << "Created CCardStack";
-
     // Create the vbox layout
     vbox = new CCardVBoxLayout(CardOffsetInStack, this);
 }
@@ -66,7 +64,6 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
         if ((isTopCardRed && isCardToDropRed) || (!isTopCardRed && !isCardToDropRed))
         {
             // No same colors
-            qDebug() << "No same color";
             return false;
         }
 
@@ -74,7 +71,6 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
         if (cardToDrop->getOverallValue() != topCard->getOverallValue() - 1)
         {
             // No lower value
-            qDebug() << "No lower value!";
             return false;
         }
 
@@ -82,7 +78,6 @@ bool CHoldingStack::canDropCard(CCard *cardToDrop)
         if (topCard->getType() == ECardType::Ace && cardToDrop->getType() == ECardType::King)
         {
             // No aces on kings
-            qDebug() << "No aces on kings";
             return false;
         }
 
@@ -188,7 +183,7 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
 
     // Register a new transaction
     Transaction t;
-    t.type = Transaction::TransactionType::StackToStack;
+    t.type = Transaction::ETransactionType::StackToStack;
     t.stack1 = payload->cards.front()->getCardStack();
     t.stack2 = this;
     t.cards = payload->cards;
@@ -218,7 +213,7 @@ void CHoldingStack::dropEvent(QDropEvent* ev)
     CMain::get()->getGameWindow()->incrementMove();
 
     // Play a sound
-    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardClick);
+    CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::CardClick);
 }
 
 void CHoldingStack::checkCollapseStack()

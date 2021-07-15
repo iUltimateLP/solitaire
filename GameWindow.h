@@ -36,7 +36,7 @@ public:
     // Is called after every move
     void incrementMove();
     void decrementMove();
-    void incrementScore(int gameScore);
+    void incrementScore(int scoreToAdd);
 
     // Clears the gridlayout where all cards are displayed, needed, when new game is chosen
     void removeAllWidgets(QLayout *layout);

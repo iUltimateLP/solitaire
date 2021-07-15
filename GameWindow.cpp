@@ -23,8 +23,6 @@ CGameWindow::CGameWindow(QWidget* parent)
     int windowH = this->size().height();
     this->move((screenW / 2) - (windowW / 2), (screenH / 2) - (windowH / 2));
 
-    qDebug() << "Created CGameWindow";
-
     // Set background-image
     ui->centralwidget->setStyleSheet("background-image: url(:/assets/table_background.png);");
     ui->centralwidget->resize(1000, 800);
@@ -69,7 +67,8 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->time_label->setStyleSheet("QLabel {color: white}");
     ui->statusbar->hide();
 
-    QWidget *layout = new QWidget();
+    // Create the main layout
+    QWidget* layout = new QWidget();
     mainGrid = new QGridLayout();
     mainGrid->setSpacing(12);
     layout->setLayout(mainGrid);
@@ -78,7 +77,7 @@ CGameWindow::CGameWindow(QWidget* parent)
 
 void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 {
-   // stack->resize(CCard::getCardScreenSize().width(), this->size().height() - stack->pos().y());
+    // Set a minimum height to avoid layout glitches
     stack->setMinimumHeight(CCard::getCardScreenSize().height());
     mainGrid->addWidget(stack, 1, column, 1, 1, Qt::AlignTop);
 
@@ -93,14 +92,16 @@ void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
 
 void CGameWindow::displayFinalStack(CFinalStack* final, int column)
 {
-    //final->resize(CCard::getCardScreenSize().width(), this->size().height() - final->pos().y());
+    // Add the final stack to the widget
     mainGrid->addWidget(final, 0, column + 3, 1, 1);
-    // SetRowMinimumHeight is needed, so that the layout is not changing, when cards are added to the holdingstacks
+
+    // setRowMinimumHeight is needed, so that the layout is not changing, when cards are added to the holdingstacks
     mainGrid->setRowMinimumHeight(0, 200);
 }
 
-void CGameWindow::displayDrawStack(CDrawStack *draw)
+void CGameWindow::displayDrawStack(CDrawStack* draw)
 {
+    // Add the stack to the layout
     mainGrid->addLayout(draw->getHBoxLayout(), 0, 0, 1, 2);
 }
 
@@ -144,24 +145,28 @@ void CGameWindow::showWinScreen()
 
 void CGameWindow::incrementMove()
 {
+    // Increment the moves and update the text
     ++moves;
     ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
 void CGameWindow::decrementMove()
 {
+    // Decrement the moves and update the text
     --moves;
     ui->move_label->setText("Moves: " + QString::number(moves));
 }
 
-void CGameWindow::incrementScore(int gameScore)
+void CGameWindow::incrementScore(int scoreToAdd)
 {
-    score += gameScore;
+    // Increment the score by the given value and update the text
+    score += scoreToAdd;
     ui->score_label->setText("Score: " + QString::number(score));
 }
 
 void CGameWindow::updateTimer()
 {
+    // Add a second to the timer and update the text
     *time = time->addSecs(1);
     ui->time_label->setText("Timer: " + time->toString("mm:ss"));
 }
@@ -178,12 +183,14 @@ Created by Annie Berend (5033782) and Jonathan Verbeek (5058288)");
 
 void CGameWindow::updateScore()
 {
+    // Get the score off the game instance and update the text
     score = CMain::get()->getGameInstance()->getScore();
     ui->score_label->setText("Score: " + QString::number(score));
 }
 
 void CGameWindow::resetGameWindow()
 {
+    // Removes all widgets, resets the time and moves
     removeAllWidgets(mainGrid);
     if(winningLayout)
         removeAllWidgets(winningLayout);
@@ -243,6 +250,7 @@ void CGameWindow::removeAllWidgets(QLayout* layout)
 
 void CGameWindow::setUndoButtonEnabled(bool enabled)
 {
+    // Sets the undo button to be enabled or not
     ui->undoButton->setEnabled(enabled);
 }
 

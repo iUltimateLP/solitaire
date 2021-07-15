@@ -4,6 +4,9 @@
 #include "Main.h"
 #include <QDebug>
 
+// Set the static variables
+int CFinalStack::NumCardsToRender = 5;
+
 CFinalStack::CFinalStack(QWidget* parent, ECardSymbol symbol)
     : CCardStack(parent)
     , stackSymbol(symbol)
@@ -28,15 +31,10 @@ CFinalStack::CFinalStack(QWidget* parent, ECardSymbol symbol)
 
 void CFinalStack::addCard(CCard* cardToAdd)
 {
-    // Hide the current top card, if any
-    /*if (this->getNumCards() > 0)
-    {
-        this->getTopCard()->hide();
-    }*/
-
     // Call the superclasses' addCard
     CCardStack::addCard(cardToAdd);
 
+    // Add it to the vbox
     vbox->addWidget(cardToAdd);
 }
 
@@ -48,13 +46,8 @@ void CFinalStack::removeCard(CCard* cardToRemove)
     // Call the superclasses' removeCard
     CCardStack::removeCard(cardToRemove);
 
+    // Remove it from the vbox
     vbox->removeWidget(cardToRemove);
-
-    // Show the next top card, if any
-    /*if (this->getNumCards() > 0)
-    {
-        this->getTopCard()->show();
-    }*/
 }
 
 bool CFinalStack::canDropCard(CCard *cardToDrop)
@@ -86,10 +79,10 @@ bool CFinalStack::canDropCard(CCard *cardToDrop)
 
 void CFinalStack::handleCardsChanged()
 {
-    // Only show the last five cards to avoid weird overlapping shadows
+    // Only show the last NumCardsToRender cards to avoid weird overlapping shadows
     for (int i = 0; i < getCards().length(); i++)
     {
-        if (i >= getCards().length() - 5)
+        if (i >= getCards().length() - CFinalStack::NumCardsToRender)
         {
             getCards()[i]->show();
         }

@@ -7,10 +7,6 @@
 CDrawStack::CDrawStack(QWidget* parent)
     : CCardStack(parent)
 {
-    //TODO: why do we need setGeometry? -> does not change anything when commented out
-    // This widget has always the size of a card
-    //this->setGeometry(0, 0, CCard::cardTileSize.width(), CCard::cardTileSize.height());
-
     // Create the dummy vbox layout with zero spacing, so they get overlayed
     hbox = new CCardHBoxLayout(20, this);
 
@@ -36,19 +32,16 @@ CDrawStack::CDrawStack(QWidget* parent)
     boxLayout->addWidget(drawStackPlaceholder);
     boxLayout->addWidget(this);
 
+    // Connect the clicked event with the showNextCard function
     QObject::connect(drawStackPlaceholder, &CClickableLabel::clicked, this, &CDrawStack::showNextCard);
-}
-
-void CDrawStack::addCard(CCard* cardToAdd)
-{
-    CCardStack::addCard(cardToAdd);
 }
 
 void CDrawStack::removeCard(CCard* cardToRemove)
 {
-
     // Call the superclasses' removeCard
     CCardStack::removeCard(cardToRemove);
+
+    // Remove the card from the UI
     removeCardFromUi();
 }
 
@@ -59,11 +52,12 @@ bool CDrawStack::canDropCard(CCard *cardToDrop)
     // Adding a card to the drawStack is not possible, due to that, this method is not necessary
     qDebug() << "nothing happens";
 
-    return true;
+    return false;
 }
 
 CCard* CDrawStack::getTopCard()
 {
+    // Return the current top card
     return getCards()[currentCard];
 }
 
@@ -103,12 +97,11 @@ void CDrawStack::removeCardFromUi()
     // The next card should be interactable, if there is one
     if(currentCard <= getNumCards()-1)
     {
-        qDebug() << "next card is set to interact";
         getCards()[currentCard]->setCanInteract(true);
+
         // When a card is removed, the last third card in the stack will be displayed, if existent
         if(currentCard + 2 <= getNumCards()-1)
         {
-            qDebug() << "next card should be displayed";
             hbox->push_back(getCards()[currentCard+2]);
             getCards()[currentCard+2]->setVisible(true);
         }
@@ -117,7 +110,6 @@ void CDrawStack::removeCardFromUi()
 
 void CDrawStack::showNextCard()
 {
-    qDebug() << "current card" << currentCard;
     // The cards that shouldn't be displayed have to be invisible, even if the card is removed from
     // the layout (the card is still in the background of the layout)
     // If there are cards left on the stack, the variable "currentCard" is decremented
@@ -128,8 +120,6 @@ void CDrawStack::showNextCard()
     }
     else if(currentCard == 0)
     {
-        qDebug() << "set to last card";
-
         // CurrentCard = 0 means, that the stack is empty, so the drawStack gets recycled
         drawStackPlaceholder->setPixmap(cardBackPixmap);
 
@@ -157,7 +147,7 @@ void CDrawStack::showNextCard()
 
     // Register a new transaction that we drew a card
     Transaction t;
-    t.type = Transaction::TransactionType::DrawFromDrawStack;
+    t.type = Transaction::ETransactionType::DrawFromDrawStack;
     t.stack1 = this;
 
     CMain::get()->getGameInstance()->addTransaction(t);
@@ -166,7 +156,7 @@ void CDrawStack::showNextCard()
     CMain::get()->getGameWindow()->incrementMove();
 
     // Play a sound effect
-    CMain::get()->getSoundManager()->playSoundEffect(SoundEffectType::CardStack);
+    CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::CardStack);
 }
 
 void CDrawStack::undo(CCard* card)
