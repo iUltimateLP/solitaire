@@ -107,40 +107,15 @@ void CGameWindow::displayDrawStack(CDrawStack* draw)
 
 void CGameWindow::showWinScreen()
 {
-    int windowW = this->size().width();
-    int windowH = this->size().height();
-    int windowX = this->pos().x();
-    int windowY = this->pos().y();
+    // Stop the timer
     timer->stop();
-    winScreen = new WinScreen(windowW, windowH, windowX, windowY);
+
+    // If any win screen was already displayed, don't do anything
+    if (winScreen != nullptr) return;
+
+    // Create a new win screen
+    winScreen = new CWinScreen(score, moves, time->toString("mm:ss"));
     winScreen->show();
-
-    QLabel* score_label = new QLabel();
-    score_label->setText("Score: " + QString::number(score) + "");
-    score_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
-    QLabel* moves_label = new QLabel();
-    moves_label->setText("Moves: " + QString::number(moves));
-    moves_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
-    QLabel* time_label = new QLabel();
-    time_label->setText("Time: " + time->toString("mm:ss"));
-    time_label->setStyleSheet("QLabel {color: rgba(244, 80, 80, 200)}");
-
-    QFont font = moves_label->font();
-    font.setBold(true);
-    font.setPointSize(30);
-    moves_label->setFont(font);
-    score_label->setFont(font);
-    time_label->setFont(font);
-
-    winningRow = new QWidget();
-    winningLayout = new QHBoxLayout();
-    winningRow->setLayout(winningLayout);
-    ui->gridLayout->addWidget(winningRow);
-    winningLayout->setMargin(100);
-
-    winningLayout->addWidget(score_label);
-    winningLayout->addWidget(moves_label);
-    winningLayout->addWidget(time_label);
 }
 
 void CGameWindow::incrementMove()
@@ -192,19 +167,32 @@ void CGameWindow::resetGameWindow()
 {
     // Removes all widgets, resets the time and moves
     removeAllWidgets(mainGrid);
-    if(winningLayout)
-        removeAllWidgets(winningLayout);
-    if(winScreen)
+
+    // Close a winning screen if present
+    if (winScreen)
+    {
         winScreen->close();
+        winScreen = nullptr;
+    }
+
+    // Reset the time and move count
     time = new QTime(0,0);
+    timer->start(1000);
     moves = 0;
     emit resetGame();
 }
 
 void CGameWindow::closeWindows()
 {
-    if(winScreen)
+    // If a win screen is present, close it
+    if (winScreen)
+    {
         winScreen->close();
+        delete winScreen;
+        winScreen = nullptr;
+    }
+
+    // Close this window too)
     this->close();
 }
 

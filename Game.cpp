@@ -253,22 +253,23 @@ void CGame::checkHasEnded()
         hasEnded &= (finalStack->getNumCards() == 13);
     }
 
+    // Update isWon
+    this->isWon = hasEnded;
+
     if (hasEnded)
     {
+        // We won! Show the win screen
         CMain::get()->getGameWindow()->showWinScreen();
-        this->isWon = true;
-        // We won!
+
+        // Play the sound effect
+        CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::Win);
+
         qDebug() << "Won!";
     }
     else
     {
         // Not won yet!
         qDebug() << "Not won!";
-        // We won! Play the sound effect
-        CMain::get()->getSoundManager()->playSoundEffect(ESoundEffectType::Win);
-
-        // Show window
-
     }
 }
 

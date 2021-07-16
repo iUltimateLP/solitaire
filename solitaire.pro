@@ -28,7 +28,7 @@ SOURCES += \
     Main.cpp \
     GameWindow.cpp \
     SoundManager.cpp \
-    Winscreen.cpp
+    WinScreen.cpp
 
 HEADERS += \
     Card.h \
@@ -43,11 +43,11 @@ HEADERS += \
     HoldingStack.h \
     Main.h \
     SoundManager.h \
-    Winscreen.h
+    WinScreen.h
 
 FORMS += \
     GameWindow.ui \
-    Winscreen.ui
+    WinScreen.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

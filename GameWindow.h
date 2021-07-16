@@ -8,7 +8,7 @@
 #include "HoldingStack.h"
 #include "FinalStack.h"
 #include "DrawStack.h"
-#include "Winscreen.h"
+#include "WinScreen.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CGameWindow; }
@@ -31,7 +31,7 @@ public:
     void displayFinalStack(CFinalStack* final, int column);
 
     // This function displays the draw stack, is called from game.cpp
-    void displayDrawStack(CDrawStack * draw);
+    void displayDrawStack(CDrawStack* draw);
 
     // Is called after every move
     void incrementMove();
@@ -44,6 +44,7 @@ public:
     // Sets whether the undo button is enabled or not
     void setUndoButtonEnabled(bool enabled);
 
+    // Shows the win screen
     void showWinScreen();
 
 signals:
@@ -56,7 +57,6 @@ private slots:
 
     // The "About" menu item
     void showAbout();
-
 
     // The "Music" menu item
     void setMusic(bool checked);
@@ -74,6 +74,7 @@ public slots:
     // The "new game" menu item
     void resetGameWindow();
 
+    // Closes all windows
     void closeWindows();
 
 private:
@@ -86,11 +87,9 @@ private:
     QTimer* timer;
     QTime* time;
 
-    WinScreen* winScreen = nullptr;
+    // Reference to the win screen, if any
+    CWinScreen* winScreen = nullptr;
 
     // The main grid layout
     QGridLayout* mainGrid;
-    // The layout for the winning score
-    QWidget * winningRow;
-    QHBoxLayout* winningLayout;
 };
