@@ -19,5 +19,6 @@
         <file>assets/backarrow.png</file>
         <file>assets/winscreen.png</file>
         <file>assets/win.wav</file>
+        <file>assets/icon.png</file>
     </qresource>
 </RCC>

@@ -1,6 +1,6 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "WinScreen.h"
-#include "ui_Winscreen.h"
+#include "ui_WinScreen.h"
 #include <QLabel>
 #include <QDesktopWidget>
 #include "Main.h"
@@ -47,7 +47,7 @@ CWinScreen::CWinScreen(int score, int moves, QString time, QWidget *parent) :
     movesLabel->setStyleSheet("color: white;");
     ui->gridLayout_2->addWidget(movesLabel, 1, 1, Qt::AlignCenter);
 
-    // Create the time label)
+    // Create the time label
     QLabel* timeLabel = new QLabel("Time: " + time, this);
     timeLabel->setFont(font);
     timeLabel->setStyleSheet("color: white;");
@@ -72,8 +72,6 @@ void CWinScreen::mousePressEvent(QMouseEvent* ev)
 
 void CWinScreen::closeEvent(QCloseEvent* ev)
 {
-    Q_UNUSED(ev);
-
     // Restart the game
     CMain::get()->getGameInstance()->restartGame();
     CMain::get()->getGameWindow()->resetGameWindow();

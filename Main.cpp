@@ -11,6 +11,8 @@ int CMain::run(int argc, char* argv[])
     // Create a new QApplication instance
     QApplication app(argc, argv);
 
+    app.setWindowIcon(QIcon(":/assets/icon.png"));
+
     // Assign the singleton instance
     singletonInstance = this;
 

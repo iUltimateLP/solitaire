@@ -25,17 +25,17 @@ CGameWindow::CGameWindow(QWidget* parent)
 
     // Set background-image
     ui->centralwidget->setStyleSheet("background-image: url(:/assets/table_background.png);");
-    ui->centralwidget->resize(1000, 800);
+    ui->centralwidget->resize(600, 800);
 
     // Displays the initial score and moves
     ui->score_label->setText("Score: " + QString::number(score));
     ui->move_label->setText("Moves: " + QString::number(moves));
 
     QPixmap undoArrow(":/assets/backarrow.png");
+    ui->undoButton->setIcon(undoArrow);
     ui->undoButton->setEnabled(false);
     ui->undoButton->setFlat(true);
-    ui->undoButton->setIcon(undoArrow);
-    ui->undoButton->setGeometry(0,0,20,20);
+    ui->undoButton->setIconSize(QSize(25,25));
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
     timer = new QTimer(this);
@@ -56,7 +56,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     QObject::connect(ui->undoButton, &QPushButton::clicked, this, &CGameWindow::undo);
 
     // Set the distance between the 3 labels
-    ui->labelLayout->setSpacing(25);
+    ui->labelLayout->setSpacing(55);
     ui->labelLayout->setAlignment(ui->move_label, Qt::AlignRight);
     ui->labelLayout->setAlignment(ui->score_label, Qt::AlignRight);
     ui->labelLayout->setAlignment(ui->time_label, Qt::AlignRight);
@@ -88,6 +88,7 @@ void CGameWindow::displayHoldingStack(CHoldingStack* stack, int column)
     QWidget* stretchDummy = new QWidget();
     stretchDummy->setSizePolicy(policy);
     mainGrid->addWidget(stretchDummy, 2, column);
+    mainGrid->setHorizontalSpacing(70);
 }
 
 void CGameWindow::displayFinalStack(CFinalStack* final, int column)
@@ -178,7 +179,8 @@ void CGameWindow::resetGameWindow()
     // Reset the time and move count
     time = new QTime(0,0);
     timer->start(1000);
-    moves = 0;
+    moves = -1;
+    incrementMove();
     emit resetGame();
 }
 
@@ -192,7 +194,7 @@ void CGameWindow::closeWindows()
         winScreen = nullptr;
     }
 
-    // Close this window too)
+    // Close this window too
     this->close();
 }
 
@@ -212,7 +214,6 @@ void CGameWindow::undo()
 {
     // Tell the game instance to undo the last move
     CMain::get()->getGameInstance()->undoLastMove();
-    showWinScreen();
 }
 
 void CGameWindow::removeAllWidgets(QLayout* layout)

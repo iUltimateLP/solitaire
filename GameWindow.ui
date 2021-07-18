@@ -23,6 +23,16 @@
       <property name="rightMargin">
        <number>20</number>
       </property>
+      <item row="3" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+      </item>
+      <item row="2" column="0">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="topMargin">
+         <number>20</number>
+        </property>
+       </layout>
+      </item>
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="labelLayout" stretch="0,0,0,0">
         <property name="sizeConstraint">
@@ -35,17 +45,28 @@
          <number>10</number>
         </property>
         <item>
-         <widget class="QPushButton" name="undoButton">
-          <property name="layoutDirection">
-           <enum>Qt::RightToLeft</enum>
-          </property>
-          <property name="autoFillBackground">
-           <bool>false</bool>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string> </string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="undoButton">
+            <property name="layoutDirection">
+             <enum>Qt::RightToLeft</enum>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLabel" name="time_label">
@@ -90,16 +111,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item row="2" column="0">
-       <layout class="QGridLayout" name="gridLayout_3">
-        <property name="topMargin">
-         <number>20</number>
-        </property>
-       </layout>
-      </item>
-      <item row="3" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3"/>
       </item>
      </layout>
     </item>

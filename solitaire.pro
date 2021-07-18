@@ -58,3 +58,5 @@ DISTFILES +=
 
 RESOURCES += \
     assets.qrc
+
+RC_ICONS +=
