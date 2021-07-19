@@ -1,9 +1,9 @@
 // Author: Annie Berend (5033782) - Jonathan Verbeek (5058288)
 #include "WinScreen.h"
 #include "ui_WinScreen.h"
+#include "Main.h"
 #include <QLabel>
 #include <QDesktopWidget>
-#include "Main.h"
 
 CWinScreen::CWinScreen(int score, int moves, QString time, QWidget *parent) :
     QWidget(parent),

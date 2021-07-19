@@ -266,11 +266,6 @@ void CGame::checkHasEnded()
 
         qDebug() << "Won!";
     }
-    else
-    {
-        // Not won yet!
-        qDebug() << "Not won!";
-    }
 }
 
 bool CGame::hasEnded()

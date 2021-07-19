@@ -137,11 +137,6 @@ CCard::CCard(QWidget *parent, const ECardSymbol symbol, const ECardType type, co
     this->cannotMoveAnim = new QPropertyAnimation(this, "pos");
     this->cannotMoveAnim->setDuration(200);
     this->cannotMoveAnim->setEasingCurve(QEasingCurve::InOutBounce);
-
-    // Set up the moving animatino
-    this->moveAnim = new QPropertyAnimation(this, "pos");
-    this->moveAnim->setDuration(1000);
-    this->moveAnim->setEasingCurve(QEasingCurve::InOutBounce);
 }
 
 QSize CCard::getCardScreenSize()
@@ -232,7 +227,6 @@ void CCard::mousePressEvent(QMouseEvent* ev)
 
 void CCard::mouseReleaseEvent(QMouseEvent* ev)
 {
-
     // Only trigger when didn't move
     if ((ev->pos() - dragStartPos).manhattanLength() < 1)
     {

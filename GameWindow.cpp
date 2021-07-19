@@ -35,6 +35,7 @@ CGameWindow::CGameWindow(QWidget* parent)
     ui->undoButton->setIcon(undoArrow);
     ui->undoButton->setEnabled(false);
     ui->undoButton->setFlat(true);
+    ui->undoButton->setToolTip("Undo");
     ui->undoButton->setIconSize(QSize(25,25));
 
     // Creation of timer and time as well as connection of timeout signal with updateTime
@@ -181,6 +182,7 @@ void CGameWindow::resetGameWindow()
     timer->start(1000);
     moves = -1;
     incrementMove();
+    ui->undoButton->setEnabled(false);
     emit resetGame();
 }
 
