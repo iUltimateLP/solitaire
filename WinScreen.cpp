@@ -72,6 +72,8 @@ void CWinScreen::mousePressEvent(QMouseEvent* ev)
 
 void CWinScreen::closeEvent(QCloseEvent* ev)
 {
+    Q_UNUSED(ev);
+
     // Restart the game
     CMain::get()->getGameInstance()->restartGame();
     CMain::get()->getGameWindow()->resetGameWindow();
